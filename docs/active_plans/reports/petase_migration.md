@@ -1,6 +1,10 @@
 # PETase migration report
 
-[petase_1_linear_regression.md](../../../tutorials/petase_1_linear_regression.md) is a complete
+Path note (2026-10-22): paths and command examples below use the current repository layout.
+Recorded observations belong to their stated snapshots; renamed output manifests retain their
+original contents until the final rebuild and verification refresh.
+
+[petase_1_linear_regression.md](../../../tutorial_data/petase_1_linear_regression.md) is a complete
 illustrative Bradford regression lesson, **not a recovered original experiment**. All seeded numbers
 are synthetic teaching data, stated in the title, introduction, worksheet name, column headers, and
 instructions. The coordinator authorized that approach after recovery found no original measurements.
@@ -39,8 +43,8 @@ The extracted bytes match the base64 payloads exactly:
 
 | Companion | SHA-256 |
 | --- | --- |
-| [petase_01.png](../../../tutorials/assets/petase_01.png) | `ac18ea8fdb0ecf2729e226f8a8cb2cc256e8df7152d22f2dcf58603a52553a7d` |
-| [petase_02.png](../../../tutorials/assets/petase_02.png) | `d954d55629e392d10e847a8b23c47107bfc26a668b5a4db669b1ad4d5b6083f1` |
+| [petase_01.png](../../../tutorial_data/assets/petase_01.png) | `ac18ea8fdb0ecf2729e226f8a8cb2cc256e8df7152d22f2dcf58603a52553a7d` |
+| [petase_02.png](../../../tutorial_data/assets/petase_02.png) | `d954d55629e392d10e847a8b23c47107bfc26a668b5a4db669b1ad4d5b6083f1` |
 
 ## Scientific corrections and primary sources
 
@@ -86,7 +90,7 @@ explicit. The exercise does not need a hypothesis test or p-value for calibratio
 ## Integration validation
 
 Initial lint reached the shared compiler but failed with `UnboundLocalError` in `compile_source`
-at its `sheetlesson.parser.parse_source` call, caused by a local import binding. The coordinator
+at its `tutorial_lib.parser.parse_source` call, caused by a local import binding. The coordinator
 was notified; this content owner did not modify shared code. Final lint and generated DOCX/XLSX/PDF
 inspection require the integrating agent's repaired implementation. Numerical checks, image-byte
 comparisons, and source recovery are independently verified. Google behavior remains unverified.
@@ -103,7 +107,7 @@ Added a short workbook-opening step before dataset inspection: upload the genera
 Google Drive, open in Google Sheets, make and rename a personal copy, and locate the exact
 `Bradford illustrative` worksheet. No synthetic data, formula, or scientific claim changed.
 
-Validation: `source source_me.sh && python3 tutorial.py lint tutorials/petase_1_linear_regression.md`
+Validation: `source source_me.sh && python3 make_tutorial.py lint tutorial_data/petase_1_linear_regression.md`
 passed with zero errors and zero warnings; the existing unmapped-Google note remains. Reviewed
 the source step for complete instructions and exact sheet naming. This is an authored workflow,
 not evidence of live Google import. Final PDF rebuild and visual verification belong to the

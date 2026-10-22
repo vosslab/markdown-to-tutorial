@@ -6,7 +6,7 @@ import pathlib
 import argparse
 import datetime
 
-import sheetlesson.compiler
+import tutorial_lib.compiler
 import sheets_validation_lib
 
 
@@ -37,7 +37,7 @@ def main() -> int:
 	cases = []
 	for path in args.tutorials:
 		cases.extend(sheets_validation_lib.prepare_cases(
-			sheetlesson.compiler.compile_document(path)))
+			tutorial_lib.compiler.compile_document(path)))
 	expectations = {}
 	if args.expectations is not None:
 		expectations = json.loads(args.expectations.read_text(encoding="utf-8"))["tutorials"]

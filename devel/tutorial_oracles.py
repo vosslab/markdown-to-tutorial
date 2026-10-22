@@ -9,12 +9,12 @@ import math
 import numpy
 import scipy.stats
 
-import sheetlesson.model
-import sheetlesson.references
+import tutorial_lib.model
+import tutorial_lib.references
 
 
 #============================================
-def observations(sheet: sheetlesson.model.Worksheet, column: int,
+def observations(sheet: tutorial_lib.model.Worksheet, column: int,
 	start: int = 2, end: int = 101) -> numpy.ndarray:
 	"""Read numeric observations, ignoring the workbook's deliberately empty rows."""
 	values = [seed.scalar.value for (row, col), seed in sorted(sheet.cells.items())
@@ -26,7 +26,7 @@ def observations(sheet: sheetlesson.model.Worksheet, column: int,
 
 
 #============================================
-def parameter(document: sheetlesson.model.Document, address: str) -> float:
+def parameter(document: tutorial_lib.model.Document, address: str) -> float:
 	values = [a.scalar.value for a in document.actions if a.target is not None
 		and a.target.address == address and a.scalar is not None and a.scalar.kind == "number"]
 	if len(values) != 1:
@@ -50,7 +50,7 @@ def tails(statistic: float, degrees: float | None = None) -> tuple[float, float,
 
 
 #============================================
-def one_sample(document: sheetlesson.model.Document) -> dict:
+def one_sample(document: tutorial_lib.model.Document) -> dict:
 	is_baby = document.path.name.startswith("babies")
 	is_z = "z_test" in document.path.name
 	alpha_cell = ("E14" if is_z else "E15") if is_baby else "D14"
@@ -84,7 +84,7 @@ def one_sample(document: sheetlesson.model.Document) -> dict:
 
 
 #============================================
-def two_sample(document: sheetlesson.model.Document) -> tuple[dict, dict]:
+def two_sample(document: tutorial_lib.model.Document) -> tuple[dict, dict]:
 	sheet = document.worksheets[-1]
 	x, y = observations(sheet, 2), observations(sheet, 3)
 	if document.path.name.startswith("babies"):
@@ -113,7 +113,7 @@ def two_sample(document: sheetlesson.model.Document) -> tuple[dict, dict]:
 
 
 #============================================
-def variance_test(document: sheetlesson.model.Document) -> dict:
+def variance_test(document: tutorial_lib.model.Document) -> dict:
 	alpha = parameter(document, "E20")
 	x, y = [observations(document.worksheets[-1], col) for col in (2, 3)]
 	ratio = float(y.var(ddof=1) / x.var(ddof=1))
@@ -129,7 +129,7 @@ def variance_test(document: sheetlesson.model.Document) -> dict:
 
 
 #============================================
-def anova(document: sheetlesson.model.Document) -> dict:
+def anova(document: tutorial_lib.model.Document) -> dict:
 	alpha = parameter(document, "I13")
 	groups = [observations(document.worksheets[-1], col) for col in range(2, 7)]
 	all_values = numpy.concatenate(groups)
@@ -145,7 +145,7 @@ def anova(document: sheetlesson.model.Document) -> dict:
 		"K3": within / dfw, "L2": float(test.statistic), "M2": float(test.pvalue),
 		"I14": decision(float(test.pvalue), alpha)}
 	for index, group in enumerate(groups):
-		column = sheetlesson.references.column_letters(9 + index)
+		column = tutorial_lib.references.column_letters(9 + index)
 		result.update({column + "7": float(group.mean()),
 			column + "8": float(group.var(ddof=1)), column + "9": len(group)})
 	return result
@@ -168,7 +168,7 @@ def regression(x: numpy.ndarray, y: numpy.ndarray, degree: int) -> dict:
 
 
 #============================================
-def caffeine(document: sheetlesson.model.Document) -> dict:
+def caffeine(document: tutorial_lib.model.Document) -> dict:
 	x, y = [observations(document.worksheets[-1], col, end=26) for col in (1, 2)]
 	if "descriptive" in document.path.name:
 		result = {"E2": float(x.mean()), "F2": float(y.mean()),
@@ -200,7 +200,7 @@ def caffeine(document: sheetlesson.model.Document) -> dict:
 
 
 #============================================
-def petase(document: sheetlesson.model.Document) -> dict:
+def petase(document: tutorial_lib.model.Document) -> dict:
 	sheet = document.worksheets[-1]
 	x, raw = [observations(sheet, col, end=8) for col in (1, 2)]
 	y = raw - raw[0]
@@ -221,7 +221,7 @@ def petase(document: sheetlesson.model.Document) -> dict:
 
 
 #============================================
-def calculate(document: sheetlesson.model.Document) -> tuple[dict, dict]:
+def calculate(document: tutorial_lib.model.Document) -> tuple[dict, dict]:
 	"""Dispatch explicit curriculum models; unknown lessons fail instead of being skipped."""
 	name = document.path.name
 	scenarios = {}

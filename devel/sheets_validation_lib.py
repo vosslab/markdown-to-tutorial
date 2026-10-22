@@ -4,12 +4,12 @@ import math
 import time
 import random
 
-import sheetlesson.model
-import sheetlesson.references
+import tutorial_lib.model
+import tutorial_lib.references
 
 
 #============================================
-def extended_value(scalar: sheetlesson.model.Scalar) -> dict:
+def extended_value(scalar: tutorial_lib.model.Scalar) -> dict:
 	"""Preserve scalar types, including formula and literal equals-prefixed text."""
 	keys = {"formula": "formulaValue", "text": "stringValue", "number": "numberValue",
 		"boolean": "boolValue"}
@@ -21,15 +21,15 @@ def extended_value(scalar: sheetlesson.model.Scalar) -> dict:
 
 #============================================
 def cell_write(sheet: str, row: int, column: int,
-	scalar: sheetlesson.model.Scalar, line: int) -> dict:
-	address = f"{sheetlesson.references.column_letters(column)}{row}"
+	scalar: tutorial_lib.model.Scalar, line: int) -> dict:
+	address = f"{tutorial_lib.references.column_letters(column)}{row}"
 	result = {"sheet": sheet, "row": row, "column": column, "address": address,
 		"value": extended_value(scalar), "line": line}
 	return result
 
 
 #============================================
-def prepare_cases(document: sheetlesson.model.Document) -> list[dict]:
+def prepare_cases(document: tutorial_lib.model.Document) -> list[dict]:
 	"""Cover each alternative once, changing one group from the baseline at a time."""
 	if document.has_errors:
 		raise ValueError(f"Cannot execute invalid tutorial: {document.path}")
@@ -52,15 +52,17 @@ def prepare_cases(document: sheetlesson.model.Document) -> list[dict]:
 	for name, selected in selections:
 		writes = []
 		for action in document.actions:
-			if action.scalar is None or action.target is None:
-				continue
 			if action.alternative_group is not None:
 				if selected[action.alternative_group] != action.alternative_branch:
 					continue
-			write = cell_write(action.target.sheet, action.target.start_row,
-				action.target.start_column, action.scalar, action.span.start_line)
-			write["action"] = action.kind
-			writes.append(write)
+			executable = action.generated_actions if action.kind == "fill" else [action]
+			for entry in executable:
+				if entry.scalar is None or entry.target is None:
+					continue
+				write = cell_write(entry.target.sheet, entry.target.start_row,
+					entry.target.start_column, entry.scalar, action.span.start_line)
+				write["action"] = entry.kind
+				writes.append(write)
 		cases.append({"tutorial": str(document.path), "scenario": name,
 			"branches": selected, "sheets": [sheet.name for sheet in document.worksheets],
 			"seeds": seeds, "writes": writes})
@@ -104,7 +106,7 @@ def read_cells(service: object, spreadsheet_id: str, ranges: list[str]) -> dict:
 				for column_offset, cell in enumerate(row.get("values", [])):
 					row_number = grid.get("startRow", 0) + row_offset + 1
 					column = grid.get("startColumn", 0) + column_offset + 1
-					address = sheetlesson.references.column_letters(column) + str(row_number)
+					address = tutorial_lib.references.column_letters(column) + str(row_number)
 					cells[sheet["properties"]["title"] + "!" + address] = cell
 	return cells
 

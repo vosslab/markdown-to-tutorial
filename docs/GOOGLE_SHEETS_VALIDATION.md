@@ -10,10 +10,10 @@ Run from the repository root using the Python bootstrap:
 
 ```bash
 source source_me.sh && python3 -m devel.validate_google_sheets \
-  --dry-run --output build/sheets-validation tutorials/babies_1_z_test.md
+  --dry-run --output build/sheets-validation tutorial_data/babies_1_z_test.md
 ```
 
-Use actual tutorial paths such as [the babies z-test](../tutorials/babies_1_z_test.md). Dry run writes
+Use actual tutorial paths such as [the babies z-test](../tutorial_data/babies_1_z_test.md). Dry run writes
 `execution-cases.json` and `report.json` locally and makes no Google requests. The report says
 `not_run` for Google calculation and scientific oracle checks.
 
@@ -24,8 +24,8 @@ prints credential contents. Missing ADC produces `unavailable` and exit code 2.
 
 ```bash
 source source_me.sh && python3 -m devel.validate_google_sheets \
-  --live --expectations output/validation/tutorial_expectations.json \
-  --output build/sheets-live tutorials/babies_1_z_test.md
+  --live --expectations tutorial_output/validation/tutorial_expectations.json \
+  --output build/sheets-live tutorial_data/babies_1_z_test.md
 ```
 
 Each case creates a workbook titled `TUTORIAL VALIDATION - ...` with original worksheet names,
@@ -81,7 +81,7 @@ For this collection, generate the complete 12-lesson expectation file first:
 source source_me.sh && python3 -m devel.check_tutorial_calculations
 ```
 
-The generated `output/validation/tutorial_expectations.json` covers 13 execution scenarios and
+The generated `tutorial_output/validation/tutorial_expectations.json` covers 13 execution scenarios and
 254 final formula cells. See
 [calculation_validation.md](active_plans/reports/calculation_validation.md) for the independent
 method and its limits. Google execution remains a separate check.
@@ -101,6 +101,21 @@ transport failures raise an error and leave the saved report in `running`, prese
 and completed results. Diagnose the external failure and run again into a separate output folder.
 The offline pytest uses a fake transport only to verify requests and error reporting. It is not
 Google compatibility evidence.
+
+## Local formula execution
+
+LibreOffice Calc can execute the final workbook state for each prepared scenario without Google
+credentials. The repository runner uses a separate temporary profile and compares Calc's saved
+results with the independent expectation file. It applies assignments in order and checks the final
+cells; it does not test intermediate steps or student interaction.
+
+On the current tutorial snapshot, Calc `26.2.6.3` passed all 254 values across 13 scenarios. The
+report is [local_calculation_readiness.md](active_plans/reports/local_calculation_readiness.md),
+and the detailed run is `tutorial_output/validation/local_calc_portable/calc/run-eehzg5wq/report.json`.
+This is real local formula execution. It does not establish Google Sheets import or execution.
+All 14 worksheet Google mappings remain absent, and Application Default Credentials were
+unavailable for the live Google attempt. Offline static checks plus Calc execution are the
+available local evidence; do not describe them as Google validation.
 
 The implementation follows Google's official references for
 [spreadsheet creation](https://developers.google.com/workspace/sheets/api/reference/rest/v4/spreadsheets/create),

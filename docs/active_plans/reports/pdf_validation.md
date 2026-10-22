@@ -1,5 +1,13 @@
 # PDF validation
 
+Snapshot note (2026-10-22): the 88-page report below records an earlier build and is superseded
+for current artifacts by [readiness_visual.md](readiness_visual.md), which reviewed the current
+12 PDFs (65 pages). Do not use the older page count as the current output inventory.
+
+Path note (2026-10-22): paths and command examples below use the current repository layout.
+Recorded observations belong to their stated snapshots; renamed output manifests retain their
+original contents until the final rebuild and verification refresh.
+
 Final visual review: 2026-10-22. The final output PDFs were rendered after the last rebuild and visually reviewed across all pages.
 
 All 12 tutorial bundles rebuilt successfully with the default `all` formats. The final PDFs contain 88 pages total. Every page was rendered at 110 dpi with PyMuPDF and visually inspected through contact sheets; pagination and table transitions were also inspected at full raster size. This is local LibreOffice PDF evidence; Google import, live link navigation, and spreadsheet recalculation are separate checks.
@@ -7,14 +15,14 @@ All 12 tutorial bundles rebuilt successfully with the default `all` formats. The
 ## Commands and artifacts
 
 - Build environment: `source source_me.sh && python3`.
-- Sequential command for each source: `python3 tutorial.py build tutorials/<name>.md`.
+- Sequential command for each source: `python3 make_tutorial.py build tutorial_data/<name>.md`.
 - The build process invoked LibreOffice outside the macOS sandbox using an approved escalated execution.
 - Every final bundle build returned exit code 0.
-- Final PDF SHA256 fingerprints and page counts: `output/verification/pdf/render_inventory.json`.
-- Current contact sheets: `output/verification/pdf/contact_sheets/`, one per tutorial.
-- Full-size pagination and image samples: `output/verification/pdf/pages/`.
+- Final PDF SHA256 fingerprints and page counts: `tutorial_output/verification/pdf/render_inventory.json`.
+- Current contact sheets: `tutorial_output/verification/pdf/contact_sheets/`, one per tutorial.
+- Full-size pagination and image samples: `tutorial_output/verification/pdf/pages/`.
 - Rendering: `fitz.open(pdf)` then `page.get_pixmap(dpi=110).save(path)`.
-- Retained review images are under `output/verification/pdf/`; the redundant `tests/_temp/pdf_review/` copies were removed after review.
+- Retained review images are under `tutorial_output/verification/pdf/`; the redundant `tests/_temp/pdf_review/` copies were removed after review.
 
 ## Page inventory
 

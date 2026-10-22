@@ -1,5 +1,9 @@
 # Independent calculation validation
 
+Path note (2026-10-22): paths and command examples below use the current repository layout.
+Recorded observations belong to their stated snapshots; renamed output manifests retain their
+original contents until the final rebuild and verification refresh.
+
 All 12 migrated tutorials have reproducible independent numerical expectations. There are
 13 execution scenarios (the babies two-sample lesson has two alternatives), covering all
 254 final formula cells across those scenarios. Eight synthetic checks exercise both signs of
@@ -22,10 +26,10 @@ or expected cell without an authored formula. It checks every prepared alternati
 records each result's source line. This validates the expectation mapping and intended mathematics;
 it does not establish that Google Sheets evaluates the authored formula to that result.
 
-Google runner expectations are emitted to `output/validation/tutorial_expectations.json`, using
+Google runner expectations are emitted to `tutorial_output/validation/tutorial_expectations.json`, using
 `tutorials -> basename -> common/scenarios -> Sheet!Cell -> value`. Full precision numerical and
 decision outputs, source lines, scenario counts and synthetic check results are also recorded in
-`output/validation/independent_oracles.json`. Numeric comparisons use relative tolerance `1e-7`
+`tutorial_output/validation/independent_oracles.json`. Numeric comparisons use relative tolerance `1e-7`
 and absolute tolerance `1e-10`; string decisions require equality. Common values apply to every
 scenario; scenario values override common ones. Generated files are reproducible ignored outputs.
 
@@ -62,8 +66,8 @@ Commands run from the repository root:
 
 ```bash
 source source_me.sh && python3 -m devel.check_tutorial_calculations
-source source_me.sh && python3 -m devel.validate_google_sheets tutorials/*.md \
-  -n -e output/validation/tutorial_expectations.json -o output/validation/sheets
+source source_me.sh && python3 -m devel.validate_google_sheets tutorial_data/*.md \
+  -n -e tutorial_output/validation/tutorial_expectations.json -o tutorial_output/validation/sheets
 source source_me.sh && python3 -m pytest -q tests/test_tutorial_oracles.py \
   tests/test_function_typing.py tests/test_pyflakes_code_lint.py \
   tests/test_import_requirements.py

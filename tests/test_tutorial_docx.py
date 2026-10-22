@@ -7,8 +7,9 @@ import zipfile
 import markdown_it
 import defusedxml.ElementTree
 
-import sheetlesson.model
-import sheetlesson.docx_renderer
+import tutorial_lib.model
+import tutorial_lib.compiler
+import tutorial_lib.docx_renderer
 
 
 NAMESPACES = {
@@ -27,17 +28,17 @@ def test_editable_formula_links_and_independent_lists(tmp_path: pathlib.Path) ->
 	source += "   - Another child can move independently.\n\n"
 	source += "```sheets\n" + formula + "\n```\n\n"
 	source += "7. **Choose:** Format > Number\n"
-	document = sheetlesson.model.Document(tmp_path / "input.md", source, title="Native tutorial")
+	document = tutorial_lib.model.Document(tmp_path / "input.md", source, title="Native tutorial")
 	document.tokens = markdown_it.MarkdownIt("commonmark", {"html": True}).parse(source)
 	document.content_token_indices = list(range(len(document.tokens)))
-	span = sheetlesson.model.SourceSpan(str(document.path), 1, 1)
-	reference = sheetlesson.model.CellReference("Data", 2, 2, 2, 2, "B2")
-	worksheet = sheetlesson.model.Worksheet("Data", span)
-	worksheet.google = sheetlesson.model.GoogleMapping("source", "workbook123", "99")
+	span = tutorial_lib.model.SourceSpan(str(document.path), 1, 1)
+	reference = tutorial_lib.model.CellReference("Data", 2, 2, 2, 2, "B2")
+	worksheet = tutorial_lib.model.Worksheet("Data", span)
+	worksheet.google = tutorial_lib.model.GoogleMapping("source", "workbook123", "99")
 	document.worksheets.append(worksheet)
 	for index, token in enumerate(document.tokens):
 		if token.type == "heading_open" and token.tag == "h4":
-			heading = sheetlesson.model.Heading(4, "Calculate", "Step 1: Calculate",
+			heading = tutorial_lib.model.Heading(4, "Calculate", "Step 1: Calculate",
 				"step-calculate", span, index, kind="step", number="1")
 			token.meta["heading"] = heading
 		if token.children:
@@ -45,10 +46,11 @@ def test_editable_formula_links_and_independent_lists(tmp_path: pathlib.Path) ->
 				if child.type == "code_inline" and child.content == "B2":
 					child.meta["reference"] = reference
 	output = tmp_path / "native.docx"
-	sheetlesson.docx_renderer.write_document(document, output)
+	tutorial_lib.docx_renderer.write_document(document, output)
 	with zipfile.ZipFile(output) as archive:
 		document_xml = defusedxml.ElementTree.fromstring(archive.read("word/document.xml"))
 		numbering = defusedxml.ElementTree.fromstring(archive.read("word/numbering.xml"))
+		footer_xml = defusedxml.ElementTree.fromstring(archive.read("word/footer1.xml"))
 		relations = archive.read("word/_rels/document.xml.rels").decode("utf-8")
 	texts = [node.text for node in document_xml.findall(".//w:t", NAMESPACES)]
 	assert texts.count(formula) == 2
@@ -56,6 +58,8 @@ def test_editable_formula_links_and_independent_lists(tmp_path: pathlib.Path) ->
 	assert "workbook123/edit#gid=99&amp;range=B2" in relations
 	assert document_xml.find(".//w:hyperlink[@w:anchor]", NAMESPACES) is not None
 	assert document_xml.find(".//w:bookmarkStart", NAMESPACES) is not None
+	page_field = footer_xml.find(".//w:fldSimple[@w:instr='PAGE']", NAMESPACES)
+	assert page_field is not None
 	assert document_xml.find(".//w:vertAlign[@w:val='subscript']", NAMESPACES) is not None
 	starts = numbering.findall(".//w:start", NAMESPACES)
 	assert {"3", "7"}.issubset({node.get("{" + NAMESPACES["w"] + "}val") for node in starts})
@@ -72,6 +76,35 @@ def test_editable_formula_links_and_independent_lists(tmp_path: pathlib.Path) ->
 
 
 #============================================
+def test_result_labels_stay_with_adjacent_entries(tmp_path: pathlib.Path) -> None:
+	"""Keep a result's meaning with its entry without joining intervening prose."""
+	source = "# Results\n\n## Workbook\n\n### Sheet: Data\n\n"
+	source += "| x | y |\n| --- | --- |\n| 1 | 2 |\n\n"
+	source += "## Tutorial\n\n### Part: Analysis\n\n#### Step: Calculate\n\n"
+	source += "- **Label C1:** Summary\n"
+	source += "- **Label C2:** Slope\n"
+	source += "- **Enter D2:** `=SUM(A2:B2)`\n"
+	source += "- **Label C3:** Intercept\n\n"
+	source += "Explain what this result means.\n\n"
+	source += "- **Enter D3:** `=SUM(A2:B2)`\n"
+	document = tutorial_lib.compiler.compile_source(source, tmp_path / "results.md")
+	assert not document.has_errors
+	output = tmp_path / "results.docx"
+	tutorial_lib.docx_renderer.write_document(document, output)
+	with zipfile.ZipFile(output) as archive:
+		document_xml = defusedxml.ElementTree.fromstring(archive.read("word/document.xml"))
+	kept = [
+		"".join(node.text or "" for node in paragraph.findall(".//w:t", NAMESPACES))
+		for paragraph in document_xml.findall(".//w:body/w:p", NAMESPACES)
+		if paragraph.find("w:pPr/w:keepNext", NAMESPACES) is not None
+	]
+	assert "Label C2: Slope" in kept
+	assert "Label C1: Summary" not in kept
+	assert "Label C3: Intercept" not in kept
+	assert "Enter D2: =SUM(A2:B2)" not in kept
+
+
+#============================================
 def test_native_tables_images_and_menu_segments(tmp_path: pathlib.Path) -> None:
 	"""Tables and images retain editable content, embedded data and authored order."""
 	png = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aS1sAAAAASUVORK5CYII="
@@ -80,19 +113,19 @@ def test_native_tables_images_and_menu_segments(tmp_path: pathlib.Path) -> None:
 	source += "| Group | Value |\n| --- | --- |\n| native | 12 |\n\n"
 	source += "![Data alt](data:image/png;base64," + png + ")\n\n"
 	source += "- **Choose:** Format > Number > Percent\n"
-	document = sheetlesson.model.Document(tmp_path / "images.md", source)
+	document = tutorial_lib.model.Document(tmp_path / "images.md", source)
 	parser = markdown_it.MarkdownIt("commonmark").enable("table")
 	document.tokens = parser.parse(source)
 	document.content_token_indices = list(range(len(document.tokens)))
-	span = sheetlesson.model.SourceSpan(str(document.path), 1, 1)
+	span = tutorial_lib.model.SourceSpan(str(document.path), 1, 1)
 	for index, token in enumerate(document.tokens):
 		if token.type == "inline" and token.content.startswith("**Choose:"):
-			token.meta["action"] = sheetlesson.model.Action(
+			token.meta["action"] = tutorial_lib.model.Action(
 				"choose", span, index, "Format > Number > Percent",
 				menu=["Format", "Number", "Percent"],
 			)
 	output = tmp_path / "images.docx"
-	sheetlesson.docx_renderer.write_document(document, output)
+	tutorial_lib.docx_renderer.write_document(document, output)
 	with zipfile.ZipFile(output) as archive:
 		document_xml = defusedxml.ElementTree.fromstring(archive.read("word/document.xml"))
 		relations = archive.read("word/_rels/document.xml.rels").decode("utf-8")

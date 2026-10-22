@@ -1,7 +1,7 @@
 """Durable author-facing semantic contracts independent of rendering internals."""
 
 import json
-import sheetlesson.compiler
+import tutorial_lib.compiler
 
 
 def compile_tutorial(instructions: str, workbook: str = "") -> object:
@@ -10,7 +10,7 @@ def compile_tutorial(instructions: str, workbook: str = "") -> object:
 	source = "# Example\n\n## Workbook\n\n" + workbook
 	source += "\n\n## Tutorial\n\n### Part 3: Analysis\n\n#### Step: Calculate\n\n"
 	source += instructions
-	return sheetlesson.compiler.compile_source(source)
+	return tutorial_lib.compiler.compile_source(source)
 
 
 def test_scalar_fidelity_and_student_destinations() -> None:
@@ -110,6 +110,53 @@ def test_action_payload_contracts_produce_source_diagnostics() -> None:
 	valid = compile_tutorial('- **Enter C2:**\n\n  ```sheets\n  =A2\n  ```')
 	assert not valid.has_errors
 	assert valid.actions[0].scalar.value == '=A2'
+
+
+def test_label_only_list_items_need_substantive_content() -> None:
+	empty_leaf = compile_tutorial('- **Guide:** **For Sample Means:**')
+	diagnostics = [item for item in empty_leaf.diagnostics
+		if item.category == "incomplete-instruction"]
+	assert len(diagnostics) == 1
+	assert diagnostics[0].severity == "error"
+	assert diagnostics[0].span.start_line == 17
+
+	valid = compile_tutorial('- **Guide:** **Setup Another Table:**\n'
+		'  - **Enter C2:** `=A2`')
+	assert not any(item.category == "incomplete-instruction" for item in valid.diagnostics)
+	assert not valid.has_errors
+
+	for instructions in (
+		'- **Guide:**\n\n  Continue in prose.',
+		'- **Guide:** **For Sample Means:**\n  Continue in the same paragraph.',
+		'- **Enter C2:** `=A2`',
+	):
+		document = compile_tutorial(instructions)
+		assert not any(item.category == "incomplete-instruction" for item in document.diagnostics)
+
+	empty_child = compile_tutorial('- **Guide:**\n  - **Setup Another Table:**')
+	assert any(item.category == "incomplete-instruction" and item.span.start_line == 18
+		for item in empty_child.diagnostics)
+
+	nonempty_fence = compile_tutorial('- **Guide:** **For Sample Means:**\n\n'
+		'  ```text\n  Notes for this step.\n  ```')
+	assert not any(item.category == "incomplete-instruction"
+		for item in nonempty_fence.diagnostics)
+	empty_fence = compile_tutorial('- **Guide:** **For Sample Means:**\n\n'
+		'  ```text\n  ```')
+	assert any(item.category == "incomplete-instruction" for item in empty_fence.diagnostics)
+
+	outside_tutorial = ('# Example\n\n- **Introduction:** **Overview:**\n\n'
+		'## Workbook\n\n- **Worksheet:** **Instructions:**\n\n'
+		'### Sheet: Data\n\n| A | B |\n| --- | --- |\n| 1 | 2 |\n\n'
+		'## Tutorial\n\n### Part 3: Analysis\n\n#### Step: Calculate\n\n'
+		'- **Enter C2:** `=A2`')
+	document = tutorial_lib.compiler.compile_source(outside_tutorial)
+	assert not any(item.category == "incomplete-instruction" for item in document.diagnostics)
+	inside_tutorial = outside_tutorial.replace(
+		'- **Enter C2:** `=A2`', '- **Guide:** **For Sample Means:**')
+	# The same label-only shape is diagnosed when it appears in the Tutorial region.
+	document = tutorial_lib.compiler.compile_source(inside_tutorial)
+	assert any(item.category == "incomplete-instruction" for item in document.diagnostics)
 
 
 def test_unsupported_footnotes_exempt_literal_code() -> None:

@@ -1,5 +1,9 @@
 # Babies tutorial migration
 
+Path note (2026-10-22): paths and command examples below use the current repository layout.
+Recorded observations belong to their stated snapshots; renamed output manifests retain their
+original contents until the final rebuild and verification refresh.
+
 Status: source migration and offline DOCX/XLSX builds complete. This report
 records source evidence and independent numerical checks, not a live Google Sheets calculation.
 
@@ -12,11 +16,11 @@ one-sample t: 2; two-sample t: none). No source artifact was modified.
 
 The migrated files are:
 
-- [babies_1_z_test.md](../../../tutorials/babies_1_z_test.md): 7 numbered steps, 2 substeps,
+- [babies_1_z_test.md](../../../tutorial_data/babies_1_z_test.md): 7 numbered steps, 2 substeps,
   23 scalar assignments, 10 original PNG companions.
-- [babies_2_t_test.md](../../../tutorials/babies_2_t_test.md): 10 numbered steps, 3 substeps,
+- [babies_2_t_test.md](../../../tutorial_data/babies_2_t_test.md): 10 numbered steps, 3 substeps,
   24 scalar assignments, 2 original PNG companions.
-- [babies_3_two_sample_t_test.md](../../../tutorials/babies_3_two_sample_t_test.md): 9 numbered
+- [babies_3_two_sample_t_test.md](../../../tutorial_data/babies_3_two_sample_t_test.md): 9 numbered
   steps, numbered 0-8, 3 substeps, 20 scalar assignments including two explicit alternatives.
 
 National lessons retain the entire original data sheet and seed the same data on their respective
@@ -125,8 +129,8 @@ compile_source local-import error was reported to the compiler owner and has bee
 Built each lesson with `build_document(..., 'docx,xlsx')`, reopened the generated DOCX and XLSX,
 and checked every working-sheet cell for prefilled formulas: none. E9/G5 checks are blank as
 expected. Generated DOCX image counts are 10, 2 and 0, matching all original local companions;
-paragraph counts are 105, 109 and 75. Bundles are under output/babies_1_z_test,
-output/babies_2_t_test, and output/babies_3_two_sample_t_test.
+paragraph counts are 105, 109 and 75. Bundles are under tutorial_output/babies_1_z_test,
+tutorial_output/babies_2_t_test, and tutorial_output/babies_3_two_sample_t_test.
 
 Google import, formula execution, link navigation, and visual DOCX/PDF review remain separate
 external checks. Neither independent scipy results nor offline source checks claim these passed.
@@ -136,6 +140,6 @@ external checks. Neither independent scipy results nor offline source checks cla
 
 Corrected the one-sample Z lesson's setup prose from `Part 1: National Z-Test` to the declared
 worksheet name `Part 1 National Z-Test`. No workbook content or calculation changed.
-`source source_me.sh && python3 tutorial.py lint tutorials/babies_1_z_test.md` passed with zero
+`source source_me.sh && python3 make_tutorial.py lint tutorial_data/babies_1_z_test.md` passed with zero
 errors; the existing spare-range and free-response warnings and mapping notes remain. Final
 PDF rebuild and visual verification belong to the render-validation workstream.

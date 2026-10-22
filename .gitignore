@@ -24,3 +24,5 @@ site/
 # ADD YOUR CUSTOM IGNORES BELOW
 # Propagation preserves this section.
 # Template-only ignores.
+
+/tutorial_output/

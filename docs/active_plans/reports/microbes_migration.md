@@ -1,13 +1,17 @@
 # Microbes migration report
 
+Path note (2026-10-22): paths and command examples below use the current repository layout.
+Recorded observations belong to their stated snapshots; renamed output manifests retain their
+original contents until the final rebuild and verification refresh.
+
 ## Coverage
 
 All five complete Microbes tutorials have been migrated to single-source Markdown. Their source
-files are [microbes_1_z_test.md](../../../tutorials/microbes_1_z_test.md),
-[microbes_2_t_test.md](../../../tutorials/microbes_2_t_test.md),
-[microbes_3_two_sample_t_test.md](../../../tutorials/microbes_3_two_sample_t_test.md),
-[microbes_4_f_test.md](../../../tutorials/microbes_4_f_test.md), and
-[microbes_5_anova.md](../../../tutorials/microbes_5_anova.md).
+files are [microbes_1_z_test.md](../../../tutorial_data/microbes_1_z_test.md),
+[microbes_2_t_test.md](../../../tutorial_data/microbes_2_t_test.md),
+[microbes_3_two_sample_t_test.md](../../../tutorial_data/microbes_3_two_sample_t_test.md),
+[microbes_4_f_test.md](../../../tutorial_data/microbes_4_f_test.md), and
+[microbes_5_anova.md](../../../tutorial_data/microbes_5_anova.md).
 
 | Tutorial | Original instruction steps | Preserved embedded images | Seeded source cells |
 | --- | --- | --- | --- |
@@ -83,8 +87,8 @@ cumulative argument and worked examples support the left-CDF interpretation used
 Commands used (all Python invocations follow the required environment bootstrap):
 
 ```bash
-source source_me.sh && python3 tutorial.py lint tutorials/microbes_1_z_test.md
-source source_me.sh && python3 tutorial.py build tutorials/microbes_1_z_test.md --format docx,xlsx --output-dir output_microbes/microbes_1_z_test
+source source_me.sh && python3 make_tutorial.py lint tutorial_data/microbes_1_z_test.md
+source source_me.sh && python3 make_tutorial.py build tutorial_data/microbes_1_z_test.md --format docx,xlsx --output-dir output_microbes/microbes_1_z_test
 ```
 
 The same build command was run successfully for all five basenames. Generated DOCX/XLSX bundles
@@ -146,8 +150,8 @@ normality, and outlier cautions remain explicit. This distinction follows the pr
 checked on 2026-10-22. Repaired the broken F.DIST sentence to explain its lower-tail CDF and the
 need for the subsequent tail calculations. No data or formulas changed.
 
-Validation: `source source_me.sh && python3 tutorial.py lint tutorials/microbes_1_z_test.md` and
-`source source_me.sh && python3 tutorial.py lint tutorials/microbes_4_f_test.md` each passed with
+Validation: `source source_me.sh && python3 make_tutorial.py lint tutorial_data/microbes_1_z_test.md` and
+`source source_me.sh && python3 make_tutorial.py lint tutorial_data/microbes_4_f_test.md` each passed with
 zero errors. Existing spare-range, free-response, and forward-reference warnings remain. Reviewed
 the changed source paragraphs for complete sentences and balanced inline formatting. Final PDF
 rebuild and visual verification belong to the render-validation workstream.

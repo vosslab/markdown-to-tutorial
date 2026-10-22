@@ -9,8 +9,8 @@ import argparse
 import numpy
 import scipy.stats
 
-import sheetlesson.compiler
-import sheetlesson.model
+import tutorial_lib.compiler
+import tutorial_lib.model
 import tutorial_oracles
 import sheets_validation_lib
 
@@ -19,7 +19,7 @@ import sheets_validation_lib
 def parse_args() -> argparse.Namespace:
 	parser = argparse.ArgumentParser(description=__doc__)
 	parser.add_argument("-o", "--output", dest="output", type=pathlib.Path,
-		default=pathlib.Path("output/validation"))
+		default=pathlib.Path("tutorial_output/validation"))
 	args = parser.parse_args()
 	return args
 
@@ -70,7 +70,7 @@ def synthetic_direction_checks() -> list[dict]:
 
 
 #============================================
-def check_mapping(document: sheetlesson.model.Document, item: dict) -> dict:
+def check_mapping(document: tutorial_lib.model.Document, item: dict) -> dict:
 	cases = sheets_validation_lib.prepare_cases(document)
 	provenance = []
 	for case in cases:
@@ -91,12 +91,12 @@ def check_mapping(document: sheetlesson.model.Document, item: dict) -> dict:
 #============================================
 def main() -> int:
 	args = parse_args()
-	paths = sorted(pathlib.Path("tutorials").glob("*.md"))
+	paths = sorted(pathlib.Path("tutorial_data").glob("*.md"))
 	if len(paths) != 12:
 		raise ValueError(f"Expected all 12 migrated tutorials, found {len(paths)}")
 	payload, details = {"tutorials": {}}, []
 	for path in paths:
-		document = sheetlesson.compiler.compile_document(path)
+		document = tutorial_lib.compiler.compile_document(path)
 		if document.has_errors:
 			raise ValueError(f"Cannot validate invalid tutorial {path}")
 		common, scenarios = tutorial_oracles.calculate(document)

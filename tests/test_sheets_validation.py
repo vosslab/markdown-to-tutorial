@@ -4,8 +4,8 @@ import pathlib
 
 import pytest
 
-import sheetlesson.model
-import sheetlesson.compiler
+import tutorial_lib.model
+import tutorial_lib.compiler
 import sheets_validation_lib
 
 
@@ -17,12 +17,12 @@ def test_independent_branches_preserve_replacements_and_literal_types() -> None:
 	source += "- **Alternative: First**\n  - **Enter B2:** `=A2+1`\n"
 	source += "- **Alternative: Second**\n  - **Enter B2:** `=A2+2`\n\n"
 	source += "- **Replace B2:** `=A2+3`\n"
-	document = sheetlesson.compiler.compile_source(source)
+	document = tutorial_lib.compiler.compile_source(source)
 	cases = sheets_validation_lib.prepare_cases(document)
 	assert [case["scenario"] for case in cases] == ["baseline", "group-1-branch-2"]
 	assert [write["value"] for write in cases[1]["writes"]] == [
 		{"formulaValue": "=A2+2"}, {"formulaValue": "=A2+3"}]
-	literal = sheetlesson.model.Scalar("text", "=NOT_A_FORMULA")
+	literal = tutorial_lib.model.Scalar("text", "=NOT_A_FORMULA")
 	assert sheets_validation_lib.extended_value(literal) == {
 		"stringValue": "=NOT_A_FORMULA"}
 

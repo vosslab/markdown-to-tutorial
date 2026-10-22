@@ -16,28 +16,28 @@ import pytest
 import pypdf
 
 # Local modules
-import sheetlesson.build
-import sheetlesson.model
-import sheetlesson.pdf_export
+import tutorial_lib.build
+import tutorial_lib.model
+import tutorial_lib.pdf_export
 
 
 #============================================
-def make_document(directory: pathlib.Path) -> sheetlesson.model.Document:
+def make_document(directory: pathlib.Path) -> tutorial_lib.model.Document:
 	"""Create a minimal compiled model for publication integrity tests."""
 	source = directory / "lesson.md"
 	source.write_text("A tutorial\n", encoding="utf-8")
-	document = sheetlesson.model.Document(source, source.read_text(encoding="utf-8"))
-	span = sheetlesson.model.SourceSpan(str(source), 1, 1)
-	sheet = sheetlesson.model.Worksheet("Data", span)
-	sheet.cells[(1, 1)] = sheetlesson.model.CellSeed(
-		1, 1, sheetlesson.model.Scalar("text", "Value"), span
+	document = tutorial_lib.model.Document(source, source.read_text(encoding="utf-8"))
+	span = tutorial_lib.model.SourceSpan(str(source), 1, 1)
+	sheet = tutorial_lib.model.Worksheet("Data", span)
+	sheet.cells[(1, 1)] = tutorial_lib.model.CellSeed(
+		1, 1, tutorial_lib.model.Scalar("text", "Value"), span
 	)
 	document.worksheets.append(sheet)
 	return document
 
 
 #============================================
-def write_docx(document: sheetlesson.model.Document, path: pathlib.Path) -> None:
+def write_docx(document: tutorial_lib.model.Document, path: pathlib.Path) -> None:
 	"""Provide a valid local package without exercising the independent renderer."""
 	output = docx.Document()
 	output.add_paragraph(document.source)
@@ -63,16 +63,16 @@ def test_failed_conversion_preserves_bundle_and_subset_replaces_it(
 	tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch,
 ) -> None:
 	document = make_document(tmp_path)
-	monkeypatch.setattr(sheetlesson.build.sheetlesson.docx_renderer, "write_document", write_docx)
-	monkeypatch.setattr(sheetlesson.build.sheetlesson.pdf_export, "export_pdf", write_pdf)
+	monkeypatch.setattr(tutorial_lib.build.tutorial_lib.docx_renderer, "write_document", write_docx)
+	monkeypatch.setattr(tutorial_lib.build.tutorial_lib.pdf_export, "export_pdf", write_pdf)
 	destination = tmp_path / "published"
-	sheetlesson.build.build_document(document, destination)
+	tutorial_lib.build.build_document(document, destination)
 	before = {path.name: path.read_bytes() for path in destination.iterdir()}
-	monkeypatch.setattr(sheetlesson.build.sheetlesson.pdf_export, "export_pdf", fail_pdf)
+	monkeypatch.setattr(tutorial_lib.build.tutorial_lib.pdf_export, "export_pdf", fail_pdf)
 	with pytest.raises(RuntimeError, match="conversion failed"):
-		sheetlesson.build.build_document(document, destination)
+		tutorial_lib.build.build_document(document, destination)
 	assert {path.name: path.read_bytes() for path in destination.iterdir()} == before
-	sheetlesson.build.build_document(document, destination, "xlsx")
+	tutorial_lib.build.build_document(document, destination, "xlsx")
 	assert set(path.suffix for path in destination.iterdir()) == {".xlsx", ".json"}
 	report = json.loads((destination / "validation.json").read_text(encoding="utf-8"))
 	assert report["external_behavior"]["google_import"] == "unchecked"
@@ -82,17 +82,17 @@ def test_failed_conversion_preserves_bundle_and_subset_replaces_it(
 def test_modified_artifact_and_foreign_directory_are_preserved(tmp_path: pathlib.Path) -> None:
 	document = make_document(tmp_path)
 	destination = tmp_path / "published"
-	sheetlesson.build.build_document(document, destination, "xlsx")
+	tutorial_lib.build.build_document(document, destination, "xlsx")
 	workbook = destination / "lesson.xlsx"
 	workbook.write_bytes(b"user edits")
 	with pytest.raises(ValueError, match="modified"):
-		sheetlesson.build.build_document(document, destination, "xlsx")
+		tutorial_lib.build.build_document(document, destination, "xlsx")
 	assert workbook.read_bytes() == b"user edits"
 	foreign = tmp_path / "foreign"
 	foreign.mkdir()
 	(foreign / "notes.txt").write_text("keep", encoding="utf-8")
 	with pytest.raises(ValueError, match="not an owned"):
-		sheetlesson.build.build_document(document, foreign, "xlsx")
+		tutorial_lib.build.build_document(document, foreign, "xlsx")
 	assert (foreign / "notes.txt").read_text(encoding="utf-8") == "keep"
 
 
@@ -102,8 +102,8 @@ def test_successful_converter_with_unreadable_pdf_preserves_bundle(
 ) -> None:
 	"""A converter's zero exit and PDF signature must not publish a corrupt bundle."""
 	document = make_document(tmp_path)
-	monkeypatch.setattr(sheetlesson.build.sheetlesson.docx_renderer, "write_document", write_docx)
-	monkeypatch.setattr(sheetlesson.pdf_export.shutil, "which", lambda name: "/mock/soffice")
+	monkeypatch.setattr(tutorial_lib.build.tutorial_lib.docx_renderer, "write_document", write_docx)
+	monkeypatch.setattr(tutorial_lib.pdf_export.shutil, "which", lambda name: "/mock/soffice")
 	writer = pypdf.PdfWriter()
 	writer.add_blank_page(width=100, height=100)
 	buffer = io.BytesIO()
@@ -115,11 +115,11 @@ def test_successful_converter_with_unreadable_pdf_preserves_bundle(
 		output.write_bytes(pdf_bytes)
 		return subprocess.CompletedProcess(command, 0, stdout="converted", stderr="")
 
-	monkeypatch.setattr(sheetlesson.pdf_export.subprocess, "run", convert)
+	monkeypatch.setattr(tutorial_lib.pdf_export.subprocess, "run", convert)
 	destination = tmp_path / "published"
-	sheetlesson.build.build_document(document, destination)
+	tutorial_lib.build.build_document(document, destination)
 	before = {path.name: path.read_bytes() for path in destination.iterdir()}
 	pdf_bytes = b"%PDF-"
 	with pytest.raises(RuntimeError, match="unreadable PDF"):
-		sheetlesson.build.build_document(document, destination)
+		tutorial_lib.build.build_document(document, destination)
 	assert {path.name: path.read_bytes() for path in destination.iterdir()} == before

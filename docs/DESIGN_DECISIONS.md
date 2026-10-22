@@ -78,7 +78,7 @@ The Python reader checks document structure without adding a separate system exe
 **Consequence.** Invalid output fails the staged build and preserves the previous published bundle.
 This check does not claim rendered layout or visual review.
 
-**Owner.** [pdf_export.py](../sheetlesson/pdf_export.py).
+**Owner.** [pdf_export.py](../tutorial_lib/pdf_export.py).
 
 ### Independent scientific expectations
 
@@ -106,27 +106,79 @@ original Bradford measurements.
 **Consequence.** Keep synthetic provenance visible. Interpret Bradford as total protein relative
 to a standard, rather than PETase-specific abundance, activity, or fermentation productivity.
 
-**Owner.** [petase_1_linear_regression.md](../tutorials/petase_1_linear_regression.md) and
+**Owner.** [petase_1_linear_regression.md](../tutorial_data/petase_1_linear_regression.md) and
 [petase_migration.md](active_plans/reports/petase_migration.md).
 
-### Distinct executable and library names
+### User-selected tutorial layout
 
-**Decision.** Keep the command-line executable named `tutorial.py` and name the application
-package directory `sheetlesson/`.
+**Decision.** Use `make_tutorial.py` for the executable, `tutorial_lib/` for the application
+package, `tutorial_data/` for authored lessons and assets, and `tutorial_output/` for default
+generated bundles and verification evidence.
 
-**Why.** Distinct prefixes let shell autocomplete distinguish the executable from the library.
+**Why.** The latest explicit user instruction selects this coordinated layout and supersedes
+the earlier distinct-prefix naming decision.
 
-**Consequence.** Active imports and documentation use `sheetlesson`; do not add a
-`tutorial_lib` compatibility alias that restores the autocomplete collision.
+**Consequence.** Update imports, command examples, source discovery, and default paths together.
+Retain existing generated evidence under the renamed ignored output directory; rebuild manifests
+after the rename before claiming current artifact provenance. Provide no old-name aliases.
 
-**Owner.** [tutorial.py](../tutorial.py) and the [sheetlesson package](../sheetlesson/).
+**Owner.** [AUTHORING_GUIDE.md](AUTHORING_GUIDE.md), [tutorial_lib](../tutorial_lib/),
+[tutorial_data](../tutorial_data/), and [make_tutorial.py](../make_tutorial.py).
+
+### Focused readiness contracts
+
+**Decision.** Keep the authored schema unchanged while enforcing label ownership and rejecting
+instruction items that contain only bold, colon-terminated labels and no substantive continuation,
+valid action, nonempty fence, or substantive descendant.
+
+**Why.** The 12-lesson readiness review exposed these gaps in existing source and AST handling; the
+current `Label`, `Enter`, `Select`, and `Choose` actions already express the needed work.
+
+**Consequence.** A seeded label is for inspection; a student `Label` assignment starts blank.
+Identical repeated assignments continue to warn. An empty child does not make its parent
+instruction substantive. Do not add directives or compatibility layers for these cases.
+
+**Owner.** [TUTORIAL_SPEC.md](TUTORIAL_SPEC.md) and the compiler in
+[tutorial_lib/compiler.py](../tutorial_lib/compiler.py).
+
+### Targeted workbook and document readability
+
+**Decision.** Freeze worksheet panes at `A2`, keep columns at least 12 characters wide, and add a
+native Word `PAGE` footer field. Teach number formats as explicit menu tasks when a lesson requires
+them.
+
+**Why.** These defaults make entry worksheets easier to follow while preserving simple authored
+tables and an honest boundary around native spreadsheet formatting.
+
+**Consequence.** Do not infer arbitrary formats from cell values or claim full Excel/Sheets
+formatting fidelity. Replace misleading worked-example screenshots with native editable tables;
+preserve original image assets.
+
+**Owner.** [TUTORIAL_SPEC.md](TUTORIAL_SPEC.md),
+[tutorial_lib/workbook.py](../tutorial_lib/workbook.py), and
+[tutorial_lib/docx_styles.py](../tutorial_lib/docx_styles.py).
+
+### XLSX formula token serialization
+
+**Decision.** Add the OOXML `_xlfn.` prefix only to recognized modern formula-name tokens when
+writing XLSX, and remove it on readback only for recognized tokens.
+
+**Why.** Modern spreadsheet functions otherwise fail to calculate in some engines even though
+the authored formula is valid. Prefixing the full formula or rewriting its math would alter the
+source semantics.
+
+**Consequence.** Keep authored whitespace, function arguments, strings, references, and
+mathematical operations unchanged. Leave unknown functions untouched and report their validation
+coverage honestly. Formula normalization is a storage-boundary operation, not calculation.
+
+**Owner.** [formula_io.py](../tutorial_lib/formula_io.py) and [TUTORIAL_SPEC.md](TUTORIAL_SPEC.md).
 
 ### Repository and developer import paths
 
 **Decision.** Source both the repository root and `devel/` from `source_me.sh` after it loads
 the user's shell configuration.
 
-**Why.** The CLI and tests import the root `sheetlesson` package, while developer tools and tests
+**Why.** The CLI and tests import the root `tutorial_lib` package, while developer tools and tests
 share flat support modules from `devel/`.
 
 **Consequence.** Keep the paths after `.bashrc` because it clears `PYTHONPATH`; run repository
@@ -146,3 +198,20 @@ evidence. Editing them solely to satisfy a new implementation's hygiene run woul
 Source fingerprints verify the original artifacts remain intact.
 
 **Owner.** [conftest.py](../tests/conftest.py).
+
+### Fill-down action and label sizing
+
+**Decision.** Author a spreadsheet fill as one `Fill` action such as `Fill C2:C26: Down`; the range
+includes its seeded first row, supports downward filling only, and expands through blank student cells.
+Translate with the spreadsheet reference translator and report malformed source formulas through
+controlled diagnostics. Estimate workbook widths and wrapping from authored labels and quoted
+formula text, including IF decisions, while leaving answer cells blank.
+
+**Why.** Students should enter a formula once and fill the intended range efficiently, while authored
+labels and decision text provide evidence for estimating readable dimensions before answers exist.
+
+**Consequence.** Keep this action distinct from repeated `Enter` instructions. Keep student answers
+blank and treat dimensions as estimates, not font measurements or calculated formula results.
+
+**Owner.** [TUTORIAL_SPEC.md](TUTORIAL_SPEC.md), [compiler.py](../tutorial_lib/compiler.py), and
+[workbook.py](../tutorial_lib/workbook.py).

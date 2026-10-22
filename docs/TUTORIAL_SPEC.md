@@ -1,8 +1,8 @@
 # Single-source tutorial specification
 
-Status: implementation specification, 2026-10-22. Implementation and migrations are complete.
-The execution sequence is in
-[tutorial_converter_plan.md](archive/tutorial_converter_plan.md).
+Status: active implementation and readiness review, 2026-10-22. Earlier implementation and
+migration evidence applies to its recorded snapshots; current readiness work and closeout are tracked
+in [tutorial_readiness_plan.md](active_plans/archive/tutorial_readiness_plan.md).
 
 ## Product contract
 
@@ -137,11 +137,20 @@ string contents only after removing the table's structural escaping.
 
 Formula text means the semantic characters after Markdown decoding. Preserve function names,
 spaces, quoted strings, `$` anchors, and sheet references. Never evaluate formulas in Python.
+At the XLSX boundary, prefix only recognized modern function-name tokens with `_xlfn.` when
+required by OOXML storage. Preserve the authored formula's mathematical meaning and all other
+characters; this is a serialization rule, not formula rewriting. On readback, remove that prefix
+only from recognized function tokens so validation and DOCX rendering see the logical authored
+formula. Unknown functions remain unchanged and outside the checked function vocabulary.
 Only leading `=` declares a formula; text beginning with `+`, `-`, or `@` remains text unless it
 matches the numeric rule. XLSX serialization must explicitly preserve literal text cell types.
 
 Workbook table formulas are prefilled in the student workbook. Formula instructions under Tutorial
 are not prefilled. This distinction gives the author one visible way to choose starting content.
+For each label, choose one owner: seed it in the Workbook table for students to inspect, or leave
+the target blank and ask students to enter it with `Label`. Do not seed a label and ask students to
+re-enter it. `Label` and `Enter` still reject a nonempty seeded target; identical repeated
+assignments remain a redundancy warning.
 
 ### Optional Google link metadata
 
@@ -194,7 +203,7 @@ An explicit declaration is allowed even with only one sheet. Missing or unknown 
 
 Cross-sheet references use familiar spreadsheet syntax: `'Other sheet'!B2` or
 `'Other sheet'!B2:B25`. Apostrophes inside names are doubled. Assignment targets are single cells;
-references and Select actions may be ranges. Cross-sheet targets must name a declared worksheet.
+references, Select, and Fill actions may be ranges. Cross-sheet targets must name a declared worksheet.
 
 ## List-authored instructions
 
@@ -207,6 +216,7 @@ bold in the rendered document. Ordinary strong openings remain ordinary instruct
 | `**Label F2:**` | Student types a literal text label | Do not fill the answer |
 | `**Enter G2:**` | Student types a scalar value or formula | Do not fill the answer |
 | `**Replace G2:**` | Student deliberately changes a previously populated cell | Preserve initial value |
+| `**Fill E2:F26:** Down` | Student copies first-row formulas down each selected column | Do not fill the answers |
 | `**Select:**` | Student selects the single cell or range in the payload | None |
 | `**Choose:**` | Student follows a menu path | None |
 | `**Compare:**`, `**Explain:**`, other prose openings | Ordinary instruction | None |
@@ -219,14 +229,33 @@ Explanations belong in a subsequent paragraph or nested ordinary list item, outs
 
 Actions are valid in ordered or unordered lists and may appear in nested lists. A malformed
 recognized action is an error, not silently demoted to prose. Actions require a containing Step.
-Every tutorial list item should have an opening strong span; missing openings are style warnings,
-not a reason to guess or rewrite the author's words. Lists inside literal examples are exempt.
+Reject a list item when its only content is one or more bold, colon-terminated labels and it has no
+substantive continuation, nonempty fenced instruction, valid action, or substantive descendant.
+An empty child item does not make its parent substantive. This check follows parsed Markdown
+structure and source locations. Other list items without an opening strong span remain style
+warnings; do not guess or rewrite the author's words. Lists inside literal examples are exempt.
 
 `Label`/`Enter` targeting a nonempty seeded cell or a previously assigned cell with a different
 value is an error; use `Replace` for an intentional change. Identical repeated assignments are
 warnings about redundancy. `Replace` requires a known prior value, seeded or instructed. Neither
 action changes the generated workbook beyond the initial table content and entry-cell styling.
 Track authored instruction state in document order without computing formula results.
+
+`Fill` accepts only the literal payload `Down` and an ordered A1 range containing at least two
+rows. A single column (`**Fill C2:C26:** Down`) and a rectangle (`**Fill E2:F26:** Down`) use
+the same rule: each cell of the first row must already contain a formula in every incoming
+instruction state, and that column's source formula must be identical across those states.
+Missing, nonformula, or conflicting source values are errors. An author can put Fill inside
+each alternative when the alternatives need different source formulas.
+
+Translate each source formula to the remaining cells of its column using ordinary spreadsheet
+relative, mixed, and absolute A1 reference rules. Preserve string literals and quoted worksheet
+names. Validate generated entries in row order, left to right, with the same conflict, redundancy,
+formula-reference, and availability checks as Enter. Their source location is the authored Fill
+item. Later instructions can use the resulting cells. Keep the authored Fill as one visible
+instruction in DOCX/PDF; generated Enter children belong to validation and execution only.
+Both execution engines replay those same children. Student XLSX contains only Workbook seeds;
+Fill marks destination entry cells without inserting answers.
 
 ### Alternative calculations
 
@@ -310,7 +339,8 @@ checked, and unchecked formulas rather than using a single misleading accuracy s
 
 ### DOCX
 
-Use native paragraphs, list numbering, tables, hyperlinks, and editable formula text. Establish
+Use native paragraphs, list numbering, tables, hyperlinks, and editable formula text. Add a native
+Word `PAGE` field in the footer. Establish
 named styles for title, part, step, substep, body, instruction, formula, cell reference, and menu.
 Prefer standard heading styles for outline navigation, with direct run formatting where the import
 spike demonstrates it is needed. Style values belong in one renderer-owned style definition.
@@ -334,9 +364,12 @@ future work; migrate such content to supported assets or report it rather than d
 
 ### XLSX
 
-Write worksheets, values, types, and formulas exactly as the Workbook model specifies. Use modest
-header emphasis, wrapped text, readable bounded column widths, and a distinct style on blank student
-entry cells. Do not populate Label/Enter answers, add hidden solutions, or overwrite seed values.
+Write worksheets, values, types, and formulas exactly as the Workbook model specifies. Freeze panes
+at `A2`; use at least 12-character column widths, including for blank student-entry cells, while
+keeping widths bounded. Use modest header emphasis, wrapped text, and a distinct style on blank
+student entry cells. Do not populate Label/Enter answers, add hidden solutions, or overwrite seed
+values. Number formats are explicit authored menu tasks when a lesson needs them; do not infer
+arbitrary number formats from values or promise full workbook fidelity.
 Do not fabricate cached formula results. Request recalculation on opening when supported by the
 chosen writer, and disclose that calculation was not performed by the converter.
 
@@ -353,7 +386,7 @@ layout renderer. Verify that the current run created a nonempty readable PDF. Us
 paths so an old PDF cannot masquerade as success. On this macOS host, commands invoking LibreOffice
 must run outside the sandbox, through the project's conversion wrapper.
 
-Each default build publishes `output/<source-stem>/<source-stem>.docx`, `.xlsx`, and `.pdf`, plus
+Each default build publishes `tutorial_output/<source-stem>/<source-stem>.docx`, `.xlsx`, and `.pdf`, plus
 `validation.json`. The JSON is build evidence, not a fourth teaching deliverable. It includes source
 and asset fingerprints, diagnostic locations, reference-check coverage, and output status. It makes
 no claim about Google import unless separate recorded acceptance evidence exists.
@@ -371,10 +404,10 @@ ZIP/PDF bytes, but must produce equivalent tutorial/workbook content.
 The current CLI provides these commands:
 
 ```bash
-source source_me.sh && python3 tutorial.py lint tutorial.md
-source source_me.sh && python3 tutorial.py build tutorial.md
-source source_me.sh && python3 tutorial.py build tutorial.md --format docx,xlsx
-source source_me.sh && python3 tutorial.py import-xlsx template.xlsx --output draft.md
+source source_me.sh && python3 make_tutorial.py lint tutorial.md
+source source_me.sh && python3 make_tutorial.py build tutorial.md
+source source_me.sh && python3 make_tutorial.py build tutorial.md --format docx,xlsx
+source source_me.sh && python3 make_tutorial.py import-xlsx template.xlsx --output draft.md
 ```
 
 `lint` parses and validates without running LibreOffice or writing deliverables. `build` defaults
@@ -437,3 +470,12 @@ the migration records. These checks do not establish Google Docs or Sheets impor
 Live Google import is optional when the required access is available. Record observed results
 separately, and claim Google verification only for behavior actually observed. Missing Google access
 does not block local completion or become a milestone dependency.
+
+The static validator checks formula syntax, references, and authored assignments; it never evaluates
+formulas. For real local execution, `devel/validate_libreoffice.py` applies all authored
+assignments for each scenario, opens and recalculates the final workbook state in LibreOffice Calc,
+and compares saved results with independent SciPy/NumPy expectations. This verifies final states,
+not intermediate steps. On the current snapshot Calc passed 254 expected values across 13
+scenarios. No Google claim follows from that result: all 14 worksheet mappings are absent and live
+Google execution lacked credentials. See [GOOGLE_SHEETS_VALIDATION.md](GOOGLE_SHEETS_VALIDATION.md)
+and [local_calculation_readiness.md](active_plans/reports/local_calculation_readiness.md).

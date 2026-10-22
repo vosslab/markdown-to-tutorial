@@ -1,5 +1,9 @@
 # Dr. Caffeine migration evidence
 
+Path note (2026-10-22): paths and command examples below use the current repository layout.
+Recorded observations belong to their stated snapshots; renamed output manifests retain their
+original contents until the final rebuild and verification refresh.
+
 Date: 2026-10-22. Authoring migration completed; full build and Google calculation evidence are
 recorded separately when performed. Student answer cells remain blank in initial workbooks.
 
@@ -11,7 +15,7 @@ Title: Dr. Caffeine's All-Nighter Academy / Does Sleep Affect Exam Scores? The w
 credits Tania and Roohana. Source SHA256:
 `b1d00c8712671fcc19bf5e6b1f665942e8943498f811209d1a6d16329c38f84d`.
 Its 467 physical lines include 14 base64 PNGs; all 14 were extracted byte-for-byte into
-`tutorials/assets/caffeine_01.png` through `caffeine_14.png`, without image regeneration.
+`tutorial_data/assets/caffeine_01.png` through `caffeine_14.png`, without image regeneration.
 A contact-sheet review confirmed these are narrative comic illustrations, not workbook screenshots.
 Their drawn charts/text are illustrative; each migrated introduction explicitly says to use the
 actual data and student-created charts as evidence.

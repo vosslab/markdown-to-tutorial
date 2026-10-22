@@ -6,15 +6,16 @@ import zipfile
 import pytest
 import openpyxl
 
-import sheetlesson.model
-import sheetlesson.compiler
-import sheetlesson.workbook
+import tutorial_lib.model
+import tutorial_lib.compiler
+import tutorial_lib.workbook
+import tutorial_lib.formula_io
 
 
 #============================================
 def test_seed_types_and_student_targets_roundtrip(tmp_path: pathlib.Path) -> None:
 	"""Student actions cannot leak answers or coerce literal and empty text seeds."""
-	model = sheetlesson.model
+	model = tutorial_lib.model
 	span = model.SourceSpan("source.md", 1, 1)
 	sheet = model.Worksheet("Data", span)
 	values = [model.Scalar("text", "=literal"), model.Scalar("text", ""),
@@ -26,15 +27,110 @@ def test_seed_types_and_student_targets_roundtrip(tmp_path: pathlib.Path) -> Non
 	document = model.Document(pathlib.Path("source.md"), "", worksheets=[sheet])
 	document.actions = [model.Action("Enter", span, 0, "secret answer")]
 	path = tmp_path / "student.xlsx"
-	sheetlesson.workbook.write_workbook(document, path)
-	sheetlesson.workbook.verify_workbook(document, path)
+	tutorial_lib.workbook.write_workbook(document, path)
+	tutorial_lib.workbook.verify_workbook(document, path)
 	book = openpyxl.load_workbook(path, data_only=False)
 	assert book["Data"]["A4"].data_type == "s"
 	assert book["Data"]["H100"].value is None
 	assert book["Data"]["C4"].fill.fill_type == "solid"
 	assert book["Data"]["A4"].fill.fill_type is None
+	assert book["Data"].freeze_panes is None
+	assert book["Data"].column_dimensions["H"].width == 12
 	with zipfile.ZipFile(path) as archive:
 		assert b"secret answer" not in b"".join(archive.read(n) for n in archive.namelist())
+	book.close()
+
+
+#============================================
+def test_modern_formula_storage_preserves_logical_formulas(tmp_path: pathlib.Path) -> None:
+	"""XLSX prefixes enable engine recognition without rewriting text or unknown calls."""
+	model = tutorial_lib.model
+	span = model.SourceSpan("source.md", 1, 1)
+	sheet = model.Worksheet("Data", span)
+	formulas = [
+		'=  IF(TRUE, STDEV.S(A1:A2), "NORM.S.DIST( and _xlfn.STDEV.S(")',
+		'=_xlfn.NORM.DIST(1,0,1,TRUE)',
+		'=SUM(1,  2)+MY.UNKNOWN(3)+_xlfn.UNKNOWN(4)',
+	]
+	for column, formula in enumerate(formulas, 1):
+		sheet.cells[(3, column)] = model.CellSeed(
+			3, column, model.Scalar("formula", formula), span)
+	document = model.Document(pathlib.Path("source.md"), "", worksheets=[sheet])
+	path = tmp_path / "modern.xlsx"
+	tutorial_lib.workbook.write_workbook(document, path)
+	tutorial_lib.workbook.verify_workbook(document, path)
+	book = openpyxl.load_workbook(path, data_only=False)
+	assert book["Data"]["A3"].value == formulas[0].replace(
+		" STDEV.S(A1:A2)", " _xlfn.STDEV.S(A1:A2)")
+	assert book["Data"]["B3"].value == formulas[1]
+	assert book["Data"]["C3"].value == formulas[2]
+	book.close()
+	draft = tutorial_lib.workbook.import_workbook(path)
+	assert formulas[0] in draft
+	assert '=NORM.DIST(1,0,1,TRUE)' in draft
+	assert '_xlfn.UNKNOWN(4)' in draft
+	for formula in formulas:
+		stored = tutorial_lib.formula_io.serialize_formula(formula)
+		assert tutorial_lib.formula_io.serialize_formula(stored) == stored
+		assert tutorial_lib.formula_io.logical_formula(stored) == (
+			tutorial_lib.formula_io.logical_formula(formula))
+
+
+#============================================
+def test_row_one_table_freezes_header(tmp_path: pathlib.Path) -> None:
+	"""Only a table whose header starts in row one gets a frozen top row."""
+	model = tutorial_lib.model
+	span = model.SourceSpan("source.md", 1, 1)
+	sheet = model.Worksheet("Data", span)
+	sheet.regions.append(model.TableRegion(1, 1, 2, 3, span))
+	sheet.cells[(1, 1)] = model.CellSeed(1, 1, model.Scalar("text", "Name"), span)
+	sheet.cells[(1, 2)] = model.CellSeed(1, 2, model.Scalar("text", "Result"), span)
+	sheet.entry_cells.add((2, 3))
+	document = model.Document(pathlib.Path("source.md"), "", worksheets=[sheet])
+	path = tmp_path / "header.xlsx"
+	tutorial_lib.workbook.write_workbook(document, path)
+	book = openpyxl.load_workbook(path)
+	assert book["Data"].freeze_panes == "A2"
+	assert book["Data"].column_dimensions["C"].width == 12
+	book.close()
+
+
+#============================================
+def test_blank_label_targets_reserve_space_for_all_alternatives(tmp_path: pathlib.Path) -> None:
+	"""Labels remain readable beside entered results without revealing student answers."""
+	source = "# Analysis\n\n## Workbook\n\n### Sheet: Data\n\n"
+	source += "| Observation |\n| --- |\n| 1 |\n\n## Tutorial\n\n"
+	source += "### Part: Summarize\n\n- **Worksheet:** Data\n\n#### Step: Calculate\n\n"
+	source += "- **Label D4:** Sample standard deviation\n- **Enter E4:** `=1+1`\n"
+	source += "- **Alternative: Short**\n  - **Label H11:** p-value\n"
+	source += "- **Alternative: Full**\n"
+	source += "  - **Label H11:** Two-tailed p-value (quadratic term differs from zero)\n"
+	source += "- **Enter I11:** `=1/2`\n"
+	source += '- **Enter E5:** `=IF(E4<0,"Reject the Null Hypothesis",'
+	source += '"Fail to Reject the Null Hypothesis")`\n'
+	source += '- **Enter E6:** Record your interpretation\n'
+	document = tutorial_lib.compiler.compile_source(source)
+	assert not document.has_errors
+	path = tmp_path / "labels.xlsx"
+	tutorial_lib.workbook.write_workbook(document, path)
+	tutorial_lib.workbook.verify_workbook(document, path)
+	book = openpyxl.load_workbook(path)
+	sheet = book["Data"]
+	assert all(sheet[address].value is None
+		for address in ("D4", "E4", "E5", "E6", "H11", "I11"))
+	assert sheet.column_dimensions["D"].width >= len("Sample standard deviation") + 2
+	assert sheet.column_dimensions["E"].width >= len("Fail to Reject the Null Hypothesis") + 2
+	assert 12 < sheet.column_dimensions["H"].width <= 48
+	assert sheet.row_dimensions[11].height >= 30
+	assert all(sheet[address].alignment.wrap_text for address in ("D4", "E4", "H11", "I11"))
+	# Entered values retain the generated layout instead of relying on text overflow.
+	sheet["H11"] = "Two-tailed p-value (quadratic term differs from zero)"
+	sheet["I11"] = 0.125
+	book.save(path)
+	book.close()
+	book = openpyxl.load_workbook(path)
+	assert book["Data"]["H11"].alignment.wrap_text
+	assert book["Data"].row_dimensions[11].height >= 30
 	book.close()
 
 
@@ -53,7 +149,7 @@ def test_import_preserves_sparse_addresses_and_literal_types(tmp_path: pathlib.P
 	path = tmp_path / "sparse.xlsx"
 	book.save(path)
 	book.close()
-	draft = sheetlesson.workbook.import_workbook(path)
+	draft = tutorial_lib.workbook.import_workbook(path)
 	assert "#### At: C8" in draft
 	assert "#### At: F1000000" in draft
 	assert '` "001" `' in draft and '` "" `' in draft
@@ -64,11 +160,11 @@ def test_import_preserves_sparse_addresses_and_literal_types(tmp_path: pathlib.P
 	source = draft.replace("Write the tutorial instructions here.",
 		"### Part: Review\n\n- **Worksheet:** Data\n\n"
 		"#### Step: Inspect\n\n- **Compare:** Inspect the imported cells.")
-	document = sheetlesson.compiler.compile_source(source)
+	document = tutorial_lib.compiler.compile_source(source)
 	assert not document.has_errors
 	rebuilt = tmp_path / "rebuilt.xlsx"
-	sheetlesson.workbook.write_workbook(document, rebuilt)
-	sheetlesson.workbook.verify_workbook(document, rebuilt)
+	tutorial_lib.workbook.write_workbook(document, rebuilt)
+	tutorial_lib.workbook.verify_workbook(document, rebuilt)
 	book = openpyxl.load_workbook(rebuilt, data_only=False)
 	assert book["Data"]["E8"].value == "literal &amp; <br> `ticks` \\| and\nnewline"
 	assert book["Data"]["F1000000"].value == '=IF(C8="a|b",1,0)'
@@ -105,4 +201,4 @@ def test_import_blocks_semantic_loss(tmp_path: pathlib.Path, feature: str) -> No
 	elif feature == "iteration":
 		message = "iterative calculation"
 	with pytest.raises(ValueError, match=message):
-		sheetlesson.workbook.import_workbook(path)
+		tutorial_lib.workbook.import_workbook(path)
