@@ -1,0 +1,5 @@
+markdown-it-py
+python-docx
+openpyxl
+pypdf
+defusedxml  # hardened XML parsing for imported and generated Office packages

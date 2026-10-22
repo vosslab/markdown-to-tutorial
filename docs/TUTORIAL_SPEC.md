@@ -1,0 +1,439 @@
+# Single-source tutorial specification
+
+Status: implementation specification, 2026-10-22. Implementation and migrations are complete.
+The execution sequence is in
+[tutorial_converter_plan.md](archive/tutorial_converter_plan.md).
+
+## Product contract
+
+One authored Markdown file contains list-authored instructions and table-authored workbook data.
+One successful build produces a DOCX tutorial, an XLSX student workbook, and a PDF exported from
+that DOCX through LibreOffice. Google Docs and Google Sheets import are the primary delivery path.
+HTML output is outside the initial scope.
+
+The Markdown file is the source of truth after migration. DOCX, XLSX, and PDF are generated outputs.
+Local image companions are allowed; single-source means one content specification, not that every
+image must be embedded in its text. Editing generated documents does not update the Markdown.
+
+The first release supports simple teaching workbooks: rectangular data, labels, blank entry cells,
+and scalar formulas. It does not promise arbitrary Excel workbook fidelity or live Google sync.
+
+## Complete minimal example
+
+This example uses two illustrative observations, not the original full teaching dataset.
+The statistics cells are initially empty. Their assignments are instructions for students.
+
+````markdown
+# Comparing two hospitals
+
+## Workbook
+
+### Sheet: Hospital comparison
+
+| Infant | Fried foods | Green veggies |
+| --- | --- | --- |
+| 1 | 9.56 | 9.16 |
+| 2 | 8.88 | 8.85 |
+
+#### At: F1
+
+| Statistic | Fried foods | Green veggies |
+| --- | --- | --- |
+
+## Tutorial
+
+### Part 3: Compare birth weights
+
+- **Worksheet:** Hospital comparison
+
+Compare birth weights at the two hospitals.
+
+#### Step: Calculate sample means
+
+- **Label F2:** Sample Mean
+- **Enter G2:** `=AVERAGE(B2:B3)`
+- **Enter H2:** `=AVERAGE(C2:C3)`
+- **Compare:** Examine the values in `G2` and `H2`.
+
+#### Step: Create a chart
+
+##### Substep: Select the data
+
+- **Select:** `B1:C3`
+
+##### Substep: Insert the chart
+
+- **Choose:** Insert > Chart
+````
+
+The output contains Part 3, Step 1, Step 2, Substep 2.1, and Substep 2.2. The document renders
+substep labels as `2.1: Select the data`, without the word Substep. The workbook contains the two
+tables at A1 and F1; F2:H2 remain blank but are visibly identified as student entry cells.
+
+## Document structure
+
+- Require exactly one H1 title, one H2 `Workbook`, and one H2 `Tutorial`, in that order.
+- Permit ordinary introductory prose after the title; include it before the tutorial in DOCX.
+- Treat reserved headings as structural only when parsed as headings, never inside code fences.
+- Require at least one worksheet and one tutorial part. Empty scaffold parts are lint errors until
+  filled; creating a scaffold does not claim that it is buildable.
+- Restrict the Workbook section to the worksheet declarations, metadata, and tables defined below.
+  Report unrecognized content there rather than silently dropping it.
+- Exclude Workbook declarations and tables from the DOCX/PDF. A table intentionally included in
+  Tutorial is an ordinary document table and does not populate spreadsheet cells.
+- Use Markdown syntax parsing, not whole-document regular-expression replacement. Preserve source
+  locations, list nesting, inline formatting, and formula text across semantic classification.
+
+Supported tutorial prose includes paragraphs, emphasis, strong text, inline code, fenced code,
+ordered and unordered lists, block quotes, links, local PNG/JPEG images, and ordinary GFM tables.
+Reference-style links and images used by the existing exports are included. HTML character entities
+and inline `sub`, `sup`, and `br` are supported; other raw HTML gets a source-located diagnostic.
+Task lists, footnotes, executable content, and full mathematical typesetting are not initial features.
+Unsupported visible constructs must be reported, not silently discarded. Plain Unicode scientific
+text remains text; formulas receive no smart-quote or typography substitutions.
+
+## Workbook authoring
+
+### Worksheet declarations
+
+`### Sheet: <name>` creates one worksheet, in declaration order. Names must be unique ignoring case
+and valid XLSX worksheet names: nonempty, at most 31 characters, no `: \\ / ? * [ ]`, and no leading
+or trailing apostrophe. Preserve the declared spelling. Do not silently truncate names.
+
+One table directly beneath a sheet heading starts at A1. Additional tables require a preceding
+`#### At: <cell>` heading, such as `#### At: F1`. That heading applies to exactly the following
+table. Targets are single, unqualified A1 addresses. Each table is a rectangular block; its header
+row is real spreadsheet content at the starting row. The Markdown separator row is not content.
+Alignment markers affect neither cell values nor types. A header-only table is valid.
+
+All authored rows count, including explicitly blank rows. Reject ragged tables before a Markdown
+parser pads or truncates their cells. Reject overlapping table rectangles, even if their overlapping
+values are blank or equal. Diagnose the two source locations and the first overlapping address.
+Reject tables extending beyond XLSX row/column limits. Do not reserve whole sheets in memory.
+
+### Cell values and types
+
+Parse cell content after Markdown table escaping, using this ordered convention:
+
+| Source content | Stored value |
+| --- | --- |
+| Empty cell | Blank cell |
+| JSON double-quoted string, optionally in one code span | Literal text, including numeric-looking text |
+| Formula beginning with `=`, optionally in one code span | Formula string |
+| `TRUE` or `FALSE` | Boolean |
+| Signed decimal or scientific-notation number | Numeric cell |
+| Other plain text, optionally in one code span | Text |
+
+Thus `0` is not blank; `"001"` preserves leading zeroes; `"=not a formula"` is text, not a formula.
+Implement strict finite numeric parsing, using decimal/scientific notation rather than locale
+commas, currency, percentages, or date guessing. JSON strings use ordinary JSON escaping.
+Reject malformed quoted strings. An explicit empty JSON string is distinct from a blank.
+
+Workbook tables support plain text, one surrounding code span, entities, and `br` line breaks.
+Other rich markup is an error in workbook cells; it is supported separately in tutorial prose.
+Use `\|` for a literal pipe in a GFM cell, including formula text, and restore the literal pipe
+before writing the cell. Handle backticks through normal Markdown code-span rules. Escape JSON
+string contents only after removing the table's structural escaping.
+
+Formula text means the semantic characters after Markdown decoding. Preserve function names,
+spaces, quoted strings, `$` anchors, and sheet references. Never evaluate formulas in Python.
+Only leading `=` declares a formula; text beginning with `+`, `-`, or `@` remains text unless it
+matches the numeric rule. XLSX serialization must explicitly preserve literal text cell types.
+
+Workbook table formulas are prefilled in the student workbook. Formula instructions under Tutorial
+are not prefilled. This distinction gives the author one visible way to choose starting content.
+
+### Optional Google link metadata
+
+A worksheet can include this ordinary Markdown list item before its first table:
+
+```markdown
+- **Google Sheets:** https://docs.google.com/spreadsheets/d/SPREADSHEET_ID/edit#gid=TAB_ID
+```
+
+Parse the spreadsheet ID and numeric `gid`; preserve the supplied URL as provenance. A URL missing
+`gid` can identify the workbook but cannot establish a cell link for that tab. Report that limitation
+as a warning. Reject malformed URLs and conflicting metadata; allow at most one URL per worksheet.
+For a single generated workbook, mapped worksheets must share one spreadsheet ID. Repeated tab IDs
+for different worksheets are errors. Do not infer `gid` from XLSX sheet IDs or worksheet positions.
+
+Mapping is author-supplied, not verified against Google by an offline build. Uploaded XLSX files and
+personal copies may receive different URLs. Updating the mapping and rebuilding updates links.
+No API credentials, automatic upload, permissions changes, or document writes are required.
+
+## Tutorial structure and numbering
+
+Use H3 for `Part: <title>`, H4 for `Step: <title>`, and H5 for `Substep: <title>`.
+Generate part numbers from 1, step numbers from 1 within each part, and substep numbers from 1
+within each step. Substeps display their parent step number, for example `6.1` and `6.2`.
+
+For migration or standalone parts, accept `Part 3:`, `Step 6:`, and `Substep 6.1:`. An explicit
+number on the first sibling establishes the start of that sequence; subsequent explicit numbers
+must equal the generated sequence. A first `Step 0:` is allowed for existing introductory steps;
+parts start at 1 or greater, substep suffixes at 1. New authoring examples use unnumbered headings.
+An explicit substep parent must match its containing step. Invalid hierarchy, numbering gaps, and
+contradictory labels are errors with suggested replacement headings. Do not rewrite sources on build.
+
+Nonreserved headings inside Tutorial are informational and do not increment counters. They may not
+skip heading levels or introduce structural parts/steps at incorrect levels. A Part requires at
+least one Step; each Step requires content or substeps. Recognize reserved keywords case-sensitively
+and flag near-miss structural headings rather than interpreting them as ordinary prose.
+
+Ordinary list numbering is independent of step numbering. Keep nested lists and numbering starts.
+Use explicit text for generated heading numbers in DOCX to avoid relying on imported Word field
+updates. Internal Markdown heading links resolve through the same heading map used by rendering;
+duplicate referenced slugs are errors. Literal prose such as "see Step 6" is not automatically
+rewritten; warn on numeric step mentions and recommend an internal heading link where appropriate.
+
+### Worksheet scope
+
+Each part in a multi-sheet document begins with `- **Worksheet:** <name>` before its first Step.
+In a single-sheet document, omission selects that sheet. Render this declaration as a short visible
+worksheet instruction. Scope lasts for the entire part; use a new part to switch the default sheet.
+An explicit declaration is allowed even with only one sheet. Missing or unknown scope is an error.
+
+Cross-sheet references use familiar spreadsheet syntax: `'Other sheet'!B2` or
+`'Other sheet'!B2:B25`. Apostrophes inside names are doubled. Assignment targets are single cells;
+references and Select actions may be ranges. Cross-sheet targets must name a declared worksheet.
+
+## List-authored instructions
+
+Interpret an action only when it is the opening strong span of a list item. The span contains
+the action and its colon, as shown below. Subsequent text is the payload. Preserve that span as
+bold in the rendered document. Ordinary strong openings remain ordinary instructions.
+
+| Opening | Meaning | Effect on initial XLSX |
+| --- | --- | --- |
+| `**Label F2:**` | Student types a literal text label | Do not fill the answer |
+| `**Enter G2:**` | Student types a scalar value or formula | Do not fill the answer |
+| `**Replace G2:**` | Student deliberately changes a previously populated cell | Preserve initial value |
+| `**Select:**` | Student selects the single cell or range in the payload | None |
+| `**Choose:**` | Student follows a menu path | None |
+| `**Compare:**`, `**Explain:**`, other prose openings | Ordinary instruction | None |
+
+`Label` takes plain text (or one code span for literal text). `Enter` and `Replace` use the workbook
+scalar rules, with formulas required to occupy one code span or one fenced `sheets` block. A fenced
+formula may follow an otherwise empty action item as its nested block. Require one logical formula
+line; visual wrapping is a renderer concern. Reject an additional competing value or formula.
+Explanations belong in a subsequent paragraph or nested ordinary list item, outside the scalar.
+
+Actions are valid in ordered or unordered lists and may appear in nested lists. A malformed
+recognized action is an error, not silently demoted to prose. Actions require a containing Step.
+Every tutorial list item should have an opening strong span; missing openings are style warnings,
+not a reason to guess or rewrite the author's words. Lists inside literal examples are exempt.
+
+`Label`/`Enter` targeting a nonempty seeded cell or a previously assigned cell with a different
+value is an error; use `Replace` for an intentional change. Identical repeated assignments are
+warnings about redundancy. `Replace` requires a known prior value, seeded or instructed. Neither
+action changes the generated workbook beyond the initial table content and entry-cell styling.
+Track authored instruction state in document order without computing formula results.
+
+### Alternative calculations
+
+Existing tutorials teach one-tailed and two-tailed alternatives for the same destination cell.
+Support explicit sibling list groups so these are not mistaken for conflicting assignments:
+
+```markdown
+- **Alternative: Two-tailed test**
+  - **Enter G5:** `=T.TEST(B2:B25,C2:C25,2,3)`
+- **Alternative: One-tailed test**
+  - **Enter G5:** `=T.TEST(B2:B25,C2:C25,1,3)`
+```
+
+Two or more contiguous Alternative items under the same parent form a choice group. Evaluate their
+assignment history independently from the incoming state, then retain possible states. A later
+reference to a cell filled in every branch is available; one filled in only some branches receives
+a warning. Later replacement requires a value in every branch. Branches are instructional choices,
+not executable conditional logic. Nested alternatives are outside initial scope and produce errors.
+Normal prose explains the statistical direction; these examples do not assert that a one-tailed
+function call alone establishes the desired directional hypothesis.
+
+### Cell references and menu paths
+
+Backticked A1 cells and ranges in tutorial prose are explicit references. Support `$D$4`, `D$4`,
+`$D4`, rectangular ranges, and qualified worksheets. A1-shaped ordinary prose may receive a lint
+suggestion but is not automatically linked: scientific identifiers and paper sizes can look like
+cell addresses. Action targets are explicit references without requiring additional backticks.
+
+`Choose` splits a menu path on `>` or the Unicode right arrow, trims each segment, and rejects
+empty segments. Render segments in a distinct menu style separated by a right arrow. Optional
+backticks around the whole path are accepted. Do not interpret greater-than comparisons elsewhere
+as menus. Bold ordinary openings and menu formatting remain separate operations.
+
+## Validation and diagnostics
+
+Every diagnostic includes severity, stable category, source path and physical line, explanatory
+message, and correction. Include worksheet/address and the related source line when applicable.
+Preserve source locations through parsing, numbering, assignment resolution, and serialization.
+
+Validation has separate, honestly reported levels:
+
+1. Structure: headings, tables, types, action payloads, worksheet scope, and address syntax.
+2. References: existing worksheets, seeded cells, intended student destinations, instruction order,
+   and static references in the supported formula subset.
+3. Consistency: conflicting assignments, range endpoints, unavailable inputs, and conditional writes.
+4. External behavior: Google import, link navigation, and actual formula calculation, checked manually
+   on representative outputs. Offline lint never claims this level passed.
+
+Recognize static A1 references, quoted sheet names, and bounded rectangular ranges inside common
+formulas. A tokenizer must distinguish references from function names and quoted strings; raw regex
+scanning is insufficient. Whole-column/row ranges, named ranges, dynamic references such as INDIRECT,
+external workbooks, and array/spill constructs are preserved but reported as not fully validated.
+They must not produce a false "all references verified" result. A fully unknown function does not
+by itself invalidate recognized static references, but its evaluation/compatibility is unverified.
+Do not ship a statistical formula evaluator or a promise of full Sheets/Excel equivalence.
+
+| Finding | Severity and response |
+| --- | --- |
+| Invalid hierarchy, unknown sheet, impossible address, table overlap | Error; correct structure/location |
+| Conflicting assignment or malformed scalar/formula instruction | Error; correct target or use explicit replacement/alternatives |
+| Missing image or unsupported visible document construct | Error; supply asset or supported representation |
+| Unknown static sheet reference in a formula | Error; correct the sheet name |
+| Input cell blank and never supplied before use | Warning; check range or instruction order |
+| Data range extends past populated rows | Warning; confirm intentional spare rows or correct endpoint |
+| Related formulas use different endpoints | Warning; compare inputs, do not auto-repair |
+| Formula has unsupported reference syntax or function compatibility | Warning; state exactly what was not checked |
+| Missing bold list opening or hard-coded step mention | Warning; improve source manually |
+| Missing Google tab mapping | Link-status note; keep labels and offline validation |
+
+Blank cells are legal. Compute populated extents from actual values, not styled cells, and exclude
+future student outputs when checking the size of a dataset. Do not treat a long valid range as an
+error merely because a formula can legitimately ignore blanks. Avoid inferring that two same-sized
+datasets are conceptually interchangeable. No automatic statistical or scientific corrections.
+
+Report errors together where independent checks can continue. Any semantic error prevents final
+artifact publication; warnings permit it and remain in the validation report. There is no global
+warnings-as-errors switch in the initial interface. The report distinguishes verified, partially
+checked, and unchecked formulas rather than using a single misleading accuracy score.
+
+## Output behavior
+
+### DOCX
+
+Use native paragraphs, list numbering, tables, hyperlinks, and editable formula text. Establish
+named styles for title, part, step, substep, body, instruction, formula, cell reference, and menu.
+Prefer standard heading styles for outline navigation, with direct run formatting where the import
+spike demonstrates it is needed. Style values belong in one renderer-owned style definition.
+
+Formula blocks use a readable monospace face, light shading, and sufficient padding. Display the
+destination cell beside the instruction. Preserve copyable formula text; do not insert soft hyphens,
+smart quotes, invisible separators, or manual line breaks into it. Wrap visually where possible;
+report a formula that cannot fit readably. Use text weight/borders in addition to color distinctions.
+Use comfortable page margins and heading spacing; keep headings with following content. Keep a
+short instruction and its formula together, but allow a long Step to span pages.
+
+Render valid cell references as visibly styled text and, where mapped, hyperlinks to the supplied
+spreadsheet/tab/range. Encode query/fragment values correctly. Links navigate to the instructor
+workbook specified in source, not automatically to a student's personal copy. A document's visible
+worksheet label remains useful without links. Resolve internal heading links to DOCX bookmarks.
+
+Preserve image order, proportions, and alternative text. Resolve local assets relative to the
+Markdown source; decode existing PNG/JPEG data-URI references without treating them as prose.
+No network fetching occurs during build. SVG and mathematical image generation require explicit
+future work; migrate such content to supported assets or report it rather than discarding it.
+
+### XLSX
+
+Write worksheets, values, types, and formulas exactly as the Workbook model specifies. Use modest
+header emphasis, wrapped text, readable bounded column widths, and a distinct style on blank student
+entry cells. Do not populate Label/Enter answers, add hidden solutions, or overwrite seed values.
+Do not fabricate cached formula results. Request recalculation on opening when supported by the
+chosen writer, and disclose that calculation was not performed by the converter.
+
+Round-trip generated XLSX through the reader to check sheet order, addresses, values/types, and
+formula strings. Compare logical contents, not ZIP bytes or application-generated metadata.
+The representation supports teaching data, not preserved charts, macros, pivots, merged cells,
+conditional formatting, or arbitrary styles. Initial generation does not create charts merely
+because the tutorial instructs students to create them.
+
+### PDF and publication
+
+Convert the just-generated DOCX through LibreOffice Writer's PDF export, not Impress or a separate
+layout renderer. Verify that the current run created a nonempty readable PDF. Use isolated staging
+paths so an old PDF cannot masquerade as success. On this macOS host, commands invoking LibreOffice
+must run outside the sandbox, through the project's conversion wrapper.
+
+Each default build publishes `output/<source-stem>/<source-stem>.docx`, `.xlsx`, and `.pdf`, plus
+`validation.json`. The JSON is build evidence, not a fourth teaching deliverable. It includes source
+and asset fingerprints, diagnostic locations, reference-check coverage, and output status. It makes
+no claim about Google import unless separate recorded acceptance evidence exists.
+
+Generate and verify all requested outputs in staging before replacing the previous successful
+bundle. A failed PDF conversion is a failed complete build; keep previous published outputs intact
+and report the failed stage. Do not expose mixed-generation bundles as successful. Refuse source/
+input overwrite and publication to an existing directory not owned by this converter. Treat a prior
+validation manifest as ownership evidence; compare recorded fingerprints to detect modified outputs
+and report a conflict rather than overwriting user edits. Identical inputs need not produce identical
+ZIP/PDF bytes, but must produce equivalent tutorial/workbook content.
+
+## Command-line interface
+
+The current CLI provides these commands:
+
+```bash
+source source_me.sh && python3 tutorial.py lint tutorial.md
+source source_me.sh && python3 tutorial.py build tutorial.md
+source source_me.sh && python3 tutorial.py build tutorial.md --format docx,xlsx
+source source_me.sh && python3 tutorial.py import-xlsx template.xlsx --output draft.md
+```
+
+`lint` parses and validates without running LibreOffice or writing deliverables. `build` defaults
+to all three teaching outputs. `--format` (`-f`) accepts `all`, `docx,xlsx`, `docx`, or `xlsx`;
+requesting PDF always generates its DOCX prerequisite. `--output-dir` (`-o`) selects a bundle
+directory. The default output directory is relative to the invocation directory; asset resolution
+remains relative to the input file. A subset build publishes only the requested formats and its
+manifest, so an old PDF is not carried into a new bundle as if it matched the new DOCX.
+`import-xlsx` takes `--output` (`-o`) and refuses an existing destination. Do not add theme, parser,
+diagnostic-threshold, or spreadsheet-engine switches.
+
+Commands return zero on successful requested work, including advisory warnings, and nonzero on
+validation, I/O, or conversion failure. Diagnostics are concise and source-located; do not silently
+catch unexpected internal failures. CLI exceptions must retain their cause for debugging.
+
+## Import and migration
+
+`import-xlsx` creates a draft single-source Markdown file: title, Workbook section, and a Tutorial
+scaffold awaiting authored instructions. It is a one-time import, not a second maintained source.
+Import values and formulas, never cached results in place of formulas. Explicitly quote text whose
+type would otherwise change. Preserve blank rows/columns needed to retain addresses.
+
+For a sheet with only populated cells near A1, emit its populated bounding rectangle at A1. For
+sparse sheets, emit contiguous occupied row runs as separate tables anchored at their original
+top-left cell; include internal gaps so coordinates stay unchanged. Import row-run tables with their
+first source row as the GFM header. A blank worksheet becomes a one-cell blank table at A1. Limit
+allocation to populated cells and refuse pathological sparse extents with an actionable diagnostic.
+
+Inventory unsupported features before writing the draft. Ordinary fonts, fills, widths, and number
+formats may be discarded with a prominent import summary. Merges, charts, macros, rich text, dates,
+error cells, or other content whose meaning would be lost block import until the user supplies a
+simpler workbook or the format is explicitly extended. Imported dates must not silently become
+serial numbers or strings. Do not silently drop a worksheet or truncate its name.
+
+For the first teaching migration, combine imported data with a manually normalized copy of the
+Fried Foods two-sample tutorial. Record source filenames and correction notes outside the student
+document. Keep `2025_Artifacts/` unchanged. Images can be extracted to a sibling assets directory.
+Do not implement a heuristic all-purpose Google Docs Markdown importer in the first release.
+
+## Acceptance contract
+
+- A writer can change one formula once and get the new document text and validation association.
+- Inserting a Step renumbers later steps and substeps without editing numeric labels throughout.
+- Multiple sheets and cross-sheet references resolve without repeating Google URLs per instruction.
+- Workbook table addresses, blanks, literal text, numbers, and formulas survive XLSX generation.
+- Student entry cells are blank unless explicitly seeded by a Workbook table.
+- The known legacy range discrepancy produces an actionable warning, not a silent correction.
+- Native DOCX formulas remain editable and copyable in the document; the paired XLSX preserves the
+  intended initial layout and representative formulas as formula strings.
+- The LibreOffice PDF has readable formulas, images, lists, and heading/page flow, without clipping.
+- A failed build preserves the previous successful bundle and accurately reports partial checking.
+
+## Completion evidence
+
+Local completion uses automated behavior checks for DOCX/XLSX behavior and autonomous agent
+assessment of generated PDF layout. No human milestone signoff is required. Scientific migration
+questions are resolved against authoritative sources, with corrections and citations recorded in
+the migration records. These checks do not establish Google Docs or Sheets import behavior.
+
+Live Google import is optional when the required access is available. Record observed results
+separately, and claim Google verification only for behavior actually observed. Missing Google access
+does not block local completion or become a milestone dependency.

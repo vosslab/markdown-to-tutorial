@@ -4,7 +4,7 @@
 
 ## ![][image1]
 
-A **Z-test** is a statistical test used when you want to know if the average of your sample is meaningfully different from a known population mean. It works by comparing the sample mean to the population mean, while taking into account the population’s standard deviation and the size of the sample. The result is a Z test statistic, which tells you how many standard deviations away your sample mean is from the population mean. If this distance is big enough (based on probability cutoffs called p-values), you can reject the idea that your sample is “just like” the population. Z-tests are only valid when the population standard deviation is known and the sample size is reasonably large (usually 30 or more).
+A **Z-test** is a statistical test used when you want to know if the average of your sample is meaningfully different from a known population mean. It works by comparing the sample mean to the population mean, while taking into account the population's standard deviation and the size of the sample. The result is a Z test statistic, which tells you how many standard deviations away your sample mean is from the population mean. If this distance is big enough (based on probability cutoffs called p-values), you can reject the idea that your sample is "just like" the population. Z-tests are only valid when the population standard deviation is known and the sample size is reasonably large (usually 30 or more).
 
 ## Part 1 Scenario:
 
@@ -16,60 +16,60 @@ Alternative Hypothesis H1:fried foods make babies are larger than the national a
 
 ### Step 1: Set Up Your Google Sheet
 
-1. Open the template spreadsheet created by the instructor  
-   * [`https://docs.google.com/spreadsheets/d/1A3hMTmSyL8Z-8v2K7Zit27SYXdgzQ7fHGqxqR7kCAPU/edit`](https://docs.google.com/spreadsheets/d/1A3hMTmSyL8Z-8v2K7Zit27SYXdgzQ7fHGqxqR7kCAPU/edit)   
-2. Make a personal copy of the Google Sheet by going under **File** and “**Make a Copy**”![][image2]  
-3. Change the name of the Spreadsheet by adding your name and perhaps add the date  
-   ![][image3]![][image4]  
-4. Note that there are three tabs at the bottom…  
-   * Data for Parts 1 and 2  
-   * Part 1: National Z-Test  
-   * Part 2: National T-Test  
-     ![][image5]  
-5. Copy the data from the first Google Sheet, tab named “***Data for Part 1 and 2***”  and paste the data into the sheet named **“Part 1: National Z-Test”**  
+1. Open the template spreadsheet created by the instructor
+   * [`https://docs.google.com/spreadsheets/d/1A3hMTmSyL8Z-8v2K7Zit27SYXdgzQ7fHGqxqR7kCAPU/edit`](https://docs.google.com/spreadsheets/d/1A3hMTmSyL8Z-8v2K7Zit27SYXdgzQ7fHGqxqR7kCAPU/edit)
+2. Make a personal copy of the Google Sheet by going under **File** and "**Make a Copy**"![][image2]
+3. Change the name of the Spreadsheet by adding your name and perhaps add the date
+   ![][image3]![][image4]
+4. Note that there are three tabs at the bottom...
+   * Data for Parts 1 and 2
+   * Part 1: National Z-Test
+   * Part 2: National T-Test
+     ![][image5]
+5. Copy the data from the first Google Sheet, tab named "***Data for Part 1 and 2***"  and paste the data into the sheet named **"Part 1: National Z-Test"**
    **![][image6] ![][image7]**
 
 ### Step 2: Set Up the Known Population Values
 
 **Population statistic**: A population statistic describes the entire group of interest, meaning every individual in the group you want to study, such as all babies born in the United States.
 
-1. Working in the tab **“Part 1: National Z-Test”**  
-2. **Columns D and E:** Set aside this column for statistical calculations.  
-3. In cell **D1**, it should say "**Statistical Names**"  
-4. In cell **E1**, it should say "**Statistical** **Values**"  
-5. In cell **D2**, it should say "Population Mean"  
-6. In cell **E2**, enter "`7.5`"  
-   * ^ this is our representative mean baby weight of the population  
-7. In cell **D3**, it should say "Population St.Dev."  
-8. In cell **E3**, enter "`1.5`"  
-   * ^ this is our representative baby weight standard deviation of the population  
-9. After completion your table should look similar to this:  
+1. Working in the tab **"Part 1: National Z-Test"**
+2. **Columns D and E:** Set aside this column for statistical calculations.
+3. In cell **D1**, it should say "**Statistical Names**"
+4. In cell **E1**, it should say "**Statistical** **Values**"
+5. In cell **D2**, it should say "Population Mean"
+6. In cell **E2**, enter "`7.5`"
+   * ^ this is our representative mean baby weight of the population
+7. In cell **D3**, it should say "Population St.Dev."
+8. In cell **E3**, enter "`1.5`"
+   * ^ this is our representative baby weight standard deviation of the population
+9. After completion your table should look similar to this:
    ![][image8]
 
 ### Step 3: Calculate the Sample Values
 
 **Sample statistic**: A sample statistic describes a smaller subset drawn from that population, such as a group of babies born at one hospital which is a subset of all babies born in the United States.
 
-1. In cell **D5**, it should say "Sample Size"   
-2. In cell **E5**, we will use the `COUNT` function to dynamically count the number of weights:  
-   * Enter: `=COUNT(B2:B40)`  
-   * This formula counts the weights from cells B2 to B40, allowing for flexibility if you add more data. It will automatically ignore empty cells.  
-3. In cell **D6**, it should say "Sample Mean"  
-4. In cell **E6**, use the `AVERAGE` function to calculate the sample mean:  
-   * Enter: `=AVERAGE(B2:B40)`  
-   * This formula calculates the mean of weights from cells B2 to B40, allowing for flexibility if you add more data. It will automatically ignore empty cells.  
-5. In cell **D7**, it should say "Sample St.Dev."  
-6. In cell **E7**, use the `STDEV` function to calculate the sample mean:  
-   * Enter: `=STDEV(B2:B40)`  
-   * This formula calculates the standard deviation of weights from cells B2 to B40, allowing for flexibility if you add more data. It will automatically ignore empty cells.  
+1. In cell **D5**, it should say "Sample Size"
+2. In cell **E5**, we will use the `COUNT` function to dynamically count the number of weights:
+   * Enter: `=COUNT(B2:B40)`
+   * This formula counts the weights from cells B2 to B40, allowing for flexibility if you add more data. It will automatically ignore empty cells.
+3. In cell **D6**, it should say "Sample Mean"
+4. In cell **E6**, use the `AVERAGE` function to calculate the sample mean:
+   * Enter: `=AVERAGE(B2:B40)`
+   * This formula calculates the mean of weights from cells B2 to B40, allowing for flexibility if you add more data. It will automatically ignore empty cells.
+5. In cell **D7**, it should say "Sample St.Dev."
+6. In cell **E7**, use the `STDEV` function to calculate the sample mean:
+   * Enter: `=STDEV(B2:B40)`
+   * This formula calculates the standard deviation of weights from cells B2 to B40, allowing for flexibility if you add more data. It will automatically ignore empty cells.
    * We will not be using the sample standard deviation for this statistical test
 
 ### Step 4: Calculate the Z Test Statistic
 
-1. In cell **D9**, it should say "Z Test Statistic"  
-2. In cell **E9**, calculate the Z test statistic using the formula:  
-   * Formula: (sample mean – population mean) / \[ population standard deviation / sqrt(sample size) \]  
-   * Enter: `=(E6 - E2) / (E3 / SQRT(E5))`  
+1. In cell **D9**, it should say "Z Test Statistic"
+2. In cell **E9**, calculate the Z test statistic using the formula:
+   * Formula: (sample mean - population mean) / \[ population standard deviation / sqrt(sample size) \]
+   * Enter: `=(E6 - E2) / (E3 / SQRT(E5))`
    * This formula uses the sample mean (E6), population mean (E2), population standard deviation (E3), and sample size (E5). The use of `SQRT(E5)` adjusts for varying sample sizes.
 
    **Note:** In a Z-test, the calculated value is called the Z test statistic, not a simple z-score. A z-score measures how far one data point is from the mean, while the Z test statistic measures how far the sample mean is from the population mean. Both use the same standardized scale, which is why they look alike but apply to different situations.
@@ -80,16 +80,16 @@ When running a hypothesis test, you need to decide whether you care about differ
 
 #### 5.1: Understand the Research Question
 
-1. **One-Tailed Test:** Use this if testing whether babies at the hospital are **larger** than the national average.  
+1. **One-Tailed Test:** Use this if testing whether babies at the hospital are **larger** than the national average.
 2. **Two-Tailed Test:** Use this if testing for **any difference** (either larger or smaller) in baby weights.
 
 #### 5.2: Calculate the P-Value Based on the Chosen Test
 
-1. **Two-Tailed Test:**  
-   * In cell **D11**, it should say "P-Value (Two-Tailed)"  
-   * In cell **E11**, enter: `=2 * (1 - NORM.S.DIST(ABS(E9)))`  
-2. **One-Tailed Test:**  
-   * In cell **D12**, it should say "P-Value (One-Tailed)"  
+1. **Two-Tailed Test:**
+   * In cell **D11**, it should say "P-Value (Two-Tailed)"
+   * In cell **E11**, enter: `=2 * (1 - NORM.S.DIST(ABS(E9)))`
+2. **One-Tailed Test:**
+   * In cell **D12**, it should say "P-Value (One-Tailed)"
    * In cell **E12**, enter: `=1 - NORM.S.DIST(E9)`
 
 `NORM.S.DIST()` is a spreadsheet function that gives the cumulative probability from the standard normal distribution. In other words, if you plug in a value for your Z test statistic, it tells you the probability of seeing a value less than or equal to that number under the bell-shaped curve of the standard normal distribution (mean \= 0, standard deviation \= 1). This is what allows us to turn a test statistic into a p-value.
@@ -98,51 +98,51 @@ When running a hypothesis test, you need to decide whether you care about differ
 
 ### Step 6: Make a Decision Using an IF Statement
 
-1. In cell **D14**, it should say "Significance Level (α)."   
-2. In cell **E14**, enter "`0.05`"  
-3. In cell **D16**, it should say "*Two-Tail Decision*."  
-4. In cell **E16**, use the **IF** statement to automatically determine whether to reject the null hypothesis:  
-   * Using the **two-tailed test** p-value (in **E11**), enter the formula:   
-      `=IF(E11 <= E14, "Reject the Null Hypothesis", "Fail to Reject the Null Hypothesis")`  
-5. In cell **D17**, it should say "*One-Tail Decision*."  
-6. In cell **E17**, use the **IF** statement to automatically determine whether to reject the null hypothesis:  
-   * Using the **one-tailed test** p-value (in **E12**), enter the formula:  
-     `=IF(E12 <= E14, "Reject the Null Hypothesis", "Fail to Reject the Null Hypothesis")`  
-7. Explanation:  
-* The **IF** statement checks if the p-value (from either E11 or E12) is **less than or equal to** the significance level (in **E14**).  
-* If the condition is true (p-value ≤ 0.05), it returns "Reject the Null Hypothesis."  
+1. In cell **D14**, it should say "Significance Level (&alpha;)."
+2. In cell **E14**, enter "`0.05`"
+3. In cell **D16**, it should say "*Two-Tail Decision*."
+4. In cell **E16**, use the **IF** statement to automatically determine whether to reject the null hypothesis:
+   * Using the **two-tailed test** p-value (in **E11**), enter the formula:
+      `=IF(E11 <= E14, "Reject the Null Hypothesis", "Fail to Reject the Null Hypothesis")`
+5. In cell **D17**, it should say "*One-Tail Decision*."
+6. In cell **E17**, use the **IF** statement to automatically determine whether to reject the null hypothesis:
+   * Using the **one-tailed test** p-value (in **E12**), enter the formula:
+     `=IF(E12 <= E14, "Reject the Null Hypothesis", "Fail to Reject the Null Hypothesis")`
+7. Explanation:
+* The **IF** statement checks if the p-value (from either E11 or E12) is **less than or equal to** the significance level (in **E14**).
+* If the condition is true (p-value <= 0.05), it returns "Reject the Null Hypothesis."
 * If the condition is false (p-value \> 0.05), it returns "Fail to Reject the Null Hypothesis."
 
 ### Step 7: Interpret the Results
 
-1. In cell **D19**, it should say "Interpretation"  
-2. In cell **E19**, write a brief interpretation of your findings based on your chosen test:  
-   * **Two-Tailed Test Example:** "With a p-value of \[calculated value\], we \[reject/fail to reject\] the null hypothesis, indicating that the average weight at 'Joe's Hospital of Fried Foods' \[is/is not\] significantly **different** from the national average"  
+1. In cell **D19**, it should say "Interpretation"
+2. In cell **E19**, write a brief interpretation of your findings based on your chosen test:
+   * **Two-Tailed Test Example:** "With a p-value of \[calculated value\], we \[reject/fail to reject\] the null hypothesis, indicating that the average weight at 'Joe's Hospital of Fried Foods' \[is/is not\] significantly **different** from the national average"
    * **One-Tailed Test Example:** "With a p-value of \[calculated value\], we \[reject/fail to reject\] the null hypothesis, indicating that the average weight at 'Joe's Hospital of Fried Foods' \[is/is not\] significantly **greater than** the national average"
 
 ### Practice Task:
 
-* Add more baby weights to Column B (up to row B40) to see how the sample size impacts the **Z test statistic** and **p-value**.  
-* Modify some of the existing baby weight values to higher or lower numbers and observe how the **sample mean**, **Z test statistic**, and **p-value** in Column E adjust automatically.  
+* Add more baby weights to Column B (up to row B40) to see how the sample size impacts the **Z test statistic** and **p-value**.
+* Modify some of the existing baby weight values to higher or lower numbers and observe how the **sample mean**, **Z test statistic**, and **p-value** in Column E adjust automatically.
 * Discuss how changing the dataset size or individual baby weights affects the hypothesis test results and your interpretation.
 
 ### Key Takeaways:
 
-1. **Flexibility:** By using a flexible range (B2:B40), this setup allows you to vary the number of babies and observe how it influences statistical outcomes.  
-2. **Z Test Statistics:** Standardizing using Z test statistics helps compare the sample mean to a known population mean, even when sample sizes change.  
+1. **Flexibility:** By using a flexible range (B2:B40), this setup allows you to vary the number of babies and observe how it influences statistical outcomes.
+2. **Z Test Statistics:** Standardizing using Z test statistics helps compare the sample mean to a known population mean, even when sample sizes change.
 3. **Dynamic Calculations:** Google Sheets automatically recalculates the Z test statistic and p-value as you add or modify data, showing real-time effects on hypothesis testing.
 
 ## Part 2 Setup:
 
-Joe was ecstatic after conducting his Z-test, certain that his hospital’s babies were the heaviest in town. He was ready to claim the Baby Butter Ball Award and throw a butter-and-bacon-themed celebration.
+Joe was ecstatic after conducting his Z-test, certain that his hospital's babies were the heaviest in town. He was ready to claim the Baby Butter Ball Award and throw a butter-and-bacon-themed celebration.
 
 But just as Joe began planning his victory speech, the award committee sent him a stern letter:
 
-“Joe, we’ve reviewed your analysis. While you compared your babies’ weights to the national average using a Z-test, you assumed the population standard deviation was known. That’s risky, given the variation in hospital practices and diets. But there’s another problem: your sample size wasn’t large enough. You used fewer than 30 babies, which makes the Z-test invalid. You need a T-test that adjusts for this uncertainty. Until you redo the analysis properly, you’re disqualified from the Baby Butter Ball Award.”
+"Joe, we've reviewed your analysis. While you compared your babies' weights to the national average using a Z-test, you assumed the population standard deviation was known. That's risky, given the variation in hospital practices and diets. But there's another problem: your sample size wasn't large enough. You used fewer than 30 babies, which makes the Z-test invalid. You need a T-test that adjusts for this uncertainty. Until you redo the analysis properly, you're disqualified from the Baby Butter Ball Award."
 
 ![][image10]
 
-Joe’s heart sank. As the news spread, protesters gathered outside the hospital. Some were angry with Joe, holding signs that read “You Should Know Better” and “Joe is a Fraud.” Others blamed the Butter Ball Committee, with signs like “We Were Cheated” and “The T-Test Was Created by Only a Student\!”
+Joe's heart sank. As the news spread, protesters gathered outside the hospital. Some were angry with Joe, holding signs that read "You Should Know Better" and "Joe is a Fraud." Others blamed the Butter Ball Committee, with signs like "We Were Cheated" and "The T-Test Was Created by Only a Student\!"
 
 Joe stood in disbelief, watching the chaos unfold. His hopes for the Baby Butter Ball Award were slipping away.
 

@@ -38,18 +38,22 @@ collect_ignore = ["e2e", "playwright"]
 #   - Recursive directory exclusions need an explicit /** because fnmatch's *
 #     does not cross "/". Use "temp_scripts/**" to exclude a whole subtree.
 #
-# This template has no repo-specific exclusions, so the registry is empty.
+# Archived 2025 source artifacts are external reference material. Keep their
+# original Unicode intact while the ASCII hygiene check covers current code
+# and tutorial sources.
 # Cross-overlay doc references (a template doc naming a doc that ships from a
 # different overlay or the universal docs/ tree) use a backticked name, not a
 # markdown link: no single relative link is valid both in the split template
 # tree and in the flattened consumer repo.
-# Example entries (commented out; this repo needs none):
+# Example entries (commented out):
 #   REPO_HYGIENE_FILTERS = {
 #       "all": ["temp_scripts/**", "TEMPLATE.py"],
 #       "ascii_compliance": ["human_readable-*.html"],
 #       "pyflakes_code_lint": ["devel/scratch_*.py"],
 #   }
-REPO_HYGIENE_FILTERS = {}
+REPO_HYGIENE_FILTERS = {
+	"ascii_compliance": ["2025_Artifacts/**"],
+}
 
 
 # === OPTIONAL_HELPERS_MENU ===

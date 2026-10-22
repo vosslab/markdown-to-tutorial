@@ -6,36 +6,36 @@
 
 #### Background: PET and Plastic Waste
 
-**Polyethylene terephthalate (PET)** is the clear plastic used in water bottles, food packaging, and synthetic fibers. It is lightweight and convenient, but it breaks down very slowly in the environment. Global plastic accumulation has created landfills and “plastic oceans” that are difficult to clean up with traditional methods.
+**Polyethylene terephthalate (PET)** is the clear plastic used in water bottles, food packaging, and synthetic fibers. It is lightweight and convenient, but it breaks down very slowly in the environment. Global plastic accumulation has created landfills and "plastic oceans" that are difficult to clean up with traditional methods.
 
 You have just been hired at a small biotechnology startup that has one big goal: to help solve the plastic waste problem using **engineered microbes**. The company focuses on PET because it is durable and cheap, but that same durability means it persists in landfills and oceans for decades. Your team is working on an enzyme called **PETase** that can cut PET into smaller, more manageable molecules and may become the core of an industrial plastic recycling process.
 
-![][image2]  
+![][image2]
 In 2016, researchers described a bacterium, *Ideonella sakaiensis*, that can use PET as a carbon source. One of its key enzymes is PETase, which binds to PET and cuts it into smaller molecules that other enzymes can finish processing. This discovery suggested a new approach to plastic waste that uses **biocatalysts** rather than mechanical or chemical treatment alone.
 
 #### Engineering Yeast to Produce PETase
 
-The startup’s scientists have spent the last year building *Saccharomyces cerevisiae* strains that can produce PETase. Instead of using the wild type PETase gene from *I. sakaiensis*, they designed a **synthetic PETase variant** that combines several mutations known to improve activity and stability. The coding sequence was **codon optimized** for yeast and carries engineered substitutions in the active site region and surface loops that increase catalytic activity on PET fragments, improve thermal stability, and reduce aggregation during expression.
+The startup's scientists have spent the last year building *Saccharomyces cerevisiae* strains that can produce PETase. Instead of using the wild type PETase gene from *I. sakaiensis*, they designed a **synthetic PETase variant** that combines several mutations known to improve activity and stability. The coding sequence was **codon optimized** for yeast and carries engineered substitutions in the active site region and surface loops that increase catalytic activity on PET fragments, improve thermal stability, and reduce aggregation during expression.
 
 This PETase variant has shown severalfold higher **enzyme activity** than the wild type enzyme in test reactions and remains active at temperatures that are closer to realistic industrial conditions. For that reason the entire **fermentation project** now focuses on producing this improved mutant rather than the original enzyme.
 
 After many rounds of tinkering with promoters, secretion signals, and growth conditions, the team had a breakthrough shortly before you were hired. Three yeast strains now look very promising:
 
-* **Strain A** carries a single copy of the yeast codon optimized PETase variant integrated at the HO locus under the TEF1 constitutive promoter, producing cytosolic His tagged PETase at moderate but stable levels.  
-* **Strain B** carries the same PETase variant on a high copy 2µ plasmid under a strengthened PGK1 promoter with a LEU2 marker, driving very high intracellular expression and placing heavy load on the translation machinery.  
-* **Strain C** expresses PETase from a low copy CEN plasmid under the GPD promoter, fused to the α factor prepro secretion signal and a C terminal His tag so that PETase is secreted directly into the culture medium for easier recovery.
+* **Strain A** carries a single copy of the yeast codon optimized PETase variant integrated at the HO locus under the TEF1 constitutive promoter, producing cytosolic His tagged PETase at moderate but stable levels.
+* **Strain B** carries the same PETase variant on a high copy 2µ plasmid under a strengthened PGK1 promoter with a LEU2 marker, driving very high intracellular expression and placing heavy load on the translation machinery.
+* **Strain C** expresses PETase from a low copy CEN plasmid under the GPD promoter, fused to the &alpha; factor prepro secretion signal and a C terminal His tag so that PETase is secreted directly into the culture medium for easier recovery.
 
-Each strain is grown in baffled flasks to late log phase, then cells are harvested by centrifugation. For Strains A and B, the pellets are kept; for Strain C, the supernatant is saved because PETase is secreted. For the intracellular strains, pellets are resuspended in a cold lysis buffer and broken in a bead beater, and the crude lysate is clarified by high speed refrigerated centrifugation to obtain a clear soluble fraction. Solid ammonium sulfate is then added to this fraction to precipitate protein, the mixture is centrifuged again, and the resulting protein pellet is resuspended in a smaller volume of Ni NTA binding buffer. The enriched solution is loaded onto a small gravity flow column packed with Ni²⁺ charged resin, washed, and PETase is eluted with an imidazole containing buffer, followed by SDS PAGE to identify and pool the best fractions. The pooled Ni eluate is concentrated using a centrifugal concentrator and run over a size exclusion chromatography column to remove remaining aggregates and contaminants. The main PETase peak fractions are pooled to yield a **partially purified PETase preparation** for each strain, which is then aliquoted and stored at 4 °C for immediate use and frozen for longer term experiments.
+Each strain is grown in baffled flasks to late log phase, then cells are harvested by centrifugation. For Strains A and B, the pellets are kept; for Strain C, the supernatant is saved because PETase is secreted. For the intracellular strains, pellets are resuspended in a cold lysis buffer and broken in a bead beater, and the crude lysate is clarified by high speed refrigerated centrifugation to obtain a clear soluble fraction. Solid ammonium sulfate is then added to this fraction to precipitate protein, the mixture is centrifuged again, and the resulting protein pellet is resuspended in a smaller volume of Ni NTA binding buffer. The enriched solution is loaded onto a small gravity flow column packed with Ni&sup2;⁺ charged resin, washed, and PETase is eluted with an imidazole containing buffer, followed by SDS PAGE to identify and pool the best fractions. The pooled Ni eluate is concentrated using a centrifugal concentrator and run over a size exclusion chromatography column to remove remaining aggregates and contaminants. The main PETase peak fractions are pooled to yield a **partially purified PETase preparation** for each strain, which is then aliquoted and stored at 4 °C for immediate use and frozen for longer term experiments.
 
 #### Your Task: Quantifying PETase Production
 
 Your first assignment is to help evaluate these three strains. Each one has been grown in a small fermentation flask, and the team has prepared three partially purified PETase samples. However, no one yet knows how **concentrated** these samples are, so the team must quantify how much total protein is present in each sample before comparing yields or planning scale up.
 
-You will perform a **Bradford protein assay** using bovine serum albumin (BSA) standards to create a standard curve. You will measure absorbance at 595 nm for the standards and for the three unknown PETase samples, then use **linear regression** in Google Sheets to fit a straight line to the standard data, obtain a regression equation and R² value, and convert absorbance values for Strain A, Strain B, and Strain C into protein concentrations. In other words, your regression model will turn blue color in a cuvette into hard numbers that tell the startup which yeast strain is actually producing the most PETase per fermentation batch.
+You will perform a **Bradford protein assay** using bovine serum albumin (BSA) standards to create a standard curve. You will measure absorbance at 595 nm for the standards and for the three unknown PETase samples, then use **linear regression** in Google Sheets to fit a straight line to the standard data, obtain a regression equation and R&sup2; value, and convert absorbance values for Strain A, Strain B, and Strain C into protein concentrations. In other words, your regression model will turn blue color in a cuvette into hard numbers that tell the startup which yeast strain is actually producing the most PETase per fermentation batch.
 
 #### Concept: How the Bradford BSA Assay Works
 
-The **Bradford protein assay** is a colorimetric method that turns protein amount into blue color. The reagent contains the dye Coomassie Brilliant Blue G-250 in an acidic solution. In acid, the dye is mostly in a reddish or brownish form that absorbs around 465–470 nm. When it binds to proteins, especially basic and aromatic residues, the dye shifts into a blue anionic form that absorbs strongly at **595 nm**. The more protein present, the more dye switches to the blue form, and the higher the absorbance you measure at 595 nm.
+The **Bradford protein assay** is a colorimetric method that turns protein amount into blue color. The reagent contains the dye Coomassie Brilliant Blue G-250 in an acidic solution. In acid, the dye is mostly in a reddish or brownish form that absorbs around 465-470 nm. When it binds to proteins, especially basic and aromatic residues, the dye shifts into a blue anionic form that absorbs strongly at **595 nm**. The more protein present, the more dye switches to the blue form, and the higher the absorbance you measure at 595 nm.
 
 To turn this color change into an actual concentration, you mix the dye with a set of **protein standards** of known concentration, usually bovine serum albumin (BSA). Each standard is treated exactly like an unknown, and you record the absorbance at 595 nm for all of them. Across a certain working range, the amount of bound dye is approximately proportional to the amount of protein, so the standards form an approximately straight line relationship between BSA concentration and absorbance.
 
@@ -43,43 +43,43 @@ Your PETase samples are then handled in the same way: you add Bradford reagent, 
 
 #### Why Use Linear Regression Now?
 
-In the Bradford assay, you are relying on a **standard curve** that links BSA concentration to absorbance at 595 nm, but your data points will never fall perfectly on a straight line because of pipetting error, instrument noise, and natural variation. **Linear regression** is the mathematical tool that finds the single “best fit” line through those scattered points by minimizing the overall vertical distance between the data and the line. This line is not just a sketch; it is defined by an equation and a slope that quantify how much absorbance changes per unit of protein. Once you have that equation and its R² value, you can plug in absorbance values from your unknown PETase samples and interpolate their protein concentrations in a consistent way, instead of guessing from the graph or relying on a single pair of points.
+In the Bradford assay, you are relying on a **standard curve** that links BSA concentration to absorbance at 595 nm, but your data points will never fall perfectly on a straight line because of pipetting error, instrument noise, and natural variation. **Linear regression** is the mathematical tool that finds the single "best fit" line through those scattered points by minimizing the overall vertical distance between the data and the line. This line is not just a sketch; it is defined by an equation and a slope that quantify how much absorbance changes per unit of protein. Once you have that equation and its R&sup2; value, you can plug in absorbance values from your unknown PETase samples and interpolate their protein concentrations in a consistent way, instead of guessing from the graph or relying on a single pair of points.
 
 ### Step 1: Set Up Your Google Sheet for the Bradford Standard Curve
 
 1. Open your spreadsheet
 
-[https://docs.google.com/spreadsheets/d/1cAlU997q8IazW6wJhBwYRrrO2l6ls0yCAo3Rx9BlUY0/edit](https://docs.google.com/spreadsheets/d/1cAlU997q8IazW6wJhBwYRrrO2l6ls0yCAo3Rx9BlUY0/edit) 
+[https://docs.google.com/spreadsheets/d/1cAlU997q8IazW6wJhBwYRrrO2l6ls0yCAo3Rx9BlUY0/edit](https://docs.google.com/spreadsheets/d/1cAlU997q8IazW6wJhBwYRrrO2l6ls0yCAo3Rx9BlUY0/edit)
 
-2. Create a new sheet and name it **"Part 1: Bradford Standard Curve"**.  
-3. Copy the concentrations and absorbance readings from the “**BSA standard data”** tab into this sheet.
+2. Create a new sheet and name it **"Part 1: Bradford Standard Curve"**.
+3. Copy the concentrations and absorbance readings from the "**BSA standard data"** tab into this sheet.
 
 4. The data in Column A represents the concentrations and Column B represents the absorbance readings at 595nm.
 
 ### Step 2: Set Up the Known Population Values
 
-1. Column C will be used for **Statistical Names**.  
-2. Column D will contain the calculated values.  
-3. In cell **C1**, type **"Statistical Names"**.  
-4. In cell **D1**, type **"Values"**.  
+1. Column C will be used for **Statistical Names**.
+2. Column D will contain the calculated values.
+3. In cell **C1**, type **"Statistical Names"**.
+4. In cell **D1**, type **"Values"**.
 5. In cell **C2**, type **"Population Mean,"** and in cell **D2**, enter **4.0** (the known average microbial diversity for similar ecosystems).
 
 ### Step 3: Calculate the Sample Statistics
 
-1. In cell **C4**, type **"Sample Mean."**  
-2. In cell **D4**, use the **AVERAGE** function to calculate the sample mean for your microbial diversity values:  
-   * Enter: `=AVERAGE(B2:B101)`  
-3. In cell **C5**, type **"Sample Standard Deviation."**  
-4. In cell **D5**, use the **STDEV** function to calculate the sample standard deviation:  
-   * Enter: `=STDEV(B2:B101)`  
-5. In cell **C6**, type **"Sample Size,"** and in cell **D6**, use the **COUNT** function to count the number of samples:  
+1. In cell **C4**, type **"Sample Mean."**
+2. In cell **D4**, use the **AVERAGE** function to calculate the sample mean for your microbial diversity values:
+   * Enter: `=AVERAGE(B2:B101)`
+3. In cell **C5**, type **"Sample Standard Deviation."**
+4. In cell **D5**, use the **STDEV** function to calculate the sample standard deviation:
+   * Enter: `=STDEV(B2:B101)`
+5. In cell **C6**, type **"Sample Size,"** and in cell **D6**, use the **COUNT** function to count the number of samples:
    * Enter: `=COUNT(B2:B101)`
 
 ### Step 4: Calculate the T-Statistic
 
-1. In cell **C8**, type **"T-Statistic."**  
-2. In cell **D8**, use this formula to calculate the t-statistic:  
-   * Enter: `=(D4 - D2) / (D5 / SQRT(D6))`  
+1. In cell **C8**, type **"T-Statistic."**
+2. In cell **D8**, use this formula to calculate the t-statistic:
+   * Enter: `=(D4 - D2) / (D5 / SQRT(D6))`
    * This formula uses the sample mean (D4), the assumed population mean (D2), the sample standard deviation (D5), and the sample size (D6).
 
 #### Explanation: T-Statistic
@@ -88,22 +88,22 @@ The **T-statistic** measures how far the **sample mean** is from the **populatio
 
 ### Step 5: Calculate the Degrees of Freedom
 
-1. In cell **C9**, type **"Degrees of Freedom."**  
-2. In cell **D9**, calculate the degrees of freedom using:  
-   * Enter: `=D6 - 1`  
+1. In cell **C9**, type **"Degrees of Freedom."**
+2. In cell **D9**, calculate the degrees of freedom using:
+   * Enter: `=D6 - 1`
    * Here, `D6` is the sample size, so subtracting 1 gives us the degrees of freedom.
 
 #### Explanation: Why Do We Use Degrees of Freedom?
 
 In statistics, **degrees of freedom** represent the number of independent values in a dataset that can vary when estimating a statistical parameter. In the context of a **T-test**, degrees of freedom adjust for the uncertainty introduced when estimating the **population standard deviation** using the **sample standard deviation**.
 
-When calculating the **sample standard deviation**, one of the values—typically the mean—is fixed based on the rest of the data. This is why we subtract **1** from the **sample size** to get the **degrees of freedom**. Smaller degrees of freedom result in a more conservative test, meaning we need stronger evidence to reject the **null hypothesis**. Larger sample sizes, and therefore more degrees of freedom, lead to a **T-distribution** that more closely resembles a **normal (Z) distribution**.
+When calculating the **sample standard deviation**, one of the values-typically the mean-is fixed based on the rest of the data. This is why we subtract **1** from the **sample size** to get the **degrees of freedom**. Smaller degrees of freedom result in a more conservative test, meaning we need stronger evidence to reject the **null hypothesis**. Larger sample sizes, and therefore more degrees of freedom, lead to a **T-distribution** that more closely resembles a **normal (Z) distribution**.
 
 ### Step 6: Determine the Type of Test (One-Tailed or Two-Tailed)
 
 For the **T-test** on **microbial diversity** data from **Busse Woods**, you need to decide whether you are testing for any **significant difference** or a specific **directional difference** from the benchmark (**Shannon Index** of 4.0).
 
-* **Two-Tailed Test:** Use this when you are checking if the **microbial diversity** is either **higher or lower** than the benchmark. This is for testing any significant deviation from the benchmark, regardless of direction.  
+* **Two-Tailed Test:** Use this when you are checking if the **microbial diversity** is either **higher or lower** than the benchmark. This is for testing any significant deviation from the benchmark, regardless of direction.
 * **One-Tailed Test:** Use this when you have a specific hypothesis about the direction of the difference, such as testing if **microbial diversity** is **lower** than the benchmark. A **one-tailed test** focuses on deviations in a single direction.
 
 In this case, since you suspect that the diversity has **decreased** due to **urbanization**, you would likely choose a **one-tailed test (lower)** to check if the **microbial diversity** is significantly **lower** than the benchmark.
@@ -120,10 +120,10 @@ You will calculate the **p-values** using different approaches: **T.DIST.2T** fo
 
 #### Step-by-Step Tutorial:
 
-* In cell **C12**, type **"P-Value (One-Tailed, Higher)"**.  
-* In cell **D12**, enter the formula:  
-  `=T.DIST.RT(D8, D9)`  
-* In cell **E12**, enter the formula:  
+* In cell **C12**, type **"P-Value (One-Tailed, Higher)"**.
+* In cell **D12**, enter the formula:
+  `=T.DIST.RT(D8, D9)`
+* In cell **E12**, enter the formula:
   `=1 - T.DIST(D8, D9, TRUE)`
 
 #### Explanation for One-Tailed Test (Higher):
@@ -132,26 +132,26 @@ This test examines whether the microbial diversity in **Busse Woods** is **highe
 
 ### Step 8: Decision Using an IF Statement
 
-In hypothesis testing, the decision to **reject** or **fail to reject** the null hypothesis depends on comparing the p-value to a predetermined significance level (α). Typically, α is set at 0.05, meaning if the p-value is less than or equal to 0.05, we consider the result **statistically significant** and reject the null hypothesis. To streamline this decision process in Google Sheets, we will use the **IF statement**, which evaluates a condition and returns one value if the condition is true and another if false. In this case, we will check whether the p-value is less than or equal to α.
+In hypothesis testing, the decision to **reject** or **fail to reject** the null hypothesis depends on comparing the p-value to a predetermined significance level (&alpha;). Typically, &alpha; is set at 0.05, meaning if the p-value is less than or equal to 0.05, we consider the result **statistically significant** and reject the null hypothesis. To streamline this decision process in Google Sheets, we will use the **IF statement**, which evaluates a condition and returns one value if the condition is true and another if false. In this case, we will check whether the p-value is less than or equal to &alpha;.
 
 #### Step-by-Step Tutorial:
 
-* In **cell C14**, type "**Significance Level (α)**." In **cell D14**, enter **0.05**.  
-* In **cell C15**, type "**Two-Tail Decision**."  
-* In **cell D15**, use the **IF statement** to determine whether to reject the null hypothesis using the two-tailed test p-value:  
-  **Formula:** `=IF(D10 <= D14, "Reject the Null Hypothesis", "Fail to Reject the Null Hypothesis")`  
-* In **cell C16**, type "**One-Tail Decision (Lower).**"  
-* In **cell D16**, use the **IF statement** to determine whether to reject the null hypothesis using the one-tailed (lower) test p-value:  
-  **Formula:** `=IF(D11 <= D14, "Reject the Null Hypothesis", "Fail to Reject the Null Hypothesis")`  
-* In **cell C17**, type "**One-Tail Decision (Higher).**"  
-* In **cell D17**, use the **IF statement** to determine whether to reject the null hypothesis using the one-tailed (higher) test p-value:  
+* In **cell C14**, type "**Significance Level (&alpha;)**." In **cell D14**, enter **0.05**.
+* In **cell C15**, type "**Two-Tail Decision**."
+* In **cell D15**, use the **IF statement** to determine whether to reject the null hypothesis using the two-tailed test p-value:
+  **Formula:** `=IF(D10 <= D14, "Reject the Null Hypothesis", "Fail to Reject the Null Hypothesis")`
+* In **cell C16**, type "**One-Tail Decision (Lower).**"
+* In **cell D16**, use the **IF statement** to determine whether to reject the null hypothesis using the one-tailed (lower) test p-value:
+  **Formula:** `=IF(D11 <= D14, "Reject the Null Hypothesis", "Fail to Reject the Null Hypothesis")`
+* In **cell C17**, type "**One-Tail Decision (Higher).**"
+* In **cell D17**, use the **IF statement** to determine whether to reject the null hypothesis using the one-tailed (higher) test p-value:
   **Formula:** `=IF(D12 <= D14, "Reject the Null Hypothesis", "Fail to Reject the Null Hypothesis")`
 
 #### Explanation
 
-The **IF statement** is a basic yet powerful programming concept that allows the program to evaluate a condition and make decisions. Here, we use it to compare the **p-value** to the **significance level (α)** and automate the decision-making process in hypothesis testing.
+The **IF statement** is a basic yet powerful programming concept that allows the program to evaluate a condition and make decisions. Here, we use it to compare the **p-value** to the **significance level (&alpha;)** and automate the decision-making process in hypothesis testing.
 
-In statistical analysis, if the **p-value** is less than or equal to the **significance level (0.05)**, the result is considered **statistically significant**, meaning there is sufficient evidence to reject the null hypothesis. For instance, if the two-tailed test's p-value is ≤ 0.05, we reject the null hypothesis, indicating that microbial diversity in **Busse Woods** is **significantly different** from the benchmark. Conversely, if the p-value exceeds 0.05, we **fail to reject** the null hypothesis, implying the microbial diversity is **similar to the benchmark** and no significant deviation is found.
+In statistical analysis, if the **p-value** is less than or equal to the **significance level (0.05)**, the result is considered **statistically significant**, meaning there is sufficient evidence to reject the null hypothesis. For instance, if the two-tailed test's p-value is <= 0.05, we reject the null hypothesis, indicating that microbial diversity in **Busse Woods** is **significantly different** from the benchmark. Conversely, if the p-value exceeds 0.05, we **fail to reject** the null hypothesis, implying the microbial diversity is **similar to the benchmark** and no significant deviation is found.
 
 This process helps determine whether the data supports the conclusion that **urbanization** and **environmental factors** have affected microbial diversity at Busse Woods.
 
@@ -161,12 +161,12 @@ At this point, you should have conducted both the **two-tailed** and **one-taile
 
 #### Step-by-Step Tutorial:
 
-1. In **cell C19**, type **Interpretation**.  
+1. In **cell C19**, type **Interpretation**.
 2. In **cell D19**, write a brief interpretation of your findings based on the one-tailed (lower) test. Example: "With a p-value of \[calculated value\], we \[reject/fail to reject\] the null hypothesis, indicating that microbial diversity in **Busse Woods** \[is/is not\] significantly lower than the benchmark."
 
 #### Explanation:
 
-In hypothesis testing, the interpretation depends on comparing the **p-value** to the **significance level** (α \= 0.05). If the **p-value** is **less than or equal to 0.05**, the result is considered **statistically significant**, meaning the null hypothesis is **rejected**. Rejecting the null hypothesis in this case suggests that microbial diversity in **Busse Woods** is **significantly lower** than the benchmark value of **4.0** (representing the average diversity for similar ecosystems). This implies that factors such as **urbanization**, **pollution**, or **climate change** may have contributed to a **decline in biodiversity** in the area.
+In hypothesis testing, the interpretation depends on comparing the **p-value** to the **significance level** (&alpha; \= 0.05). If the **p-value** is **less than or equal to 0.05**, the result is considered **statistically significant**, meaning the null hypothesis is **rejected**. Rejecting the null hypothesis in this case suggests that microbial diversity in **Busse Woods** is **significantly lower** than the benchmark value of **4.0** (representing the average diversity for similar ecosystems). This implies that factors such as **urbanization**, **pollution**, or **climate change** may have contributed to a **decline in biodiversity** in the area.
 
 If the **p-value is greater than 0.05**, you **fail to reject** the null hypothesis. This means there is **insufficient evidence** to conclude that microbial diversity is lower than the benchmark. In this scenario, microbial diversity in **Busse Woods** is either **equal to** or within the expected range for ecosystems similar to the benchmark, suggesting that biodiversity may not have been significantly affected by external factors.
 
@@ -174,15 +174,15 @@ Completing this interpretation allows you to clearly state whether microbial div
 
 ### Practice Task:
 
-* Change some of the **Shannon Index** values for microbial diversity in **Column B** (Busse Woods data). Observe how the **sample standard deviation**, **t-statistic**, and **p-value** adjust automatically.  
-* Add more sample locations (e.g., increasing the sample size beyond 30\) and note how the **p-value** changes. Discuss when the **one-sample T-test** results start to resemble those of a **z-test**.  
+* Change some of the **Shannon Index** values for microbial diversity in **Column B** (Busse Woods data). Observe how the **sample standard deviation**, **t-statistic**, and **p-value** adjust automatically.
+* Add more sample locations (e.g., increasing the sample size beyond 30\) and note how the **p-value** changes. Discuss when the **one-sample T-test** results start to resemble those of a **z-test**.
 * Discuss how the flexibility in **sample size** affects the results of the **one-sample T-test** and compare this to your earlier **z-test** results. Specifically, observe how a larger sample size reduces uncertainty, impacting the p-value and overall hypothesis test results.
 
 ### Key Takeaways:
 
-1. Use the **one-sample T-test** when comparing a dataset (e.g., **Shannon Index** values for microbial diversity in **Busse Woods**) to a known benchmark when the **population standard deviation is unknown** and/or the sample size is small.  
-2. The **t-distribution** accounts for additional uncertainty introduced by using the **sample standard deviation** instead of the population standard deviation.  
-3. As the **sample size increases**, the **one-sample T-test** results begin to resemble those of the **z-test**. This occurs because the **t-distribution** approximates the **normal distribution** as the sample size becomes larger, making the T-test and Z-test results more similar.  
+1. Use the **one-sample T-test** when comparing a dataset (e.g., **Shannon Index** values for microbial diversity in **Busse Woods**) to a known benchmark when the **population standard deviation is unknown** and/or the sample size is small.
+2. The **t-distribution** accounts for additional uncertainty introduced by using the **sample standard deviation** instead of the population standard deviation.
+3. As the **sample size increases**, the **one-sample T-test** results begin to resemble those of the **z-test**. This occurs because the **t-distribution** approximates the **normal distribution** as the sample size becomes larger, making the T-test and Z-test results more similar.
 4. The **one-sample T-test** is particularly useful for assessing whether microbial diversity in **Busse Woods** has significantly declined in comparison to the benchmark, especially when the sample size is limited.
 
 ## Part 3 Setup: Microbial Diversity at Busse Woods
