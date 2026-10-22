@@ -32,14 +32,16 @@ def add_heading(output: object, token: object, inline: object, document: object,
 	"""Use explicit generated labels and native outline heading styles."""
 	heading = token.meta.get("heading")
 	if heading is None:
-		paragraph = output.add_paragraph(style=f"Heading {min(int(token.tag[1:]), 9)}")
+		level = int(token.tag[1:])
+		style = "Title" if level == 1 else f"Heading {max(1, min(level - 2, 3))}"
+		paragraph = output.add_paragraph(style=style)
 		tutorial_lib.docx_inline.render(paragraph, inline.children or [], document)
 		return
-	styles = {"part": "Tutorial Part", "step": "Tutorial Step",
-		"substep": "Tutorial Substep", "title": "Tutorial Title"}
-	style = styles.get(heading.kind, f"Heading {min(heading.level, 9)}")
+	styles = {"part": "Heading 1", "step": "Heading 2",
+		"substep": "Heading 3", "title": "Title"}
+	style = styles.get(heading.kind, f"Heading {max(1, min(heading.level - 2, 3))}")
 	if heading.level == 1:
-		style = "Tutorial Title"
+		style = "Title"
 	paragraph = output.add_paragraph(style=style)
 	# Remove only the authored structural prefix; keep title emphasis and links native.
 	children = list(inline.children or [])
@@ -58,8 +60,8 @@ def add_heading(output: object, token: object, inline: object, document: object,
 #============================================
 def keep_label_with_entry(output: object, document: tutorial_lib.model.Document,
 	position: int, action: tutorial_lib.model.Action | None) -> None:
-	"""Keep an adjacent list label and its right-hand result on the same page."""
-	if action is None or action.kind not in ("enter", "replace") or position < 5:
+	"""Keep a sibling label with its result entry or authored instruction."""
+	if position < 5:
 		return
 	neighbors = [document.tokens[index]
 		for index in document.content_token_indices[position - 5:position]]
@@ -68,10 +70,23 @@ def keep_label_with_entry(output: object, document: tutorial_lib.model.Document,
 		"list_item_close", "list_item_open", "paragraph_open"]:
 		return
 	previous = neighbors[0]
-	if previous.level != document.tokens[document.content_token_indices[position]].level:
+	current = document.tokens[document.content_token_indices[position]]
+	if previous.level != current.level:
 		return
 	label = previous.meta.get("action")
-	if label is None or label.kind != "label" or label.target is None or action.target is None:
+	if label is None or label.kind != "label" or label.target is None:
+		return
+	# A bold opening Instruction label marks an authored response, not a parsed entry.
+	children = current.children or []
+	start = 0
+	while start < len(children) and children[start].type == "text" and not children[start].content:
+		start += 1
+	opening = children[start:start + 3]
+	if ([token.type for token in opening] == ["strong_open", "text", "strong_close"]
+		and opening[1].content.strip() == "Instruction:"):
+		output.paragraphs[-2].paragraph_format.keep_with_next = True
+		return
+	if action is None or action.kind not in ("enter", "replace") or action.target is None:
 		return
 	left, right = label.target, action.target
 	if (left.start_row == left.end_row == right.start_row == right.end_row
@@ -112,7 +127,12 @@ def render_tokens(output: object, document: tutorial_lib.model.Document) -> None
 			if paragraph is None:
 				raise ValueError("Inline tutorial content has no containing paragraph")
 			action = token.meta.get("action", actions.get(index))
-			tutorial_lib.docx_inline.render(paragraph, token.children or [], document, action)
+			font_name = None
+			if cell is not None:
+				font_name = tutorial_lib.docx_styles.NARROW_FONT
+			tutorial_lib.docx_inline.render(
+				paragraph, token.children or [], document, action, font_name=font_name,
+			)
 			if cell is None:
 				keep_label_with_entry(output, document, position, action)
 		elif kind in ("bullet_list_open", "ordered_list_open"):
@@ -136,10 +156,9 @@ def render_tokens(output: object, document: tutorial_lib.model.Document) -> None
 			action = None
 		elif kind == "paragraph_open":
 			action = token.meta.get("action", actions.get(index, action))
-			style = "Tutorial Instruction" if items else "Tutorial Body"
+			paragraph = cell.paragraphs[0] if cell is not None else output.add_paragraph(style="Normal")
 			if quote_depth:
-				style = "Tutorial Quote"
-			paragraph = cell.paragraphs[0] if cell is not None else output.add_paragraph(style=style)
+				paragraph.paragraph_format.left_indent = docx.shared.Inches(0.25)
 			if items and cell is None:
 				if not items[-1]:
 					tutorial_lib.docx_numbering.apply_list(paragraph, lists[-1])
@@ -153,9 +172,11 @@ def render_tokens(output: object, document: tutorial_lib.model.Document) -> None
 		elif kind in ("fence", "code_block"):
 			if output.paragraphs:
 				output.paragraphs[-1].paragraph_format.keep_with_next = True
-			paragraph = output.add_paragraph(style="Tutorial Formula")
+			paragraph = output.add_paragraph(style="Normal")
+			tutorial_lib.docx_styles.format_formula(paragraph)
 			# Markdown fences carry a parser-added final newline, outside the formula.
-			paragraph.add_run(token.content.removesuffix("\n"))
+			run = paragraph.add_run(token.content.removesuffix("\n"))
+			tutorial_lib.docx_styles.format_run(run, "code")
 			paragraph = None
 		elif kind == "blockquote_open":
 			quote_depth += 1
@@ -182,6 +203,7 @@ def render_tokens(output: object, document: tutorial_lib.model.Document) -> None
 		elif kind in ("th_open", "td_open"):
 			cell = row.cells[column]
 			paragraph = cell.paragraphs[0]
+			paragraph.style = "Normal"
 			if kind == "th_open":
 				tutorial_lib.docx_styles.shade(
 					cell._tc.get_or_add_tcPr(), tutorial_lib.docx_styles.TABLE_HEADER_FILL,

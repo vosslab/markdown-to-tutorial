@@ -2,6 +2,23 @@
 
 ## 2026-10-22
 
+### Teaching-quality closeout evidence
+
+- Complete all-12 lesson source comparisons and expert workbook walkthroughs; the final rebuild
+  contains 36 artifacts across 70 PDF pages, with matching source hashes, 254 passing Calc
+  comparisons across 13 scenarios, and 1,464 passing repository tests at rebuild time. Final
+  integration matched all 12 source hashes and 36 artifact hashes against the manifest, and the
+  complete suite passed 1,474 tests. Fresh independent review
+  accepted all 12 DOCX bundles and 70 PDF pages. A further style-quality review found no blocker
+  across 48 source/artifact hashes, four native workbook/DOCX pairs, and 11 critical pages. These
+  reviews do not establish student outcomes; Google Docs/Sheets import and live Google calculation
+  remain unverified. The README now embeds current PDF and XLSX screenshots; their hashes and
+  capture methods are in [the screenshot receipt](screenshots/README.md). Final integration
+  acceptance is recorded in [the integration review](active_plans/reports/teaching_integration_review.md). See the
+  [teaching quality summary](active_plans/reports/teaching_quality_summary.md) and
+  [final style-quality review](active_plans/reports/teaching_final_style_quality.md).
+- Clarify in the README that student workbooks retain starting data while leaving answer cells blank.
+
 ### Readiness implementation and current evidence
 
 - Complete the focused result-label pagination SPEC review: the renderer meets the adjacent
@@ -27,21 +44,38 @@
   Calc passed 254 comparisons across 13 scenarios, the repository suite passed 1309 tests, and
   integrated implementation/content reviews accepted the result. Archive the completed plan; 14
   Google worksheet mappings remain absent and Google behavior remains unverified.
-- Complete first-pass source corrections for all 12 lessons after direct original-to-generated
+- Complete source corrections for all 12 lessons after direct original-to-generated
   comparisons; restore Babies task ordering and standalone setup, Microbes narrative and statistical
   boundaries, independently usable Caffeine lessons, and PETase's qualified synthetic Bradford task.
-  Fresh visual review then found three misleading Caffeine figures and recurring label/step page
-  splits. Those corrections, rebuild, and quality closeout remain open; see the
+  A fresh visual review found four misleading Caffeine visuals and recurring label/step page splits;
+  the source and pagination fixes are rebuilt across 36 current artifacts and 68 PDF pages. Calc
+  passes all 254 comparisons across 13 scenarios. Fresh regression review accepted the corrected
+  Caffeine figures and pagination; both HCI groups and all 12 workbook walkthroughs are complete.
+  The final refresh rebuilt the Babies 1 story fix, renumbered Babies 3's moved substeps, and
+  clarified PETase's chart path as Series > Add series. The pre-style source refresh produced 36
+  artifacts over 68 PDF pages; Calc passed 254 comparisons across 13 scenarios and the full suite
+  passed 1,458 tests. Final comparison found nondeterministic LibreOffice font resolution: identical
+  Babies 3 DOCX exports produced three or four pages depending on the Carlito font resolved.
+  The user confirmed the Google Docs Normal text, Title, Subtitle, and Heading 1-3 styles, plus PT Sans,
+  PT Sans Narrow, and Roboto Mono. Map these styles to titles, optional metadata, parts, steps,
+  substeps, and Normal text content. Use direct formatting for instructional emphasis and monospace;
+  clear inherited theme font selectors. Render menu paths with bold Roboto Mono and ASCII ` > `
+  separators. Require these fonts in the local PDF environment; do not install fonts or download
+  fallbacks. Preserve existing sizes, spacing, and margins. The final style-integrated rebuild has 36
+  artifacts across 70 PDF pages, current source hashes, 254 passing Calc comparisons across 13
+  scenarios, and 1,464 passing repository tests. Repeated Babies 3 exports match in text layout,
+  normalized fonts, and all four page pixel hashes. Fresh typography SPEC review accepted all 12
+  DOCX/PDF bundles and 70 pages; overall quality integration remains open. See the
   [teaching quality summary](active_plans/reports/teaching_quality_summary.md).
 - Clarify the review standard: preserve established Babies/Microbes teaching experience and voice,
   correcting verified errors, typos, and format faults with minimal wording changes. Treat Caffeine
   as a draft foundation and complete all three parts as polished standalone classroom lessons.
-- Complete focused Fill/layout specification reviews; the full all-12 generated-XLSX walkthrough
-  remains in progress.
+- Complete focused Fill/layout specification reviews and the all-12 generated-XLSX walkthrough.
   Shared Fill handling reports malformed source formulas through controlled diagnostics; label
   sizing includes quoted formula text such as IF decisions while preserving blank answer cells.
-  Follow-up group artifact reviews and final quality/HCI inspection remain pending. Review reports
-  name ignored `tutorial_output/` artifacts as code paths instead of broken links.
+  Final typography SPEC review accepted all rebuilt bundles; overall quality integration remains open.
+  Review reports name ignored `tutorial_output/`
+  artifacts as code paths instead of broken links.
 - Complete an independent established-teaching SPEC review of the current Babies 1-3 and Microbes
   1-5 DOCX/PDF/XLSX bundles. The report records direct source-to-output evidence, formula-free
   starting workbooks, and fresh renders of all current PDF pages; 45 pages were reviewed.

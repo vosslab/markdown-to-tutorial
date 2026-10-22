@@ -19,8 +19,8 @@ was found.
   `H11` and adjacent result `I11`, and microbes 1 `D15` are empty. Their corresponding columns
   are 27, 48, and 36 characters wide, and each target is wrapped. Caffeine 3 row 11 reserves 33
   points.
-- Inspected the three retained populated Calc renders. Caffeine 1 shows the full “Sample standard
-  deviation” label and both numeric results. Caffeine 3 shows the full two-tailed quadratic label
+- Inspected the three retained populated Calc renders. Caffeine 1 shows the full "Sample standard
+  deviation" label and both numeric results. Caffeine 3 shows the full two-tailed quadratic label
   alongside the p-value. Microbes 1 shows the full Reject and Fail to Reject decisions.
 - The focused command `source source_me.sh && python3 -m pytest tests/test_tutorial_workbook.py
   -q` passed: **10 passed**.

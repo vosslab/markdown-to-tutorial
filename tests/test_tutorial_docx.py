@@ -6,16 +6,60 @@ import zipfile
 
 import markdown_it
 import defusedxml.ElementTree
+import docx
 
 import tutorial_lib.model
 import tutorial_lib.compiler
 import tutorial_lib.docx_renderer
+import tutorial_lib.docx_styles
 
 
 NAMESPACES = {
 	"w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
 	"r": "http://schemas.openxmlformats.org/package/2006/relationships",
 }
+
+
+#============================================
+def test_standard_styles_and_direct_fonts() -> None:
+	"""Paragraph fonts stay editable through styles while role fonts remain explicit."""
+	source = "# Title\n\n### Overview\n\n#### Detail\n\n##### Evidence\n\n###### Deep\n\n"
+	source += "Body [link](https://example.org) and `=SUM(A1:B1)`\n\n"
+	source += "> Quoted evidence\n\n```sheets\n=SUM(A1:B1)\n```\n\n"
+	source += "| Note | Formula |\n| --- | --- |\n| [Compact](https://example.org) | `=SUM(A1:B1)` |\n"
+	document = tutorial_lib.model.Document(pathlib.Path("styles.md"), source)
+	document.tokens = markdown_it.MarkdownIt("commonmark").enable("table").parse(source)
+	document.content_token_indices = list(range(len(document.tokens)))
+	output = docx.Document()
+	tutorial_lib.docx_styles.configure(output)
+	tutorial_lib.docx_renderer.render_tokens(output, document)
+	standard = {"Normal", "Title", "Subtitle", "Heading 1", "Heading 2", "Heading 3"}
+	for name in standard:
+		style = output.styles[name]
+		assert style.font.name == "PT Sans"
+		fonts = style._element.rPr.rFonts
+		assert not any("Theme" in key or "theme" in key for key in fonts.attrib)
+	assert [p.style.name for p in output.paragraphs[:5]] == [
+		"Title", "Heading 1", "Heading 2", "Heading 3", "Heading 3",
+	]
+	assert all(p.style.name in standard for p in output.paragraphs)
+	assert all(run.font.name is None for p in output.paragraphs[:5] for run in p.runs)
+	assert output.paragraphs[5].runs[0].font.name is None
+	assert output.sections[0].footer.paragraphs[0].style.name == "Normal"
+	table_link = output.tables[0].cell(1, 0)._tc.find(".//w:hyperlink/w:r", NAMESPACES)
+	assert table_link.find("w:rPr/w:rFonts", NAMESPACES).get(
+		docx.oxml.ns.qn("w:ascii")) == "PT Sans Narrow"
+	assert output.tables[0].cell(1, 1).paragraphs[0].runs[0].font.name == "Roboto Mono"
+	formula = output.paragraphs[-1]
+	assert formula.runs[0].font.name == "Roboto Mono"
+	assert formula._p.find("w:pPr/w:shd", NAMESPACES) is not None
+	assert formula._p.find("w:pPr/w:pBdr", NAMESPACES) is not None
+	assert output.paragraphs[-2].paragraph_format.left_indent is not None
+	runs = output._element.findall(".//w:r", NAMESPACES)
+	assert not any(run.find("w:rPr/w:rStyle", NAMESPACES) is not None for run in runs)
+	link = output._element.find(".//w:hyperlink/w:r", NAMESPACES)
+	assert link.find("w:rPr/w:u", NAMESPACES) is not None
+	assert link.find("w:rPr/w:rFonts", NAMESPACES) is None
 
 
 #============================================
@@ -64,12 +108,20 @@ def test_editable_formula_links_and_independent_lists(tmp_path: pathlib.Path) ->
 	starts = numbering.findall(".//w:start", NAMESPACES)
 	assert {"3", "7"}.issubset({node.get("{" + NAMESPACES["w"] + "}val") for node in starts})
 	assert document_xml.find(".//w:numPr", NAMESPACES) is not None
+	cell_run = next(run for run in document_xml.findall(".//w:r", NAMESPACES)
+		if run.find("w:t", NAMESPACES) is not None
+		and run.find("w:t", NAMESPACES).text == "B2")
+	assert cell_run.find("w:rPr/w:b", NAMESPACES) is not None
+	assert cell_run.find("w:rPr/w:rFonts", NAMESPACES).get(
+		docx.oxml.ns.qn("w:ascii")) == "Roboto Mono"
 	paragraphs = {
 		"".join(node.text or "" for node in paragraph.findall(".//w:t", NAMESPACES)): paragraph
 		for paragraph in document_xml.findall(".//w:body/w:p", NAMESPACES)
 	}
 	parent = paragraphs["Enter D2: " + formula]
 	child = paragraphs["See: calculate, B2, H2Onext"]
+	heading = paragraphs["Step 1: Calculate"]
+	assert heading.find(".//w:rFonts", NAMESPACES) is None
 	assert parent.find("w:pPr/w:keepNext", NAMESPACES) is not None
 	assert child.find("w:pPr/w:keepNext", NAMESPACES) is None
 	assert paragraphs["Choose: Format > Number"].find("w:pPr/w:keepNext", NAMESPACES) is None
@@ -77,7 +129,7 @@ def test_editable_formula_links_and_independent_lists(tmp_path: pathlib.Path) ->
 
 #============================================
 def test_result_labels_stay_with_adjacent_entries(tmp_path: pathlib.Path) -> None:
-	"""Keep a result's meaning with its entry without joining intervening prose."""
+	"""Keep adjacent result pairs without joining chains or crossing block boundaries."""
 	source = "# Results\n\n## Workbook\n\n### Sheet: Data\n\n"
 	source += "| x | y |\n| --- | --- |\n| 1 | 2 |\n\n"
 	source += "## Tutorial\n\n### Part: Analysis\n\n#### Step: Calculate\n\n"
@@ -87,6 +139,24 @@ def test_result_labels_stay_with_adjacent_entries(tmp_path: pathlib.Path) -> Non
 	source += "- **Label C3:** Intercept\n\n"
 	source += "Explain what this result means.\n\n"
 	source += "- **Enter D3:** `=SUM(A2:B2)`\n"
+	source += "- **Label C4:** Earlier label\n"
+	source += "- **Label C5:** Interpretation\n"
+	source += "- **Instruction:** In cell `D5`, write what this result means.\n\n"
+	source += "- **Label C6:** Before heading\n\n"
+	source += "#### Step: Interpret\n\n"
+	source += "- **Instruction:** In cell `D6`, explain the result.\n\n"
+	source += "- **Label C7:** Before prose\n\n"
+	source += "Consider the evidence.\n\n"
+	source += "- **Instruction:** In cell `D7`, explain the evidence.\n\n"
+	source += "- Parent\n  - **Label C8:** Nested label\n"
+	source += "- **Instruction:** In cell `D8`, explain the nested result.\n\n"
+	source += "- **Label C9:** Before table\n\n"
+	source += "| Note |\n| --- |\n| Evidence |\n\n"
+	source += "- **Instruction:** In cell `D9`, explain the table.\n\n"
+	source += "- **Label C10:** Before plain instruction\n"
+	source += "- Instruction: In cell `D10`, explain the result.\n"
+	source += "- **Label C11:** Before later bold label\n"
+	source += "- Read this **Instruction:** carefully.\n"
 	document = tutorial_lib.compiler.compile_source(source, tmp_path / "results.md")
 	assert not document.has_errors
 	output = tmp_path / "results.docx"
@@ -102,6 +172,13 @@ def test_result_labels_stay_with_adjacent_entries(tmp_path: pathlib.Path) -> Non
 	assert "Label C1: Summary" not in kept
 	assert "Label C3: Intercept" not in kept
 	assert "Enter D2: =SUM(A2:B2)" not in kept
+	assert "Label C5: Interpretation" in kept
+	assert "Instruction: In cell D5, write what this result means." not in kept
+	assert not set(kept).intersection({
+		"Label C4: Earlier label", "Label C6: Before heading", "Label C7: Before prose",
+		"Label C8: Nested label", "Label C9: Before table",
+		"Label C10: Before plain instruction", "Label C11: Before later bold label",
+	})
 
 
 #============================================
@@ -142,7 +219,12 @@ def test_native_tables_images_and_menu_segments(tmp_path: pathlib.Path) -> None:
 	assert linked_content == ["linked before ", "image", " linked after"]
 	assert 'Target="https://example.org"' in relations
 	assert "native12" in texts
-	assert "Format \u2192 Number \u2192 Percent" in texts
+	assert "Format > Number > Percent" in texts
+	menu_run = next(run for run in document_xml.findall(".//w:r", NAMESPACES)
+		if "Format >" in "".join(run.itertext()))
+	assert menu_run.find("w:rPr/w:b", NAMESPACES) is not None
+	assert menu_run.find("w:rPr/w:rFonts", NAMESPACES).get(
+		docx.oxml.ns.qn("w:ascii")) == "Roboto Mono"
 	assert len(document_xml.findall(".//w:tbl", NAMESPACES)) == 1
 	rows = document_xml.findall(".//w:tbl/w:tr", NAMESPACES)
 	assert all(row.find("w:trPr/w:cantSplit", NAMESPACES) is not None for row in rows)

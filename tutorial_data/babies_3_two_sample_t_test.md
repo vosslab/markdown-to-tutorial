@@ -114,7 +114,7 @@ interpretation, regardless of which result the summaries or p-values suggest.
 
 #### Step 6: Perform the Two-Sample T-Test in Google Sheets
 
-##### Substep 6.2: Calculate the p-value
+##### Substep: Calculate the p-value
 
 - **Syntax:** The function has the form `=T.TEST(range1, range2, tails, type)`.
   `B2:B101` is Joe's birth-weight range; `C2:C101` is Green Veggies' range.
@@ -147,7 +147,7 @@ national-comparison tutorial.
   of a difference in the opposite direction, so it should only be used if you have a clear,
   justified expectation.
 
-##### Substep 6.3: Plan the decision
+##### Substep: Plan the decision
 
 - **Preview:** Compare the p-value in `G5` from your chosen alternative with a significance
   level of 0.05. The next step enters the significance level and the decision formula once.

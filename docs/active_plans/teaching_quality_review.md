@@ -1,6 +1,8 @@
 # Teaching quality review
 
-Status: in progress. The prior readiness closeout does not settle this review. Babies and Microbes
+Status: complete. The final integration review accepts the current 12-lesson artifacts and confirms
+the scoped README and screenshot work. The prior readiness closeout did not settle this review.
+Babies and Microbes
 are established lessons: preserve their teaching experience and author voice while correcting
 verified errors, typos, and format faults. The Dr Caffeine set is a draft foundation, not a quality
 benchmark; complete all three parts as polished, independently usable classroom lessons. Minimize
@@ -22,6 +24,9 @@ wording edits. Change the converter only for recurring design issues demonstrate
    add validation infrastructure for this review.
 6. After corrections, request a fresh independent review of the changed lessons and generated
    outputs. Record remaining limitations and evidence before closing this plan.
+7. After final style and output checks, refresh the README with the README documentation skill, then
+   capture and embed current screenshots with the screenshot documentation skill. These follow-on
+   documentation tasks do not add a human approval gate.
 
 For the expert walkthrough, use a cognitive walkthrough without student participants. The task
 sequence draws on the W3C [clear steps pattern](https://www.w3.org/WAI/WCAG2/supplemental/patterns/o1p04-clear-steps/)
@@ -42,12 +47,13 @@ as task-design references; this is not an accessibility conformance claim.
 
 | Work | Status | Evidence or remaining work |
 | --- | --- | --- |
-| Direct comparison of all 12 originals and generated lessons/artifacts | Complete | Four review groups are audited; see the teaching review reports below. |
-| Student walkthrough of all 12 generated XLSX files | In progress | Workbook layout evidence covers representative populated workbooks; finish and record the full lesson-by-lesson cognitive walkthrough. Google Sheets import remains unverified. |
+| Direct comparison of all 12 originals and generated lessons/artifacts | Complete | Four review groups are audited; see the teaching review reports below. Corrected artifacts are in the final rebuild report. |
+| Student walkthrough of all 12 generated XLSX files | Complete | Both HCI group reviews include manual walkthroughs across all 12 lessons. Google Sheets import remains unverified. |
 | Independent challenge | Complete | Review reports record challenges to scientific accuracy, statistics, evidence, and sequence. |
 | Substantive authored lesson corrections | Complete | The first-pass edits and the fresh Caffeine figure corrections are recorded; review the corrected renders after rebuild. |
-| Converter changes for recurring design issues | Complete | Fill Down, label-driven workbook sizing, and Label-to-Enter pagination grouping are implemented and reviewed; rebuilt PDF pagination review remains pending. |
-| Fresh independent review after corrections | In progress | Rebuild and review corrected Caffeine figures and pagination, finish two group-level source/artifact reviews, and complete final quality/HCI review. |
+| Converter changes for recurring design issues | Complete | Fill Down, label-driven workbook sizing, six-style DOCX output, role formatting, and Label-to-Instruction pagination grouping are implemented; the latest 70-page visual review is clean. |
+| Fresh independent review after corrections | Complete | Both HCI reviews, all 12 workbook walkthroughs, and the accepted typography SPEC recheck cover the rebuilt outputs. Expert inspection does not establish student outcomes. |
+| README and screenshots | Complete | The README now describes starting data and blank answer cells accurately and embeds two current Caffeine 3 images; the capture receipt records source hashes and rendering methods in `docs/screenshots/README.md`. Final integration acceptance remains open. |
 
 ## Review record
 
@@ -64,5 +70,15 @@ record durable human guidance and settled design decisions in their designated d
   and [teaching_workbook_layout.md](reports/teaching_workbook_layout.md).
 - Consolidated progress and remaining review limits:
   [teaching_quality_summary.md](reports/teaching_quality_summary.md).
+- Corrected 12-lesson rebuild and Calc evidence:
+  [teaching_final_rebuild.md](reports/teaching_final_rebuild.md). It supersedes the initial rebuild.
+- Final style and 70-page PDF review:
+  [teaching_typography_spec_recheck.md](reports/teaching_typography_spec_recheck.md).
+- Independent final style-quality review:
+  [teaching_final_style_quality.md](reports/teaching_final_style_quality.md).
+- README screenshot capture evidence:
+  [docs/screenshots/README.md](../screenshots/README.md).
+- Final cross-plan integration and full-suite acceptance:
+  [teaching_integration_review.md](reports/teaching_integration_review.md).
 - Each caffeine lesson is standalone and starts at Part 1. Their step ranges are 1-5, 1-7, and
   1-7; caffeine 2 has substeps 3.1-3.2 and 6.1-6.4. This is settled, not an open numbering question.

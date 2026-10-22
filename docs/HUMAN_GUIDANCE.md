@@ -52,5 +52,10 @@ origin belongs there too. Rules: [REPO_STYLE.md](REPO_STYLE.md).
 - For the teaching-quality pass, use HCI cognitive-walkthrough methods and targeted humanizer edits;
   expert inspection does not count as student testing. Keep wording changes focused on actual learner
   needs and preserve the source voice.
-- Each Caffeine lesson is standalone and starts with Part 1. Caffeine 1 has Steps 1-5; Caffeine 2 has
-  Steps 1-7 with substeps 3.1-3.2 and 6.1-6.4; Caffeine 3 has Steps 1-7.
+- Keep numbering coherent across the three independently usable Caffeine lessons.
+- In generated DOCX/PDF, use Regular PT Sans for body text, PT Sans Narrow for compact tables, and
+  Roboto Mono for formulas/cells/menus. These are available in Google Docs. Keep Atkinson Hyperlegible
+  Next out of this project because it is unavailable there.
+- In generated DOCX, use Google Docs' Normal text, Title, Subtitle, and Heading 1-3 paragraph styles.
+  Map Title to titles, Subtitle to optional metadata, Heading 1-3 to parts/steps/substeps, and Normal
+  text to body/list/formula/quote/table text and the page footer. Use direct formatting for emphasis.

@@ -49,14 +49,17 @@ def link_element(paragraph: object, href: str) -> object:
 
 
 #============================================
-def add_text(paragraph: object, text: str, state: dict, style: str | None = None,
+def add_text(paragraph: object, text: str, state: dict, role: str | None = None,
 	parent: object | None = None) -> object:
 	"""Write a native run and optionally place it inside a hyperlink."""
-	run = paragraph.add_run(text, style=style)
-	run.bold = state["bold"] or style in ("Tutorial Cell Reference", "Tutorial Menu")
+	run = paragraph.add_run(text)
+	run.bold = state["bold"]
 	run.italic = state["italic"]
 	run.font.subscript = state["sub"]
 	run.font.superscript = state["sup"]
+	tutorial_lib.docx_styles.format_run(
+		run, role, linked=parent is not None, font_name=state["font"],
+	)
 	if parent is not None:
 		parent.append(run._r)
 	return run
@@ -92,9 +95,10 @@ def add_image(paragraph: object, token: object, document: object,
 
 
 #============================================
-def render(paragraph: object, tokens: list, document: object, action: object = None) -> None:
+def render(paragraph: object, tokens: list, document: object, action: object = None,
+	font_name: str | None = None) -> None:
 	"""Preserve inline emphasis, HTML scripts, formula bytes, images and links."""
-	state = {"bold": False, "italic": False, "sub": False, "sup": False}
+	state = {"bold": False, "italic": False, "sub": False, "sup": False, "font": font_name}
 	links = []
 	menu_rendered = False
 	for token in tokens:
@@ -121,12 +125,12 @@ def render(paragraph: object, tokens: list, document: object, action: object = N
 			else:
 				raise ValueError(f"Unsupported DOCX inline HTML: {token.content}")
 		elif kind in ("text", "code_inline"):
-			style = "Tutorial Code" if kind == "code_inline" else None
+			role = "code" if kind == "code_inline" else None
 			text = token.content
 			parent = links[-1] if links else None
 			if action is not None and action.kind.lower() == "choose" and not state["bold"]:
 				if text.strip() and not menu_rendered:
-					add_text(paragraph, " " + " \u2192 ".join(action.menu), state, "Tutorial Menu")
+					add_text(paragraph, " " + " > ".join(action.menu), state, "menu")
 					menu_rendered = True
 				continue
 			if action is not None and action.target is not None and state["bold"]:
@@ -137,14 +141,14 @@ def render(paragraph: object, tokens: list, document: object, action: object = N
 					url = reference_url(document, action.target)
 					if url is not None and parent is None:
 						parent = link_element(paragraph, url)
-					add_text(paragraph, address, state, "Tutorial Cell Reference", parent)
+					add_text(paragraph, address, state, "cell", parent)
 					add_text(paragraph, after, state, parent=links[-1] if links else None)
 					continue
 			if "reference" in token.meta:
-				style = "Tutorial Cell Reference"
+				role = "cell"
 				url = reference_url(document, token.meta["reference"])
 				if url is not None and parent is None:
 					parent = link_element(paragraph, url)
-			add_text(paragraph, text, state, style, parent)
+			add_text(paragraph, text, state, role, parent)
 		else:
 			raise ValueError(f"Unsupported DOCX inline token: {kind}")

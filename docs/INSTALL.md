@@ -3,6 +3,10 @@
 The converter runs on Python 3 with the packages in `pip_requirements.txt`. The default build also
 uses LibreOffice Writer to export PDF; the `docx,xlsx` build does not need LibreOffice.
 
+Generated DOCX files use Google Docs paragraph styles and PT Sans, PT Sans Narrow, and Roboto Mono.
+PDF export requires these fonts to be installed locally and visible to LibreOffice. Setup does not
+install fonts or download fallback fonts; the current macOS environment has the required families.
+
 ## macOS setup
 
 Install the repository's Homebrew dependencies, LibreOffice, and Python packages:

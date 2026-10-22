@@ -10,7 +10,10 @@ The SHA-256 source hash in every bundle's `validation.json` matches the current 
 and the source hash captured by the Calc validation run. All 12 generated XLSX workbooks passed
 the repository's typed-seed readback check, including blank student destinations. DOCX package
 verification passed for all 12 bundles. The artifact hashes and byte sizes are recorded in
-[`manifest.json`](../../../tutorial_output/verification/teaching_review/rebuild/manifest.json).
+`tutorial_output/verification/teaching_review/rebuild/manifest.json`.
+
+This is the first teaching-quality rebuild. The later corrected-source rebuild and calculation evidence
+in [teaching_final_rebuild.md](teaching_final_rebuild.md) supersede its artifact inventory and page counts.
 
 | Tutorial | PDF pages |
 | --- | ---: |

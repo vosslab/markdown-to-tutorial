@@ -215,3 +215,51 @@ blank and treat dimensions as estimates, not font measurements or calculated for
 
 **Owner.** [TUTORIAL_SPEC.md](TUTORIAL_SPEC.md), [compiler.py](../tutorial_lib/compiler.py), and
 [workbook.py](../tutorial_lib/workbook.py).
+
+### Standalone lesson numbering
+
+**Decision.** Number each independently usable Caffeine lesson from Part 1. Caffeine 1 uses Steps 1-5;
+Caffeine 2 uses Steps 1-7 with substeps 3.1-3.2 and 6.1-6.4; Caffeine 3 uses Steps 1-7.
+
+**Why.** The three lessons are separate classroom materials, not sequential parts of one document.
+
+**Consequence.** Preserve semantic Part, Step, and Substep markers in each source and render numbering
+from that source structure; do not number the lessons as Parts 1, 2, and 3.
+
+**Owner.** [TUTORIAL_SPEC.md](TUTORIAL_SPEC.md) and
+[docx_numbering.py](../tutorial_lib/docx_numbering.py).
+
+### DOCX Google Docs style mapping
+
+**Decision.** In generated DOCX, use Google Docs' Normal text, Title, Subtitle, and Heading 1-3
+paragraph styles. Map Title to document titles, Subtitle to optional metadata, and Heading 1-3 to
+parts, steps, and substeps. Use Normal text for body, lists, formulas, quotes, tables, and the page
+footer. Directly format emphasis, code, cell references, menus, and links. Set PT Sans for body text,
+PT Sans Narrow for compact table text, and Roboto Mono for formulas, cells, and menus.
+
+**Why.** LibreOffice exported byte-identical DOCX packages with different pagination when Carlito
+font files with mismatched versions resolved on the host. The user confirmed these fonts and six
+paragraph styles are available in Google Docs, matching the intended import workflow.
+
+**Consequence.** Restrict emitted DOCX paragraph references to the six Google Docs styles and set font
+names explicitly so PDF pagination does not depend on inherited theme fonts. Unused stock definitions
+may remain in the template. Do not rely on custom tutorial paragraph or character styles; preserve
+instructional emphasis through direct formatting. Keep XLSX font styling unchanged. Keep existing
+point sizes, spacing, and margins unless rendered evidence requires a focused change.
+
+**Owner.** [docx_styles.py](../tutorial_lib/docx_styles.py) and the PDF conversion contract in
+[TUTORIAL_SPEC.md](TUTORIAL_SPEC.md).
+
+### ASCII menu separators
+
+**Decision.** Continue accepting `>` and the Unicode right arrow as `Choose` path delimiters. Render
+bold Roboto Mono segments with ASCII ` > ` separators.
+
+**Why.** The selected three-font palette does not include a separate arrow font, and the ASCII menu
+separator is already used in authored lessons.
+
+**Consequence.** Normalize either accepted source delimiter to ASCII ` > ` in DOCX; do not require a
+fourth font or arrow-glyph fallback.
+
+**Owner.** [TUTORIAL_SPEC.md](TUTORIAL_SPEC.md) and
+[docx_inline.py](../tutorial_lib/docx_inline.py).

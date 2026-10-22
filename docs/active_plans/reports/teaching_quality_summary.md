@@ -2,72 +2,65 @@
 
 ## Current state
 
-All 12 lesson sources have been audited against their originals and generated materials. Source
-corrections are complete for Babies, Microbes, all three Caffeine lessons, and PETase. Fresh visual
-review found substantive problems in Caffeine figures; the figures and chart-reopening instructions
-are now corrected. The shared Label-to-Enter pagination fix is also implemented. Focused Fill,
-workbook-layout, and pagination specification reviews are complete. Rebuild and rendered review of
-the corrected outputs, the all-12 student XLSX walkthrough, two group-level source/artifact reviews,
-and final quality review remain open.
+All 12 lesson sources have been compared with their originals and generated materials. First-pass
+corrections and the later Babies 1, Babies 3, and PETase edits are in the completed content build.
+The pre-style content build recorded 36 artifacts across 68 PDF pages, 254 Calc comparisons across
+13 scenarios, and 1,458 passing tests. The final style-integrated rebuild contains 36 artifacts across
+70 PDF pages; all 12 source hashes match the bundle and Calc reports. Calc again passed all 254
+comparisons across 13 scenarios, and the full suite passed 1,464 tests. Repeated Babies 3 exports
+have matching text layout, normalized fonts, and all four page pixel hashes. The fresh typography SPEC
+review accepted the current DOCX/PDF outputs. A further independent style-quality review found no
+blocker after checking 48 source/artifact hashes, four native workbook/DOCX pairs, and 11 critical
+pages. The final integration audit matched all 12 source hashes and 36 artifact hashes against the
+manifest; the complete suite passed 1,474 tests. The README embeds two current Caffeine 3 images; their
+capture settings and product hashes are recorded in [the screenshot receipt](../../screenshots/README.md).
+These expert inspections do not establish student success or comparative teaching efficacy.
 
-The review uses expert inspection and a cognitive walkthrough. No students participated, so these
-reports provide no evidence of student task success, classroom learning, or equal teaching efficacy.
-The walkthrough draws on the W3C clear-steps and task-expectations patterns as task-design references,
-not as an accessibility conformance claim.
+The font-resolution fix maps generated DOCX to Google Docs' Normal text, Title, Subtitle, and Heading
+1-3 styles with PT Sans, PT Sans Narrow, and Roboto Mono. It clears inherited theme font selectors;
+direct formatting preserves emphasis and monospaced roles. Menu paths render in bold Roboto Mono with
+ASCII ` > ` separators. The Label/instruction pairing fix is included. Fresh review found all 70 PDF
+pages visually clean. Repeated Babies 3 exports now have matching layout and pixel hashes, and the
+full suite passes after the style changes. The [fresh typography SPEC recheck](teaching_typography_spec_recheck.md)
+accepted the current 12 DOCX/PDF bundles, including the six paragraph styles, 4,911 ordinary runs
+with style inheritance, 70 narrow table runs, and 677 monospaced runs. The earlier
+[typography review](teaching_final_typography_spec.md) documents the superseded pre-fix snapshot.
+PT Sans lacks
+some Greek alpha/beta glyphs, so LibreOffice embeds Helvetica in PDFs for those glyphs only; no DOCX
+style uses Helvetica. PDF builds require the selected fonts installed locally; setup does not install
+fonts or download fallbacks. XLSX font styling is unchanged.
 
 ## Changes with teaching impact
 
-- Babies lessons now have students choose and record the assigned hypothesis before inspecting
-  results; the standalone t-test workbook instructions no longer suggest copying tabs from another
-  part. Data and formulas were preserved.
-- Microbes lessons restore the continuing soil-diversity investigation, contextual transitions,
-  concise recaps, and missing images. Corrections clarify known versus estimated population SD,
-  Welch assumptions, F-test scope, and ANOVA interpretation. No one-sample `T.TEST` formula promise
-  was added because the original only mentions the function without giving an implementation.
-- The three Caffeine lessons now work independently, with each beginning at Part 1. Added language
-  supplies formula-entry, recovery, result-check, interpretation, and submission steps where the
-  draft lacked them. The quadratic lesson replaces repeated formula instructions with Fill actions.
-  The R-squared discrepancy is explained beside the retained comic instead of adding repeated broad
-  caveats. Wording changes were kept targeted to learner tasks and supported corrections.
-- PETase restores the new-hire task and Bradford-assay explanation while clearly identifying its
-  calibration values as synthetic. It makes no claim about actual PETase abundance, activity, or
-  fermentation productivity.
-- Recurring converter issues now have shared behavior: Fill translates formulas with the existing
-  spreadsheet reference translator and controlled diagnostics; workbook widths and wrapping use
-  authored labels and quoted formula text, including IF decisions, while keeping answer cells blank.
-  Width and row-height values are estimates rather than font measurements or calculated results.
-
-## Fresh visual findings
-
-The latest rendered review found four Caffeine visual elements that do not match their lesson data:
-caffeine04 shows 212 students despite 25 observations; caffeine06 shows caffeine concentration
-descending while sleep has a positive relationship; caffeine09 shows 9 cups per day despite a
-3-11.5 cup range; and caffeine13 shows an upward U shape and R-squared .88 while the fitted data
-have a downward curve and R-squared .847. The correction removes caffeine04 and caffeine09 and
-replaces caffeine06 and caffeine13 with plots from the actual data. Implementation and source checks
-are recorded in [teaching_caffeine_figures_fix.md](teaching_caffeine_figures_fix.md). Review and
-rebuild remain open until the corrected renders pass.
-
-The same visual pass found a recurring pagination defect: a Label can end one page while its Enter
-instruction starts the next in Caffeine 2, Caffeine 3, and PETase. The renderer fix and focused
-checks are recorded in [teaching_pagination_fix.md](teaching_pagination_fix.md); verify the rebuilt
-PDFs for all affected pages.
+- Babies keeps each lesson's story while moving hypothesis choices before result inspection. Babies 1
+  now makes clear that its higher sample mean does not overcome the nonsignificant test result.
+- Microbes restores student/advisor transitions, concise recaps, and missing images while clarifying
+  known versus estimated SD, Welch assumptions, F-test scope, and ANOVA interpretation. The 24
+  locations in Microbes 3 recur across years, but the source does not establish paired measurements;
+  its Welch exercise remains hypothetical, and paired analysis may be appropriate if linked.
+- Caffeine is now three standalone lessons, each starting at Part 1. Focused additions support
+  formula entry, recovery, result checks, interpretation, chart reopening, and submission. Four
+  misleading legacy visuals (caffeine04, caffeine06, caffeine09, caffeine13) were removed or replaced
+  with plots from the actual observations; the regression recheck accepted the figures.
+- PETase restores the new-hire task and Bradford assay explanation, labels its calibration data as
+  synthetic, and tells students to use **Series > Add series**. It makes no claim about actual
+  PETase abundance, activity, or fermentation productivity.
+- Fill Down translates formulas with source-located diagnostics. Workbook widths and wrapping use
+  authored labels and quoted formula text, including IF decisions, while leaving answers blank.
+  Width and height remain estimates, not font measurements or calculated formula results.
 
 ## Evidence and limits
 
-The group-level comparisons, fixes, implementation reviews, and retained artifact evidence are
-linked from [teaching_quality_review.md](../teaching_quality_review.md). The Fill implementation and
-workbook layout contract passed focused reviews. Rebuilt output and calculation evidence are in
-[teaching_rebuild.md](teaching_rebuild.md) and [calculation_validation.md](calculation_validation.md).
-Local Calc execution supports the checked calculations and rendered workbook layout; it does not
-establish Google Sheets behavior.
+The [review ledger](../teaching_quality_review.md) links group audits and fix reports. Final
+integration acceptance and suite evidence are recorded in
+[teaching_integration_review.md](teaching_integration_review.md). The
+[final rebuild report](teaching_final_rebuild.md) supersedes the initial artifact inventory. The
+[Caffeine figure report](teaching_caffeine_figures_fix.md), [regression recheck](teaching_regression_spec_recheck.md),
+[established HCI review](teaching_established_hci_quality.md), [regression HCI review](teaching_regression_hci_quality.md),
+the [typography recheck](teaching_typography_spec_recheck.md), and the
+[final style-quality review](teaching_final_style_quality.md) record the latest visual and walkthrough evidence.
 
-Group audit reports are snapshots of their review stage. Where a snapshot records an issue later
-corrected, the fix report and refreshed final pages supersede that finding; the consolidated summary
-tracks current resolution and open work.
-
-Current open work is to rebuild and review the corrected outputs, complete the all-12 workbook
-walkthrough and two pending group-level reviews, then finish the independent final quality/HCI
-inspection. Do not close the review based on source fixes or calculation results alone. Google
-import behavior, live class use, student task success, and comparative teaching efficacy remain
-unverified. PETase's explicitly synthetic dataset remains a material scope limit.
+These were expert inspections and cognitive walkthroughs without student participants. They are not
+an accessibility conformance claim or evidence of classroom learning. Google Sheets import and live
+behavior remain unverified. PETase data remain synthetic. Complete overall quality integration before
+closing the plan.

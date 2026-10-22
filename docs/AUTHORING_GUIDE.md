@@ -54,6 +54,7 @@ in the Workbook table for students to inspect, or leave it blank and ask student
 student assignments for validation but leave those answers blank in the generated workbook.
 `Select` records a cell/range reference; `Choose` records a menu path. Other bold openings, such as
 `**Compare:**` and `**Explain:**`, remain ordinary instructions.
+Write menu segments with ASCII `>` separators; the DOCX renders them in bold Roboto Mono.
 
 Give each list item actual content. A bold, colon-terminated label by itself is incomplete unless
 the item has a substantive continuation, a nonempty fenced instruction, a valid action, or a
@@ -93,6 +94,8 @@ python3 make_tutorial.py build tutorial_data/babies_1_z_test.md
 The default build exports PDF using LibreOffice. Use `--format docx,xlsx` for iteration without
 PDF conversion. Read source-located diagnostics and the generated `validation.json`; formula
 checking is static and does not calculate values or establish statistical correctness.
+Generated DOCX uses Google Docs' Normal text, Title, Subtitle, and Heading 1-3 styles. PDF export
+requires locally installed PT Sans, PT Sans Narrow, and Roboto Mono; setup does not install fonts.
 
 For the full syntax, numbering rules, worksheet metadata, formula checks, and unsupported content,
 see [TUTORIAL_SPEC.md](TUTORIAL_SPEC.md). For command options, see [USAGE.md](USAGE.md).

@@ -120,8 +120,8 @@ means the solution before addition of dye, treated using the same assay volumes 
 - **Choose:** Insert > Chart
 - **Choose:** Chart editor > Setup > Chart type > Scatter chart
 - **Choose:** Chart editor > Setup > X-axis
-- **Set:** Use `A2:A8` for the concentration axis and `C2:C8` for the only absorbance series.
-  Remove any automatically selected raw absorbance series.
+- **Set:** Use `A2:A8` for the concentration X-axis. Under the separate Series control, add
+  `C2:C8` as the only absorbance series. Remove any automatically selected raw absorbance series.
 - **Choose:** Chart editor > Customize > Chart and axis titles
 - **Name:** Give the chart the title "Illustrative Bradford calibration". Label the horizontal
   axis "BSA concentration (mg/mL)" and the vertical axis "Blank corrected A595".
@@ -158,7 +158,8 @@ means the solution before addition of dye, treated using the same assay volumes 
   The `$G$2` and `$G$3` references stay on the calibration coefficients.
 - **Check:** The last row should contain `=$G$2*A8+$G$3` in `I8` and `=C8-I8` in `J8`.
 - **Choose:** Insert > Chart
-- **Set:** Create a second scatter chart using `A2:A8` as concentration and `J2:J8` as residuals.
+- **Set:** Create a second scatter chart with `A2:A8` as the concentration X-axis. Under the
+  separate Series control, add `J2:J8` as the residual series.
 - **Inspect:** Look for residuals scattered around zero. A curved pattern suggests that one
   straight line is inadequate; a high R squared alone would not resolve that problem. These few
   synthetic readings do not provide replicate based measurement uncertainty.

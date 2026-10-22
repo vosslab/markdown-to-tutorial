@@ -273,9 +273,9 @@ based on which p-value is smaller.
 
 #### Looking ahead: Joe faces a challenge
 
-Joe was ecstatic after conducting his Z-test, certain that his hospital's babies were the heaviest
-in town. He was ready to claim the Baby Butter Ball Award and throw a butter-and-bacon-themed
-celebration.
+Joe mistook the higher sample mean for proof that his hospital's babies were heavier, ignoring the
+nonsignificant Z-test. He was ready to claim the Baby Butter Ball Award and throw a
+butter-and-bacon-themed celebration.
 
 But just as Joe began planning his victory speech, the award committee sent him a stern letter:
 

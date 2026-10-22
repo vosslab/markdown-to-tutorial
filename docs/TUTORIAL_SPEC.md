@@ -284,10 +284,10 @@ Backticked A1 cells and ranges in tutorial prose are explicit references. Suppor
 suggestion but is not automatically linked: scientific identifiers and paper sizes can look like
 cell addresses. Action targets are explicit references without requiring additional backticks.
 
-`Choose` splits a menu path on `>` or the Unicode right arrow, trims each segment, and rejects
-empty segments. Render segments in a distinct menu style separated by a right arrow. Optional
-backticks around the whole path are accepted. Do not interpret greater-than comparisons elsewhere
-as menus. Bold ordinary openings and menu formatting remain separate operations.
+`Choose` splits a menu path on `>` or the Unicode right arrow, trims each segment, and rejects empty
+segments. Render segments in bold Roboto Mono separated by the ASCII `>` character with spaces.
+Optional backticks around the whole path are accepted. Do not interpret greater-than comparisons
+elsewhere as menus. Bold ordinary openings and menu formatting remain separate operations.
 
 ## Validation and diagnostics
 
@@ -340,10 +340,20 @@ checked, and unchecked formulas rather than using a single misleading accuracy s
 ### DOCX
 
 Use native paragraphs, list numbering, tables, hyperlinks, and editable formula text. Add a native
-Word `PAGE` field in the footer. Establish
-named styles for title, part, step, substep, body, instruction, formula, cell reference, and menu.
-Prefer standard heading styles for outline navigation, with direct run formatting where the import
-spike demonstrates it is needed. Style values belong in one renderer-owned style definition.
+Word `PAGE` field in the footer and format the footer with Normal text. Use only these Google Docs
+paragraph styles in the generated DOCX: Normal text, Title, Subtitle, Heading 1, Heading 2, and
+Heading 3. Map Title to the document title, Subtitle to optional metadata, and Heading 1-3 to parts,
+steps, and substeps. Use Normal text for body, lists, formulas, quotes, and tables. Apply instructional
+emphasis and roles for formulas, cells, menus, and links directly to runs; do not depend on custom
+tutorial paragraph or character styles. Unused stock styles may remain in the DOCX template, but
+generated paragraphs reference only the six styles. Keep the style and direct-format values in one
+renderer-owned definition.
+
+Use PT Sans for body text and headings, PT Sans Narrow for compact table text, and Roboto Mono for
+formulas, cell references, and menu entries. Apply PT Sans Narrow only where rendered table content
+needs the narrower face. These fonts are available in Google Docs and must also be installed in the
+local PDF build environment. The builder does not download or install fonts. This DOCX/PDF font
+contract does not change XLSX font styling.
 
 Formula blocks use a readable monospace face, light shading, and sufficient padding. Display the
 destination cell beside the instruction. Preserve copyable formula text; do not insert soft hyphens,
