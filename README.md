@@ -1,10 +1,33 @@
 # markdown-to-tutorial
 
-Turn student-authored Markdown into polished science tutorials, editable Word documents, and Excel
-workbooks. Keep the author's words and students' calculations; let the compiler handle presentation
-and reference maintenance.
+Create a biology tutorial for your classmates using a plain-text template. You write the explanations
+and design the spreadsheet; this tool turns your work into formatted Word, PDF, and Excel files
+while keeping your words.
 
-## Screenshots
+## Start here
+
+**Writing a tutorial for BIOL 318? Start with the reading path below.** You can read the examples
+and plan your lesson before installing anything. Markdown is plain text with simple markers for
+headings, lists, and tables; the templates show what to type.
+
+1. **See what your writing becomes.** Open
+   [docs/FORMATTING_GUIDE.md](docs/FORMATTING_GUIDE.md). It pairs Markdown with screenshots.
+   Start with the headings and formula examples, then read "Connect a table to actions" and the
+   examples of adding a column and a row.
+2. **Copy a small working example.** Use
+   [docs/examples/formatting_demo.md](docs/examples/formatting_demo.md) for a labeled worksheet
+   with one calculation. Save your own copy as a `.md` file in a plain-text editor. Keep its section
+   headings while you replace the explanation, data, and instructions.
+3. **Write your lesson.** Follow [docs/AUTHORING_GUIDE.md](docs/AUTHORING_GUIDE.md) as you work.
+   Decide which labels and data students receive and which calculations they complete.
+4. **Build and check it.** Once the software is installed, follow [Build your files](#build-your-files).
+   Open both the document and workbook, then follow your own instructions as a classmate would.
+
+If you are **using a tutorial for an assignment**, start with the document and workbook provided
+for that lesson. This repository's authoring guides are for students making tutorials.
+
+## See the finished materials
+
 
 Actual output from the Microbes and Dr. Caffeine lessons: prominent formulas, varied heading
 indents, justified explanations, and scientific worksheets with purposeful color.
@@ -31,33 +54,49 @@ explicitly synthetic data.
 DOCX, XLSX, and PDF output is verified locally. Google Docs and Sheets import and execution remain
 unverified; Google may also wrap text differently.
 
-## Quick start
+## Choose a starting example
 
-Install the Python requirements in [docs/INSTALL.md](docs/INSTALL.md), then build a small template:
+Start small and adapt a copy. You choose the scientific question, worksheet arrangement, and
+learning activities.
 
-```bash
-source source_me.sh
-python3 make_tutorial.py lint templates/calculated_column.md
-python3 make_tutorial.py build templates/calculated_column.md --format docx,xlsx
+| I want to... | Open this file |
+| --- | --- |
+| Start with labeled data and one formula column | [docs/examples/formatting_demo.md](docs/examples/formatting_demo.md) |
+| Understand how to add a column or another observation | [docs/examples/adding_rows_and_columns.md](docs/examples/adding_rows_and_columns.md) |
+| Teach students to construct a calculated column | [templates/calculated_column.md](templates/calculated_column.md) |
+| Teach a summary calculation | [templates/statistical_summary.md](templates/statistical_summary.md) |
+| Plan an ANOVA table-building activity | [templates/anova_worksheet.md](templates/anova_worksheet.md) |
+
+The templates include some label-entry exercises. Keep those only when constructing the labels is
+part of your lesson; otherwise, supply the labels in the Workbook table, as the first example does.
+For complete lesson ideas, browse [docs/TUTORIAL_CATALOG.md](docs/TUTORIAL_CATALOG.md).
+
+## What you write
+
+Your Markdown file has two main sections:
+
+- **Workbook:** the tables, labels, and data students see when they open the spreadsheet.
+- **Tutorial:** your explanations and the instructions students follow to complete the work.
+
+For example, this instruction asks the reader to enter a formula in C2:
+
+```markdown
+1. In cell C2, enter:
+   [`=A2^2`](enter:C2)
 ```
 
-Open `tutorial_output/calculated_column/calculated_column.docx` and
-`tutorial_output/calculated_column/calculated_column.xlsx`. You get formatted instructions and
-three supplied observations, with column C reserved for the squared values.
+The formula reads the value in A2 and squares it. The `enter:C2` part connects the instruction to
+the destination cell; it is hidden in the finished document. C2 stays blank for the reader to fill.
+The [docs/FORMATTING_GUIDE.md](docs/FORMATTING_GUIDE.md#connect-a-table-to-actions) walkthrough shows
+how that address comes from the Workbook table.
 
-For PDF output, install LibreOffice and the fonts listed in [docs/INSTALL.md](docs/INSTALL.md), then
-run `python3 make_tutorial.py build templates/calculated_column.md --format all`.
+Use straight quotes, ordinary keyboard characters, and ordinary Excel formulas. For a Greek letter,
+you can type a readable name such as `&alpha;`. The tool handles fonts, colors, spacing, and the
+default three-decimal number display. Your explanations stay in your own words.
 
-Copy a template to start your own lesson:
+<details>
+<summary>More examples: a full lesson source and the original Caffeine instructions</summary>
 
-- [templates/calculated_column.md](templates/calculated_column.md) - Data, a new formula, and fill-down.
-- [templates/statistical_summary.md](templates/statistical_summary.md) - A compact summary calculation.
-- [templates/anova_worksheet.md](templates/anova_worksheet.md) - An ANOVA worksheet construction activity.
-
-Use plain ASCII Markdown, straight quotes, and ordinary Excel formulas. Readable named entities
-such as `&alpha;` are supported. No programming or replacement formula language is required.
-
-## Write instructions in context
 
 Keep the student's explanation in your own voice. Semantic links attach a cell action to the words
 students already read; the destination stays hidden in the generated document. This excerpt is from
@@ -132,7 +171,10 @@ In F2, enter [=AVERAGE(C2:C3)](enter:F2). Then explain what a curved pattern cou
 
 </details>
 
-## What the project provides
+</details>
+
+## What the tool handles
+
 
 - **Your words, professionally presented.** Editable headings, prominent green formula displays,
   styled tables, and long-paragraph justification, without LLM rewriting.
@@ -146,7 +188,44 @@ In F2, enter [=AVERAGE(C2:C3)](enter:F2). Then explain what a curved pattern cou
 - **Checks with clear limits.** Lint checks source structure and references; a separate Calc
   validation checks numerical results.
 
-## Move cells, keep instructions coordinated
+## Build your files
+
+This step uses a terminal. The publishing tool currently runs through commands; it does not have a
+web form or an upload button. First follow [docs/INSTALL.md](docs/INSTALL.md) to install Python and
+the required packages. Then open a terminal in the project folder and try the small example:
+
+```bash
+source source_me.sh
+python3 make_tutorial.py lint docs/examples/formatting_demo.md
+python3 make_tutorial.py build docs/examples/formatting_demo.md --format docx,xlsx
+```
+
+`lint` checks the source for problems. `build` makes the files. Open:
+
+- `tutorial_output/formatting_demo/formatting_demo.docx` - the formatted instructions.
+- `tutorial_output/formatting_demo/formatting_demo.xlsx` - the labeled worksheet, with calculation
+  cells left blank.
+
+For your own lesson, replace `docs/examples/formatting_demo.md` with the path to your copy.
+The output folder uses your file's name. Read reported problems, rebuild after edits, and check
+that someone following the instructions can find the right cells and complete the calculations.
+A successful build does not establish that the scientific explanation or statistical test is correct.
+
+For a PDF too, install LibreOffice and the fonts in [docs/INSTALL.md](docs/INSTALL.md), then run:
+
+```bash
+python3 make_tutorial.py build docs/examples/formatting_demo.md --format all
+```
+
+## When your worksheet changes
+
+Use the row-and-column walkthrough in [docs/FORMATTING_GUIDE.md](docs/FORMATTING_GUIDE.md#add-a-calculation-column)
+first. For larger moves, a command can help update connected references. Review the changes before
+applying them; visible wording and worked numerical examples may still need your attention.
+
+<details>
+<summary>Optional: preview a coordinated worksheet edit</summary>
+
 
 After choosing a new layout, preview a column insertion using ordinary spreadsheet coordinates:
 
@@ -164,14 +243,20 @@ Explicit worksheet references stay coordinated. Ambiguous bare references and wo
 explanations are flagged for author review rather than guessed at or rewritten. See
 [docs/USAGE.md](docs/USAGE.md#maintain-a-worksheet-after-a-layout-decision) for applying a reviewed edit.
 
-## Documentation
+</details>
 
-- [docs/FORMATTING_GUIDE.md](docs/FORMATTING_GUIDE.md) - Compare Markdown syntax with cropped output examples.
-- [docs/INSTALL.md](docs/INSTALL.md) - Install Python requirements, LibreOffice, and the required fonts.
-- [docs/AUTHORING_GUIDE.md](docs/AUTHORING_GUIDE.md) - Fill in templates, write instructions, and design worksheets.
-- [docs/USAGE.md](docs/USAGE.md) - Build, preview coordinated worksheet edits, import, and validate calculations.
-- [docs/TUTORIAL_CATALOG.md](docs/TUTORIAL_CATALOG.md) - Browse all 12 lesson sources and data notes.
-- [docs/TUTORIAL_SPEC.md](docs/TUTORIAL_SPEC.md) - Read the complete source and output contract.
-- [docs/GOOGLE_SHEETS_VALIDATION.md](docs/GOOGLE_SHEETS_VALIDATION.md) - Review the separate Google validation scope and evidence.
+## What to read next
+
+| Your question | Where to look |
+| --- | --- |
+| What should I type, and how will it look? | [docs/FORMATTING_GUIDE.md](docs/FORMATTING_GUIDE.md) |
+| How do I write a complete lesson? | [docs/AUTHORING_GUIDE.md](docs/AUTHORING_GUIDE.md) |
+| Can I see other biology tutorials? | [docs/TUTORIAL_CATALOG.md](docs/TUTORIAL_CATALOG.md) |
+| How do I install the software? | [docs/INSTALL.md](docs/INSTALL.md) |
+| How do I build files or change worksheet locations? | [docs/USAGE.md](docs/USAGE.md) |
+
+For detailed reference, [docs/TUTORIAL_SPEC.md](docs/TUTORIAL_SPEC.md) describes all supported syntax.
+[docs/GOOGLE_SHEETS_VALIDATION.md](docs/GOOGLE_SHEETS_VALIDATION.md) explains the separate spreadsheet
+calculation checks and their limits. Neither is required reading before starting your first draft.
 
 The source code is licensed under the [MIT License](LICENSE.MIT).

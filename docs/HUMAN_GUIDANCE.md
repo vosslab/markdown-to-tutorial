@@ -97,3 +97,7 @@ origin belongs there too. Rules: [REPO_STYLE.md](REPO_STYLE.md).
 - I would consider adding a separate page showing how different syntax converts into formatting,
   using Markdown and cropped screenshots.
 - Spreadsheet numerical formatting needs work; the default should be three decimal places.
+- The formatting guide should explain how formulas and spreadsheet actions connect to workbook
+  tables, with an example of adding a new row or column.
+- Make the README landing page friendlier to non-coding students, with more about where to start
+  and what to read.

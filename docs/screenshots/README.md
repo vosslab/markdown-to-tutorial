@@ -4,7 +4,8 @@ Captured 2026-10-23 UTC from the current canonical tutorial outputs. These four 
 the publishing pipeline's illustrated document opening, scannable spreadsheet actions,
 formula treatment, and a completed calculation example. The rendered
 instruction excerpts preserve the source writing while the renderer supplies the hierarchy,
-indentation, justification, and formula styling.
+indentation, justification, and formula styling. The workbook captures use the current three-decimal
+number format; the ANOVA bundle was rebuilt before capture.
 
 ## Gallery
 
@@ -21,7 +22,7 @@ indentation, justification, and formula styling.
 | `caffeine_3_illustrated_opening.webp` | PDF page 1: title, research story, and embedded illustration | 1028 x 1230 | 279774 |
 | `caffeine_3_fill_down_instructions.webp` | PDF page 4: complete Step 3, formula, and justified teaching aside | 1064 x 350 | 45832 |
 | `microbes_4_formula_instruction.webp` | PDF page 3: F-statistic spreadsheet action, standalone formula, and explanation | 1064 x 620 | 85526 |
-| `microbes_5_completed_anova.webp` | Disposable completed demonstration of the styled Microbes 5 ANOVA worksheet, H1:M16 | 1507 x 686 | 71726 |
+| `microbes_5_completed_anova.webp` | Disposable completed demonstration of the styled Microbes 5 ANOVA worksheet, H1:M16 | 1507 x 686 | 61264 |
 
 The completed ANOVA image is a demonstration, not the student starter workbook. It starts with
 the canonical styled starter, applies only the authored baseline label and formula actions in a

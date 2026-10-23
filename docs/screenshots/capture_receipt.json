@@ -1,5 +1,5 @@
 {
-  "captured_utc": "2026-10-23T02:52:13.386780+00:00",
+  "captured_utc": "2026-10-23T11:22:13.815705+00:00",
   "protected_sha256": {
     "tutorial_data/babies_1_z_test.md": "da64c65d64e160d9b7dc311b73afc7e28fefb38efdb45d9a34d9ed2704c1d5c1",
     "tutorial_data/babies_2_t_test.md": "446256332bb144cc1ecbd2d0202043dc980a484ceee4ed28db4d624a6f76e96d",
@@ -43,9 +43,9 @@
     "tutorial_output/microbes_4_f_test/microbes_4_f_test.docx": "45a295bf97105097a2cf3e97c510b6795568d12307d5e6ecbf2098abe0b238c9",
     "tutorial_output/microbes_4_f_test/microbes_4_f_test.pdf": "082f6459ca0fa11aef495fecb6b89d2798066dcf68e58d3d73f225b0db2013c5",
     "tutorial_output/microbes_4_f_test/microbes_4_f_test.xlsx": "9a55ca0d3cd1fc8ddf9ae6aaed7658a45709c3ea7f087f5003dcd86591aea200",
-    "tutorial_output/microbes_5_anova/microbes_5_anova.docx": "a1f433fd83b6eb64b83dbec7f68ba5e300badb3c36e00abcc21faf07c6410eda",
-    "tutorial_output/microbes_5_anova/microbes_5_anova.pdf": "33dc20329608b6d2361262b075cbdcdaef4651cf0c0e5d09c12f0082fbbc5d2e",
-    "tutorial_output/microbes_5_anova/microbes_5_anova.xlsx": "f0a4b033407acc8c6cf91076bbaaf05097a7e1d648c93261a97b444b5a3a34d9",
+    "tutorial_output/microbes_5_anova/microbes_5_anova.docx": "09a73b63954e19934222a990497eb079dec178e695ba657df03cce3129a19c60",
+    "tutorial_output/microbes_5_anova/microbes_5_anova.pdf": "3d310d1688352760d0b089bc16b5904fe35fd19d2b5536b315de7477ec2b30bc",
+    "tutorial_output/microbes_5_anova/microbes_5_anova.xlsx": "62cab3bec49ecb716598ffcd5c1f2258905c3094c1a117f36c9e8fc894e5c798",
     "tutorial_output/petase_1_linear_regression/petase_1_linear_regression.docx": "99b1bf0f745147832a03bd3a99c7361c023300d63aa8df85dbf93e4c48065b17",
     "tutorial_output/petase_1_linear_regression/petase_1_linear_regression.pdf": "33eb7f688cdd40bf4002d33420dba38252d09ec4389914eb2bdb2d46b398bc64",
     "tutorial_output/petase_1_linear_regression/petase_1_linear_regression.xlsx": "9a7306a8db7b264cc8467fa8ce0a5606a6486891fa4d12f82e715f46e7f9df4a"
@@ -54,7 +54,12 @@
     "caffeine_3_fill_down_instructions.webp": "e0a9885ba1803614c85e94abf498691ec4bb0ae9f4c0c82b8854038a9c445594",
     "caffeine_3_illustrated_opening.webp": "4b390c686c818b8360ab09485f5d79c388e02d3934bdba4497e84fd32b8ef2db",
     "microbes_4_formula_instruction.webp": "28189f6b5594f20245643667e07a86c61920d454f8f599ffb29a82c5fc2658f6",
-    "microbes_5_completed_anova.webp": "484b396f6cb05607db6d7215b4a481cd2c47fccb74360fdbb9e61d5ab4db066c"
+    "microbes_5_completed_anova.webp": "a6cf9e603939037af9884bae1bfe34c0899fe32e547f9d9b05d7cad56ad79e4f",
+    "syntax_actions.webp": "95f818c55aeb7988424cac9b3652d2d47df6edd76e580b654f26183f39de4e21",
+    "syntax_headings.webp": "26992d8298d704bcd0c6d064957472bc4d65d90f43530725041360f5c4ce1af4",
+    "syntax_table.webp": "4524d2f4217351918131be3016449f4ce624b045280e018019bd8f7b03d61e6b",
+    "syntax_text.webp": "3bb8bcd805a244902684b3ca6b300263690f3ebf8ee0313e5b749e012927ee49",
+    "syntax_workbook.webp": "6081b4f9f698ea18a225e03d341d9571511b080459628fdb4793e30d259d9b43"
   },
   "renderer": "/Users/vosslab/nsh/vosslab-skills/skills/documentation/screenshot-docs/scripts/render_artifact_libreoffice.sh",
   "canonical_files_unchanged": true,

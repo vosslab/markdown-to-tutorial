@@ -1,5 +1,20 @@
 # Changelog
 
+## 2026-10-23
+
+### Additions and New Features
+
+- Expand [FORMATTING_GUIDE.md](FORMATTING_GUIDE.md) with a worksheet-address map and worked
+  examples adding a calculation column and an observation row. Add a runnable source showing
+  supplied headers, blank calculation cells, and matching Enter/Fill instructions.
+
+### Fixes and Maintenance
+
+- Reorganize the README around a BIOL 318 student reading path, starting examples, and a plain-language
+  explanation of Workbook and Tutorial sections. Keep build commands and advanced examples later.
+- Rebuild the ANOVA bundle and refresh README and formatting-guide screenshots using the
+  three-decimal numerical display. Inspect both workbook views and refresh capture receipts.
+
 ## 2026-10-22
 
 ### Additions and New Features

@@ -3,8 +3,9 @@
 Copy a pattern, replace the words with your own, and build your tutorial. The compiler supplies
 fonts, colors, spacing, and numbering. You decide what the lesson says and what students do.
 
-The examples below come from [examples/formatting_demo.md](examples/formatting_demo.md).
-Each source block is followed by a cropped view of its actual rendered output.
+The formatting examples come from [examples/formatting_demo.md](examples/formatting_demo.md),
+with cropped views of the actual output. The later walkthrough connects the table and actions,
+then adds a column and a row in [examples/adding_rows_and_columns.md](examples/adding_rows_and_columns.md).
 Write plain ASCII: straight quotes, ordinary hyphens, and readable symbols such as `&alpha;`.
 
 ## Headings and nested instructions
@@ -133,6 +134,115 @@ formatting, not rounding the data.
 <!-- screenshots:begin (managed by screenshot-docs) -->
 ![Starting worksheet with labeled observations, blank squared values, and a model-feature reference table](screenshots/syntax_workbook.webp)
 <!-- screenshots:end -->
+
+## Connect a table to actions
+
+The connection is the **worksheet name and cell address**. A heading such as "Sleep hours squared"
+does not automatically connect to a formula. You choose its column, then use that column's address
+in the instructions.
+
+For the workbook table above, the first table starts at A1. Its header occupies row 1; the first
+observation occupies row 2. The Markdown separator line (`| --- | --- | --- |`) does not occupy a
+spreadsheet row.
+
+| Spreadsheet row | Column A | Column B | Column C |
+| --- | --- | --- | --- |
+| 1 | Hours of sleep | Exam score | Sleep hours squared |
+| 2 | 5 | 72 | Blank for the student's formula |
+| 3 | 7 | 88 | Blank for fill down |
+| 4 | 9 | 81 | Blank for fill down |
+
+Read this instruction as three connected pieces:
+
+```markdown
+1. In cell C2, enter:
+   [`=A2^2`](enter:C2)
+```
+
+- `A2` inside the Excel formula is the **input**: the first sleep-hours value, 5.
+- `C2` after `enter:` is the **destination**: the empty squared-hours cell in the same row.
+- `In cell C2` is what the reader sees, so it must name that same destination.
+
+The part's `- **Worksheet:** Sleep and scores` selects the worksheet for these actions. Its name
+must match `### Sheet: Sleep and scores` in the Workbook section.
+
+The table creates the starting worksheet. The action creates an instruction and records what the
+student should enter; it does **not** put the answer into the starting worksheet. Putting `=A2^2`
+directly in the Workbook table would supply that formula in advance instead.
+
+## Add a calculation column
+
+Suppose you want a second calculation: sleep hours minus 7. As the tutorial author, add a fourth
+column to the Workbook table. It becomes column D. Supply its heading and leave its values blank:
+
+```markdown
+| Hours of sleep | Exam score | Sleep hours squared | Hours minus 7 |
+| --- | --- | --- | --- |
+| 5 | 72 | | |
+| 7 | 88 | | |
+| 9 | 81 | | |
+
+- **Region A1:B4:** source
+- **Region C1:D4:** calculation
+```
+
+Extend the calculation region through D so both calculation columns receive the same styling.
+Keep the existing column-C instructions, then add this step under the same Tutorial part:
+
+```markdown
+#### Step: Compare with 7 hours
+
+1. In cell D2, enter:
+   [`=A2-7`](enter:D2)
+2. [Fill D2:D4](fill:D2:D4) down to calculate the remaining rows.
+```
+
+Both formulas read from column A, but one writes to C and the other to D. The author has added the
+column and supplied its heading; the tutorial user enters and fills its formula.
+
+## Add another observation
+
+Now add a fourth observation, 6 hours and a score of 79, at the bottom of that same Workbook table:
+
+```markdown
+| Hours of sleep | Exam score | Sleep hours squared | Hours minus 7 |
+| --- | --- | --- | --- |
+| 5 | 72 | | |
+| 7 | 88 | | |
+| 9 | 81 | | |
+| 6 | 79 | | |
+
+- **Region A1:B5:** source
+- **Region C1:D5:** calculation
+```
+
+The new observation is on spreadsheet row 5. The first formulas stay `=A2^2` in C2 and `=A2-7` in
+D2. Extend **both** fill instructions to row 5, including the visible wording and the link target:
+
+```markdown
+2. [Fill C2:C5](fill:C2:C5) down to include all four observations.
+```
+
+```markdown
+2. [Fill D2:D5](fill:D2:D5) down to include all four observations.
+```
+
+After the tutorial user fills down, C5 contains `=A5^2` and displays `36.000`; D5 contains `=A5-7`
+and displays `-1.000`. In the generated starting workbook, those cells are still blank.
+
+The complete version is [examples/adding_rows_and_columns.md](examples/adding_rows_and_columns.md).
+Build it with:
+
+```bash
+source source_me.sh
+python3 make_tutorial.py build docs/examples/adding_rows_and_columns.md --format docx,xlsx
+```
+
+These examples show the edits explicitly so you can understand the connections. Manually changing
+a Markdown table does not automatically rewrite its Tutorial instructions. For larger layout
+changes, the worksheet-edit command can preview coordinated changes; see
+[USAGE.md](USAGE.md#maintain-a-worksheet-after-a-layout-decision). Review its notices, including any
+visible wording or worked numbers that still need updating.
 
 ## Try the complete example
 
