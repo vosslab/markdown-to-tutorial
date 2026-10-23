@@ -166,6 +166,7 @@ explanations are flagged for author review rather than guessed at or rewritten. 
 
 ## Documentation
 
+- [docs/FORMATTING_GUIDE.md](docs/FORMATTING_GUIDE.md) - Compare Markdown syntax with cropped output examples.
 - [docs/INSTALL.md](docs/INSTALL.md) - Install Python requirements, LibreOffice, and the required fonts.
 - [docs/AUTHORING_GUIDE.md](docs/AUTHORING_GUIDE.md) - Fill in templates, write instructions, and design worksheets.
 - [docs/USAGE.md](docs/USAGE.md) - Build, preview coordinated worksheet edits, import, and validate calculations.

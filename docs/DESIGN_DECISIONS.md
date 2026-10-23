@@ -7,6 +7,29 @@ the reasoning a later reader needs. Guidance Neil Voss states belongs in
 `docs/active_plans/decisions/`. [PROPAGATED HEADER - ENTRIES BELOW ARE YOURS]
 <!-- VENDORED HEADER: END -->
 
+### Default spreadsheet numerical display
+
+**Decision.** Apply `0.000` to numerical content and blank work cells in generated spreadsheets.
+
+**Why.** Authors get a consistent three-decimal display without extra source syntax.
+
+**Consequence.** Preserve stored values and student-entered calculations. Other displays remain
+ordinary spreadsheet formatting tasks.
+
+**Owner.** [tutorial_lib/workbook.py](../tutorial_lib/workbook.py).
+
+### Visual syntax reference
+
+**Decision.** Pair copyable Markdown excerpts with cropped native output from one runnable
+documentation example.
+
+**Why.** Students can see the formatting a convention produces before using it in a lesson.
+
+**Consequence.** Refresh the example captures when rendering changes; show supplied worksheet labels
+and blank student calculations separately from completed demonstrations.
+
+**Owner.** [FORMATTING_GUIDE.md](FORMATTING_GUIDE.md).
+
 ### Temporary Graphify Cargo reconciliation
 
 **Decision.** Reconcile exact Cargo aliases with their AST package twins before
@@ -215,8 +238,8 @@ instruction substantive. Do not add directives or compatibility layers for these
 ### Targeted workbook and document readability
 
 **Decision.** Freeze worksheet panes at `A2`, keep columns at least 12 characters wide, and add a
-native Word `PAGE` footer field. Teach number formats as explicit menu tasks when a lesson requires
-them.
+native Word `PAGE` footer field. Use the three-decimal default described above; teach other number
+formats as explicit menu tasks when a lesson requires them.
 
 **Why.** These defaults make entry worksheets easier to follow while preserving simple authored
 tables and an honest boundary around native spreadsheet formatting.

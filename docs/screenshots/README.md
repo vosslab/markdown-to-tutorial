@@ -36,10 +36,14 @@ XLSX outputs before and after capture. All 48 protected files were unchanged. Th
 and the completed-demo provenance.
 
 All WebPs were encoded with `cwebp -q 90` under `/tmp`, visually inspected after encoding, and are
-within the 1920-pixel edge and 1 MB limits. These four images are the complete managed set.
+within the 1920-pixel edge and 1 MB limits. These four images form the landing-page capture set.
 Removed `caffeine_3_blank_predictor_workspace.webp`: its unlabeled colored areas obscured the
 worksheet's purpose and did not demonstrate useful authoring or learner behavior. No other stale
-images, retained reference images, or capture gaps remain.
+images or retained reference images remain in that set.
+
+The separate syntax examples appear in [../FORMATTING_GUIDE.md](../FORMATTING_GUIDE.md), with
+their source, capture command, and limitations documented there. Their provenance is recorded in
+[syntax_capture_receipt.json](syntax_capture_receipt.json).
 
 ## Reproduce the capture
 

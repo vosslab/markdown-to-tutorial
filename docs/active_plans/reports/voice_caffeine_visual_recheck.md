@@ -38,7 +38,8 @@ actual render: blue source data, teal predictor/calculation cells, orange statis
 and purple written-response cells. The full-width render is also in the ignored evidence directory.
 
 The refreshed managed images are [caffeine_3_fill_down_instructions.webp](../../screenshots/caffeine_3_fill_down_instructions.webp)
-and [caffeine_3_blank_predictor_workspace.webp](../../screenshots/caffeine_3_blank_predictor_workspace.webp).
+and `caffeine_3_blank_predictor_workspace.webp` (subsequently removed from the showcase because its
+unlabeled areas did not demonstrate a useful starting worksheet).
 Both are WebP quality 90 and were visually inspected after encoding. Capture details and hashes are recorded in
 [`docs/screenshots/README.md`](../../screenshots/README.md).
 

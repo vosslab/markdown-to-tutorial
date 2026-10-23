@@ -451,8 +451,11 @@ Write worksheets, values, types, and formulas exactly as the Workbook model spec
 at `A2`; use at least 12-character column widths, including for blank student-entry cells, while
 keeping widths bounded. Use modest header emphasis, wrapped text, and a distinct style on blank
 student entry cells. Do not populate Label/Enter answers, add hidden solutions, or overwrite seed
-values. Number formats are explicit authored menu tasks when a lesson needs them; do not infer
-arbitrary number formats from values or promise full workbook fidelity.
+values. Use `0.000` as the default number format for numeric seeds, formulas, and blank authored
+work cells, including fill destinations. Preserve stored precision; formatting does not round
+values or evaluate formulas. Text and Boolean seeds retain their types. Lessons can teach an
+explicit number-format menu task for other displays; do not infer statistical significance,
+percentages, or scientific notation from values or promise full workbook fidelity.
 Do not fabricate cached formula results. Request recalculation on opening when supported by the
 chosen writer, and disclose that calculation was not performed by the converter.
 

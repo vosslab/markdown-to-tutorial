@@ -35,6 +35,7 @@ LABEL_ENTRY_STYLE = ("FFF3E5", "B74300")
 SOURCE_STRIPE_FILL = "EEF5FC"
 GRIDLINE_COLOR = "C9D8E8"
 INTERPRETATION_PANEL_FILL = "FFF7FB"
+DEFAULT_NUMBER_FORMAT = "0.000"
 
 
 #============================================
@@ -133,6 +134,9 @@ def write_workbook(document: tutorial_lib.model.Document, output_path: pathlib.P
 			if scalar.kind == "text":
 				# Leading equals signs and explicit empty strings remain literal text.
 				cell.data_type = "s"
+			if scalar.kind in ("number", "formula", "blank"):
+				# Retain the stored value while making ordinary scientific results easy to read.
+				cell.number_format = DEFAULT_NUMBER_FORMAT
 			cell.font = openpyxl.styles.Font(name="PT Sans", size=10, color="202124")
 			cell.alignment = openpyxl.styles.Alignment(vertical="top", wrap_text=True)
 			length = max((len(line) for line in str(scalar.value).splitlines()), default=0)
@@ -185,6 +189,9 @@ def write_workbook(document: tutorial_lib.model.Document, output_path: pathlib.P
 					bottom=openpyxl.styles.Side(style="thin", color=GRIDLINE_COLOR))
 			cell.font = openpyxl.styles.Font(name="PT Sans", size=10, color="202124")
 			cell.alignment = openpyxl.styles.Alignment(vertical="top", wrap_text=True)
+			seed = source.cells.get((row, column))
+			if seed is None or seed.scalar.kind == "blank":
+				cell.number_format = DEFAULT_NUMBER_FORMAT
 		for bounds, role, _ in region_bounds:
 			_apply_region_outline(sheet, bounds[0], bounds[1], bounds[2], bounds[3],
 				ROLE_STYLES[role][1])

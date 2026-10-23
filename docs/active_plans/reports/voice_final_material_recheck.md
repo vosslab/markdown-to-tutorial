@@ -100,8 +100,9 @@ result areas, and purple written responses. The 75 cells in C2:C26 and E2:F26 re
 
 The two managed README assets were refreshed from these final files at quality 90 and inspected:
 [the compact four-item instruction excerpt](../../screenshots/caffeine_3_fill_down_instructions.webp)
-(1028 x 330) and [the blank predictor workspace](../../screenshots/caffeine_3_blank_predictor_workspace.webp)
-(1237 x 910). The complete four-item excerpt is uncropped. Capture parameters, byte sizes, current
+(1028 x 330) and the blank predictor workspace (1237 x 910, subsequently removed from the showcase
+because its unlabeled areas did not demonstrate a useful starting worksheet).
+The complete four-item excerpt is uncropped. Capture parameters, byte sizes, current
 source/PDF/XLSX hashes, and final WebP hashes are recorded in
 [docs/screenshots/README.md](../../screenshots/README.md). Caffeine 3 is **7 pages** in this final
 build; the older eight-page capture receipt has been replaced.

@@ -94,3 +94,6 @@ origin belongs there too. Rules: [REPO_STYLE.md](REPO_STYLE.md).
   colored areas. Tutorial users do not generally enter headings.
 - I intentionally have no `.gitignore` rule for `__pycache__`, because it lets me know when agents
   are not following guidelines.
+- I would consider adding a separate page showing how different syntax converts into formatting,
+  using Markdown and cropped screenshots.
+- Spreadsheet numerical formatting needs work; the default should be three decimal places.

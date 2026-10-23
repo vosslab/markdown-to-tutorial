@@ -42,6 +42,36 @@ def test_seed_types_and_student_targets_roundtrip(tmp_path: pathlib.Path) -> Non
 
 
 #============================================
+def test_numeric_display_defaults_to_three_decimals_without_rounding_values(
+		tmp_path: pathlib.Path,
+) -> None:
+	"""Numeric work stays precise while supplied and learner formula cells display consistently."""
+	source = "# Number display\n\n## Workbook\n\n### Sheet: Data\n\n"
+	source += "| Number | Formula | Text | Boolean | Blank |\n"
+	source += "| --- | --- | --- | --- | --- |\n"
+	source += "| 1.2345678901234567 | =A2/3 | hello | FALSE | |\n"
+	source += "| 2 | =A3/3 | goodbye | TRUE | |\n\n"
+	source += "- **Region A1:E3:** source\n- **Region F1:F3:** calculation\n\n"
+	source += "## Tutorial\n\n### Part: Calculate\n\n- **Worksheet:** Data\n\n"
+	source += "#### Step: Fill results\n\n- **Enter F2:** `=A2/3`\n"
+	source += "- **Fill F2:F3:** Down\n"
+	document = tutorial_lib.compiler.compile_source(source)
+	assert not document.has_errors
+	path = tmp_path / "number_display.xlsx"
+	tutorial_lib.workbook.write_workbook(document, path)
+	book = openpyxl.load_workbook(path, data_only=False)
+	sheet = book["Data"]
+	assert repr(sheet["A2"].value) == "1.2345678901234567"
+	assert sheet["B2"].value == "=A2/3"
+	assert all(sheet[address].number_format == "0.000"
+		for address in ("A2", "A3", "B2", "E2", "F2", "F3"))
+	assert sheet["F2"].value is None and sheet["F3"].value is None
+	assert sheet["C2"].value == "hello" and sheet["C2"].number_format == "General"
+	assert sheet["D2"].value is False and sheet["D2"].number_format == "General"
+	book.close()
+
+
+#============================================
 def test_semantic_workbook_roles_style_regions_without_changing_content(
 	tmp_path: pathlib.Path,
 ) -> None:

@@ -1,0 +1,33 @@
+{
+  "captured_utc": "2026-10-23T03:10:29.293868+00:00",
+  "source": "docs/examples/formatting_demo.md",
+  "protected_sha256": {
+    "docs/examples/formatting_demo.md": "5fa7142bd045f4cdc8f8179174003d9ce7dd049a478d88dd4086e975be788949",
+    "tutorial_data/babies_1_z_test.md": "da64c65d64e160d9b7dc311b73afc7e28fefb38efdb45d9a34d9ed2704c1d5c1",
+    "tutorial_data/babies_2_t_test.md": "446256332bb144cc1ecbd2d0202043dc980a484ceee4ed28db4d624a6f76e96d",
+    "tutorial_data/babies_3_two_sample_t_test.md": "c58d36f92c826a7625f5e371c65bad5ab5dca25148301117d69ac1504217db5f",
+    "tutorial_data/caffeine_1_descriptive_statistics.md": "357428e5a32f5b9d91516186dc646f976aa21667a1c8b7a188e1b07f9f7c6463",
+    "tutorial_data/caffeine_2_linear_regression.md": "7847918ad57941fb24e1fbcf3495b5cfc4ebc9aec82eec05130ac57c2b88ccd2",
+    "tutorial_data/caffeine_3_quadratic_regression.md": "671e14419101d4397556c3f3ac986c28373ce5562f3a3961504b35ba96327d1f",
+    "tutorial_data/microbes_1_z_test.md": "f8e007e4308e23492a644bb33b75a4f63a35634d7a5ba8446cd656399b574075",
+    "tutorial_data/microbes_2_t_test.md": "7e75603806f07ce2762833e1778774ea94fcd5775d02caee7fd504e7160b3d3f",
+    "tutorial_data/microbes_3_two_sample_t_test.md": "86ca0cce468641ada1dce58f22239b728e46921d96b75a753be46bcbf41e49a8",
+    "tutorial_data/microbes_4_f_test.md": "34c3a6e2e8d608b0dd84dd78b903cdbaac68f07f1bfcd1b94cd6ddf60bf89269",
+    "tutorial_data/microbes_5_anova.md": "9e5004a388494c8e7e28e4e9e6d2557466df9de1b90f4338caa2d4eb300fa512",
+    "tutorial_data/petase_1_linear_regression.md": "e00e11da9cc7144b674f8334bfa1e0d8357e039448a3008502e207e4df60536e"
+  },
+  "assets_sha256": {
+    "syntax_headings.webp": "26992d8298d704bcd0c6d064957472bc4d65d90f43530725041360f5c4ce1af4",
+    "syntax_text.webp": "3bb8bcd805a244902684b3ca6b300263690f3ebf8ee0313e5b749e012927ee49",
+    "syntax_actions.webp": "95f818c55aeb7988424cac9b3652d2d47df6edd76e580b654f26183f39de4e21",
+    "syntax_table.webp": "4524d2f4217351918131be3016449f4ce624b045280e018019bd8f7b03d61e6b",
+    "syntax_workbook.webp": "6081b4f9f698ea18a225e03d341d9571511b080459628fdb4793e30d259d9b43"
+  },
+  "renderer": "/Users/vosslab/nsh/vosslab-skills/skills/documentation/screenshot-docs/scripts/render_artifact_libreoffice.sh",
+  "native_artifacts": {
+    "document": "DOCX rendered to PDF by the project build, then cropped from PDF",
+    "workbook": "generated XLSX rendered through screenshot-docs LibreOffice renderer"
+  },
+  "protected_sources_unchanged": true,
+  "build_output": "isolated temporary directory; canonical tutorial_output is not used"
+}

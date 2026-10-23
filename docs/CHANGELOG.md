@@ -4,12 +4,18 @@
 
 ### Additions and New Features
 
+- Add [FORMATTING_GUIDE.md](FORMATTING_GUIDE.md), pairing copyable ASCII Markdown with cropped
+  native document and spreadsheet output. Include a runnable example and capture script.
+  Verify the source excerpts, native renders, and 917 documentation/script checks.
 - Add student-oriented calculated-column, statistical-summary, and ANOVA Markdown templates.
   Templates keep spreadsheet coordinates and ordinary Excel formulas visible while separating
   supplied Workbook content from learner-entered Tutorial actions.
 
 ### Behavior or Interface Changes
 
+- Display spreadsheet numbers and formulas with three decimal places by default, including
+  formulas students later enter in blank work cells. Preserve stored precision and blank answers.
+  Refresh the formatting-guide workbook capture; 934 focused workbook and documentation checks pass.
 - Lint Markdown tutorial files as ASCII source, allow readable named scientific entities, and
   reject numeric character references with source-located corrections. Preserve Unicode handling
   for in-memory parser and renderer callers.
@@ -18,6 +24,8 @@
 
 ### Fixes and Maintenance
 
+- Repair two historical report links to the removed blank-workspace screenshot, preserving the
+  original review history and noting why that image was later removed.
 - Remove the unlabeled Caffeine grid from the showcase after the human clarified that authors
   establish labels first and tutorial users do not generally enter headings. Keep the completed
   ANOVA demonstration explicitly separate from claims about the starting worksheet.

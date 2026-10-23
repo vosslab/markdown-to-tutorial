@@ -4,6 +4,9 @@ Each tutorial source is one Markdown file with a `Workbook` section for spreadsh
 `Tutorial` section for student-facing instructions. The converter produces an editable DOCX, an
 XLSX workbook, and a PDF from the DOCX.
 
+For examples of what your Markdown will look like, see
+[FORMATTING_GUIDE.md](FORMATTING_GUIDE.md). Each example pairs source text with a cropped output view.
+
 ## Start a source
 
 Use exactly one title, then the two required sections:
@@ -125,8 +128,10 @@ alternative. Only `Down` is supported, and the range must contain at least two r
 instructions stay concise, and the student workbook leaves the fill destinations blank.
 
 Workbook presentation uses a frozen first row and readable widths of at least 12 characters,
-including blank entry columns. When a task needs number formatting, teach the explicit spreadsheet
-menu action in the instructions; the generator does not infer number formats from values. Use native
+including blank entry columns. Numbers and formulas display three decimal places by default, and
+blank work cells carry the same format for student calculations. This changes display only;
+stored values retain their precision. For another display, such as percentages or scientific
+notation, teach the spreadsheet's number-format menu action in the instructions. Use native
 editable tables for worked examples that must match the current workbook. Keep original source
 images and assets intact; a historical screenshot may remain as provenance only when it cannot be
 mistaken for the current workbook or procedure.
