@@ -1,17 +1,6 @@
 # Dr. Caffeine's All-Nighter Academy: descriptive statistics
 
-Welcome to All-Nighter Academy Orientation, where the coffee is strong, the students are exhausted,
-and final exams are approaching! Before asking whether sleep predicts exam performance, summarize
-what is typical and how much students vary. This is the first of three tutorials. The academy
-warm-up was developed by Tania and Roohana.
-
-Your task is to give Dr. Caffeine a short description of this class using the mean, median, and
-sample standard deviation of both sleep and exam scores. No previous tutorial is required.
-
-The workbook contains all 25 paired observations from the
-[original class template](https://docs.google.com/spreadsheets/d/1mhOQhC_1hqnbvYItPT3y-V-_9l9q3pN7MtZDcOevaA0/edit?gid=0#gid=0).
-No statistics are filled in for you. The data describe an association; they do not establish that
-sleep causes a change in exam scores.
+This is tutorial 1 of 3. No previous tutorial is required. The workbook contains all 25 observations from the [original class template](https://docs.google.com/spreadsheets/d/1mhOQhC_1hqnbvYItPT3y-V-_9l9q3pN7MtZDcOevaA0/edit?gid=0#gid=0); formula answers are blank. Record your written responses in D6:F8 or in accompanying notes.
 
 ![All-Nighter Academy introduction](assets/caffeine_01.png)
 
@@ -47,84 +36,65 @@ sleep causes a change in exam scores.
 | 9 | 97 |
 | 8.5 | 100 |
 
+- **Region A1:B26:** source
+- **Region D1:F4:** calculation
+- **Region D6:F8:** interpretation
+
 ## Tutorial
 
-### Part: Academy orientation
+### Part: **Warm up - Tania + Roohana**
 
-- **Worksheet:** Sleep and scores
+Welcome to **All-Nighter Academy Orientation**! Before we investigate whether sleep can predict exam performance, let&#8217;s warm up with some basic statistics using Google Sheets! In this section, you'll learn how to enter data and calculate the average amount of sleep students get using mean, median, and sample standard deviation using our dataset, and summarize their exam scores too. These calculations will help us understand the data before moving on to the rest of the analysis.
 
-#### Step: Set up your workspace
+#### Step: **Set Up Your Google Sheet**
 
-Before calculating statistics, create a personal workspace in which you can organize, analyze,
-and interpret the data. You will use Google Sheets for calculations and visualizations.
+Before we begin calculating statistics, we need to create a personal workspace where we can organize, analyze and interpret our data. Throughout this tutorial, you will be using Google Sheets to perform calculations and create visualizations.
 
-- **Open:** Upload this tutorial's generated XLSX workbook to Google Drive and open it in Google Sheets.
-- **Choose:** File > Make a copy
-- **Rename:** Include your name and the date, for example Name_AllNighterAcademy_102126.
-- **Inspect:** Find the Sleep and scores tab. Column `A` contains hours of sleep, and column `B`
-  contains exam scores in percentage points. Each row is one student, so keep pairs together.
-- **Check:** There are 25 observations in `A2:B26`. The first pair is 3 hours and 55%;
-  the final pair is 8.5 hours and 100%.
-- **Practice:** To enter a formula, select its destination cell, type the formula including `=`,
-  and press Enter. Select that cell again to inspect the formula in the formula bar. Type labels
-  as ordinary text. Keep your written responses in notes beside your workbook.
+1. Open this tutorial's generated XLSX workbook in Google Sheets, containing the template data created by your favorite grad students.\
+2. Make a personal copy of the Google Sheet by going under **File** and &#8220;**Make a Copy**&#8221;\
+3. Rename your spreadsheet with your name and the date. For example: **Name_AllNighterAcademy_102126**\
+4. Take a moment to familiarize yourself with the Google Sheet layout. Use the **Sleep and scores** tab throughout this activity; the data are in A1:B26, and each row is one student.\
+5. Make sure you can view the column containing the **Hours of Sleep** and **Exam Score** data. These variables will be the focus of our analysis through this tutorial.
 
-#### Step: Calculate typical sleep
+Once your Google Sheet is set up, you&#8217;re ready to begin exploring the data.
 
-Descriptive statistics summarize the dataset before we examine a relationship. The mean is the
-arithmetic average: add the values and divide by the number of students.
+#### Step: **Calculate the Basics**
 
-- **Label D1:** Statistic
-- **Label E1:** Hours of sleep
-- **Label F1:** Exam score (%)
-- **Label D2:** Mean
-- **Enter E2:** `=AVERAGE(A2:A26)`
-- **Enter F2:** `=AVERAGE(B2:B26)`
-- **Record:** Average hours of sleep = _____ hours. Average exam score = _____%.
-- **Check:** A mean should lie between the smallest and largest observations. If it does not,
-  inspect the selected range and check that numbers have not been entered as text.
-- **Reflect:** Is average sleep higher or lower than you expected? What additional information
-  would you need before deciding whether these students are getting enough sleep?
+Before we examine whether sleep is related to exam performance, let&#8217;s summarize the data using descriptive statistics. Descriptive statistics helps us understand the typical values in a dataset and how much those values vary from one student to another
 
-#### Step: Find the median
+For this activity, we will calculate the average amount of sleep students get, as well as summarize exam performance using the **mean**, **median**, and **standard deviation**.
 
-The median is the middle observation after sorting values. Unlike the mean, it is less affected
-by unusually high or low observations. Do not sort just one original data column: that would
-separate students' sleep and exam-score pairs.
+Tasks: Perform the following calculations using spreadsheet functions. Type labels as ordinary text; enter formulas beginning with = and press Enter. Keep paired observations together, and record written responses in your notes.
 
-- **Label D3:** Median
-- **Enter E3:** `=MEDIAN(A2:A26)`
-- **Enter F3:** `=MEDIAN(B2:B26)`
-- **Record:** Median sleep = _____ hours. Median exam score = _____%.
-- **Compare:** Are the median and mean similar for each variable? Explain how an unusually
-  high or low observation could pull the mean away from the median.
+Label D1 [Statistic](label:D1), E1 [Hours of sleep](label:E1), and F1 [Exam score (%)](label:F1).
 
-#### Step: Measure variability
+Let's start by examining the amount of sleep students are getting in our dataset.
 
-Measures of center describe a typical observation but do not show how much students differ.
-The sample standard deviation describes spread around the mean, in the original measurement units.
-A small standard deviation indicates observations cluster near the mean; a larger one indicates
-more variability. We treat these students as a sample, so use the sample standard deviation.
+* **Mean** (Average Sleep) tells us the typical amount of sleep students get: Use the formula [=AVERAGE(A2:A26)](enter:E2) in E2 to find the mean hours of sleep. This will give you the average sleep duration, providing an overall measure of central tendency.\
+  * **Average Hours of Sleep = _____ hours**
 
-- **Label D4:** Sample standard deviation
-- **Enter E4:** `=STDEV.S(A2:A26)`
-- **Enter F4:** `=STDEV.S(B2:B26)`
-- **Record:** Standard deviation of sleep = _____ hours; standard deviation of scores = _____
-  percentage points.
-- **Explain:** What does each standard deviation tell you? Avoid comparing the two numerical
-  values as if hours and percentage points were the same unit.
-- **Reflect:** Can means, medians, and standard deviations alone tell you whether sleep and
-  exam performance are related? Why would a plot of the paired observations help?
+Label D2 [Mean](label:D2). For exam scores, enter [=AVERAGE(B2:B26)](enter:F2) in F2. Record the corresponding exam-score statistic; its unit is %.
 
-#### Step: Brief Dr. Caffeine
+Based on your result, do students appear to be getting enough sleep? Is the average higher or lower than you expected?
 
-- **Summarize:** Write two sentences: one about typical sleep and its variability, and one about
-  typical exam performance and its variability. Include your calculated values and units.
-- **Apply:** Imagine two classes with the same mean sleep but different standard deviations.
-  What would a larger standard deviation tell you that the mean alone could not?
-- **Submit:** Include the six calculated statistics, their labels, and your written responses.
-  Keep formulas in the workbook so someone else can check which observations you summarized.
+Unlike the mean, the median is less affected by unusually high or low scores. This makes it useful when a dataset contains potential outliers.
 
-Congratulations! You have completed orientation. The next lesson, **Dr. Caffeine's All-Nighter
-Academy: linear regression**, supplies the same full dataset and explores whether a straight line
-describes the relationship.
+* **Median** (middle value) helps identify the center of the distribution and is less affected by unusually high or low scores: Use the formula [=MEDIAN(A2:A26)](enter:E3) in E3 to find the median sleep duration.\
+  * **Median Sleep = _____ hours**
+
+Label D3 [Median](label:D3). For exam scores, enter [=MEDIAN(B2:B26)](enter:F3) in F3. Record the corresponding exam-score statistic; its unit is %.
+
+Is the median similar to your mean?
+
+While measures of center tell us what a typical sleep duration looks like, they do not tell us how much students differ from one another.
+
+* **Standard Deviation** (spread of data): This measures how spread out the sleep durations are from the mean, indicating the variability of student sleep. Use the formula [=STDEV.S(A2:A26)](enter:E4) in E4 to calculate the standard deviation.\
+  * **Standard Deviation of Sleep = _____ hours**
+
+Label D4 [Sample standard deviation](label:D4). For exam scores, enter [=STDEV.S(B2:B26)](enter:F4) in F4. Record the corresponding exam-score statistic; its unit is percentage points.
+
+A small standard deviation indicates that the sleep durations are clustered closely around the average. A large standard deviation shows that the sleep durations vary substantially from student to student.
+
+Write two sentences for Dr. Caffeine: one about typical sleep and its variability, and one about typical exam performance and its variability. Include the six calculated values and their units. Keep the formulas in your workbook for submission.
+
+Congratulations! You are now ready for your first day at All-Nighter Academy. You have successfully used Google Sheets to calculate descriptive statistics. Next, we&#8217;ll use a set of data to investigate whether hours of sleep can predict final exam scores.

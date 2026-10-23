@@ -2,6 +2,82 @@
 
 ## 2026-10-22
 
+### README showcase refresh
+
+- Put three reviewed output screenshots immediately after the opening, followed by the verified
+  DOCX/XLSX quick start, Caffeine 3 source excerpt, full runnable example, and curated documentation
+  routes. State the unverified Google Docs/Sheets import and execution limits before Quick start.
+- Capture the actual illustrated opening, complete fill-down instruction, and full blank workbook
+  with `devel/capture_readme_artifacts.py`. The 48 source/product hashes remain unchanged; capture
+  hygiene passes 511 checks. See the [screenshot receipt](screenshots/README.md).
+- Pass independent SPEC recheck, QUALITY review, and INTEGRATION review with ACCEPT and no material
+  issues. The subjective README rubric is 100/100 (15, 15, 20, 15, 10, 10, 5, 10); this is an
+  editorial README score, not a product-quality claim. The [showcase report](active_plans/reports/readme_showcase_refresh.md)
+  records evidence and limits.
+- Caffeine 3 lint and isolated DOCX/XLSX and all-formats builds pass; 155 focused documentation
+  tests and the 1,549-test repository suite pass. Canonical lesson text and outputs remain unchanged;
+  no live Google verification or student study is claimed.
+
+### Instructional voice restoration
+
+- Complete the five-milestone instructional voice restoration across all 12 sources. Independent
+  source reviews accept the original prose, humor, headings, and nested groups with narrow
+  technical/scientific corrections; Caffeine retains good draft prose and adds missing instruction.
+  The final rendering SPEC passes 177 checks, and fresh material review accepts all 92 PDF pages
+  plus the actual workbook layouts. Prior failed restoration/material reports remain historical.
+- Reconcile the earlier 1,528-passed / 1-failed full-suite checkpoint as historical. Its ignored
+  image link was removed, and the report now links to the repository test code rather than an
+  ignored output log. A fresh suite run remains for integration.
+- Preserve the authoring example correction: the regression formula binds to F2; I2 is an unbound
+  reflection response. Caffeine's visible E2/E3/E4 formulas and calculations retain their existing
+  destinations. PETase's fictional strain-performance narrative remains a scenario premise, with
+  three targeted corrections about Bradford total-protein limits, protein-specific response, and
+  the least-squares objective.
+- Rebuild all 36 DOCX/XLSX/PDF products after the final fixes: 92 PDF pages, with Calc passing 13
+  scenarios / 254 comparisons against unchanged expectations. Integration matches all 60 source/
+  product/validation fingerprints and both refreshed managed screenshot receipts. Fresh pages close
+  the label markup, terminal break, adjacent formula, closing link, numeric alpha, and blank spacer
+  findings. The [voice restoration ledger](active_plans/reports/voice_restoration_summary.md) links
+  current evidence. Google behavior remains unverified; no student study was run.
+- Keep the final-build report in `docs/active_plans/reports/` and preserve its original contents.
+- Keep adjacent semantic label and entry instructions together in DOCX, including the first nested
+  formula under the next numbered item, while leaving later explanations free to paginate. Remove
+  redundant terminal list hardbreaks, preserve internal breaks, and keep a final body paragraph with
+  its predecessor when those are consecutive paragraphs. Focused DOCX XML coverage passes 10 tests;
+  fresh final PDF inspection accepts the resulting page groups.
+- Correct the authoring example to name D5/E5 visibly and use a range-fill instruction. Distinguish
+  Markdown-decoded semantic labels from JSON Enter/Replace scalars, and require visible destination
+  cues. Move the untracked pagination report into the established reports directory and retain the
+  completed plan at its stable referenced path. Final integration accepts all five milestones and
+  the repository suite passes 1,548 tests after correcting two closing-document link labels.
+
+### Automatic tutorial formatting
+
+- Start the formatting work ledger for automatic formula styling and tighter list spacing across
+  all 12 tutorials. The plan tracks parser ownership, focused checks, full rebuild and visual
+  comparison, author-facing examples, and staged specification, quality, and integration reviews.
+- Update the authoring guide and README to show bare formula entry. Specify contextual formula
+  roles, literal-text and prose safeguards, preserved formula text, dark-green monospace output,
+  and the accepted paragraph spacing. The literal-action correction passed specification recheck;
+  independent review accepted all 65 rebuilt PDF pages, and final integration verified all source,
+  product, and screenshot hashes. Scoped guidance-format and Markdown-link checks passed 111 tests;
+  the complete suite passed 1,493 tests.
+- Clarify that JSON-quoted formulas are literal only in Workbook and Enter/Replace scalar contexts;
+  prose and ordinary Tutorial tables retain narrative formula styling for quoted examples.
+- Complete the 12-tutorial rebuild and quality review: 65 PDF pages versus 70 baseline pages, all
+  634 list paragraphs compacted, Calc passes 254 comparisons across 13 scenarios, and the full
+  suite passes 1,493 tests. Final integration matched all 12 source hashes and 36 artifact hashes.
+  Record scope and verification limits in the
+  [formatting summary](active_plans/reports/automatic_formatting_summary.md).
+
+### README screenshot rerun
+
+- Refresh both managed README screenshots from the current canonical Caffeine 3 PDF and XLSX. The
+  PDF excerpt shows the green formula and compact Fill instructions; the disposable workbook render
+  changes print settings only, and all 75 answer cells remain blank. Inspect both WebPs and record
+  canonical product/image hashes in [the screenshot receipt](screenshots/README.md). Live Google
+  import remains unverified.
+
 ### Teaching-quality closeout evidence
 
 - Complete all-12 lesson source comparisons and expert workbook walkthroughs; the final rebuild
@@ -65,7 +141,8 @@
   artifacts across 70 PDF pages, current source hashes, 254 passing Calc comparisons across 13
   scenarios, and 1,464 passing repository tests. Repeated Babies 3 exports match in text layout,
   normalized fonts, and all four page pixel hashes. Fresh typography SPEC review accepted all 12
-  DOCX/PDF bundles and 70 pages; overall quality integration remains open. See the
+  DOCX/PDF bundles and 70 pages; final integration acceptance is recorded in
+  [the integration review](active_plans/reports/teaching_integration_review.md). See the
   [teaching quality summary](active_plans/reports/teaching_quality_summary.md).
 - Clarify the review standard: preserve established Babies/Microbes teaching experience and voice,
   correcting verified errors, typos, and format faults with minimal wording changes. Treat Caffeine
@@ -73,7 +150,9 @@
 - Complete focused Fill/layout specification reviews and the all-12 generated-XLSX walkthrough.
   Shared Fill handling reports malformed source formulas through controlled diagnostics; label
   sizing includes quoted formula text such as IF decisions while preserving blank answer cells.
-  Final typography SPEC review accepted all rebuilt bundles; overall quality integration remains open.
+  Final typography SPEC review accepted all rebuilt bundles; subsequent final integration acceptance
+  is recorded in [the integration review](active_plans/reports/teaching_integration_review.md), and
+  the plan is closed.
   Review reports name ignored `tutorial_output/`
   artifacts as code paths instead of broken links.
 - Complete an independent established-teaching SPEC review of the current Babies 1-3 and Microbes
@@ -150,6 +229,12 @@
 
 ### Decisions and Failures
 
+- Correct the voice-restoration scope after direct original-to-generated comparisons found that
+  migrated lessons had been rewritten into action logs. Create
+  [the restoration plan](active_plans/instructional_voice_restoration.md): preserve original wording,
+  headings, humor, and compact numbered groups; keep only necessary technical/scientific changes;
+  complete missing Caffeine material without replacing its good prose. Tests and prior approvals do
+  not establish original-voice fidelity.
 - Record the user's list-first authoring and Google import priorities in
   [HUMAN_GUIDANCE.md](HUMAN_GUIDANCE.md). Record the planned seed-data/student-action separation and
   source-located validation model in [DESIGN_DECISIONS.md](DESIGN_DECISIONS.md). Keep the original

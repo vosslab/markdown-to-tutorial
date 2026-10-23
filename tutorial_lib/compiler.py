@@ -8,9 +8,11 @@ import urllib.parse
 import tutorial_lib.model as model
 import tutorial_lib.parser
 import tutorial_lib.references as references
+import tutorial_lib.semantic_bindings as bindings
+import markdown_it.token
 
 NUMBER = re.compile(r"[+-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][+-]?[0-9]+)?\Z")
-STRUCTURE = re.compile(r"(Part|Step|Substep)(?: ([0-9]+(?:\.[0-9]+)?))?:\s*(.+)\Z")
+STRUCTURE = re.compile(r"(Part|Step|Substep)(?: ([0-9]+(?:\.[0-9]+)?))?:\s*(.+)\Z", re.IGNORECASE)
 ASSIGNMENT = re.compile(r"(Label|Enter|Replace|Fill)\s+(.+):\Z")
 
 
@@ -46,7 +48,7 @@ def scalar_text(raw: str) -> str:
 def parse_scalar(raw: str) -> model.Scalar:
 	# Table structural escapes are already removed; JSON escapes belong to JSON,
 	# not Markdown. Code spans still follow the normal Markdown literal rules.
-	text = raw.strip() if raw.strip().startswith('"') else scalar_text(raw)
+	text = raw.strip() if raw.strip().startswith(('"', "=")) else scalar_text(raw)
 	return _scalar_value(text)
 
 
@@ -292,7 +294,8 @@ def _compile_structure(document: model.Document) -> None:
 			continue
 		if token.type == "heading_open":
 			inline = document.tokens[index + 1]
-			text = inline.content
+			text = "".join(child.content for child in inline.children
+				if child.type in ("text", "code_inline", "html_inline"))
 			level = int(token.tag[1:])
 			if level == 1:
 				title_count += 1
@@ -345,16 +348,19 @@ def _compile_structure(document: model.Document) -> None:
 				continue
 			elif section == "Tutorial":
 				match = STRUCTURE.fullmatch(text)
-				if match is None and re.match(r"(?i)(part|step|substep)\b", text):
+				if match is None and re.match(r"(?i)(part|step|substep)(?=\s|:|[0-9]|$)", text):
 					diagnostic(document, "heading-syntax", location, "Near-miss structural heading",
-						"Use Part:, Step:, or Substep: with matching capitalization")
+						"Use Part:, Step:, or Substep: followed by a title")
 				if level > previous_heading_level + 1:
 					diagnostic(document, "heading-hierarchy", location, "Heading skips a level",
 						"Use the next heading level")
 				previous_heading_level = level
 				kind, number, title = "informational", None, text
+				prefix_length = 0
 				if match is not None:
 					kind, explicit, title = match.groups()
+					kind = kind.capitalize()
+					prefix_length = match.start(3)
 					if kind != "Substep" and explicit is not None and "." in explicit:
 						diagnostic(document, "heading-number", location, "Part and Step numbers must be integers",
 							f"Use {kind}: {title}")
@@ -403,7 +409,8 @@ def _compile_structure(document: model.Document) -> None:
 					display = f"{number}: {title}"
 				slug = re.sub(r"[^\w\s-]", "", text.lower())
 				slug = re.sub(r"\s+", "-", slug.strip())
-				heading = model.Heading(level, title, display, slug, location, index, kind.lower(), number)
+				heading = model.Heading(level, title, display, slug, location, index,
+					kind.lower(), number, prefix_length)
 				document.headings.append(heading)
 				token.meta["heading"] = heading
 			continue
@@ -424,7 +431,9 @@ def _compile_structure(document: model.Document) -> None:
 				skip_until = end
 			elif token.type == "inline":
 				opening, payload = _opening(token)
-				if (opening == "Google Sheets:" and sheet is not None
+				if opening is not None and opening.startswith("Region ") and sheet is not None:
+					_role_region(document, sheet, opening, payload, location)
+				elif (opening == "Google Sheets:" and sheet is not None
 					and index >= 2 and document.tokens[index - 2].type == "list_item_open"
 					and token.level == 3):
 					if sheet.regions:
@@ -440,6 +449,8 @@ def _compile_structure(document: model.Document) -> None:
 			continue
 		if section != "Tutorial":
 			continue
+		if token.type == "inline":
+			_compile_bindings(document, token, index, scope, step, item_stack)
 		if token.type in ("bullet_list_open", "ordered_list_open"):
 			list_stack.append({"group": None, "branches": 0})
 		elif token.type in ("bullet_list_close", "ordered_list_close"):
@@ -451,9 +462,6 @@ def _compile_structure(document: model.Document) -> None:
 		elif token.type == "inline" and item_stack and not item_stack[-1]["opening"]:
 			item_stack[-1]["opening"] = True
 			opening, payload = _opening(token)
-			if opening is None:
-				diagnostic(document, "list-opening", location, "List item has no bold opening",
-					"Add a descriptive opening strong span", "warning")
 			if opening is not None and opening.startswith("Alternative:"):
 				if not opening[len("Alternative:"):].strip() or payload.strip():
 					diagnostic(document, "alternative-syntax", location,
@@ -554,6 +562,103 @@ def _compile_structure(document: model.Document) -> None:
 			len(document.tokens)))
 
 
+def _role_region(document: model.Document, sheet: model.Worksheet, opening: str,
+	payload: str, location: model.SourceSpan) -> None:
+	match = re.fullmatch(r"Region (.+):", opening)
+	reference = references.parse_reference(match[1], sheet.name) if match else None
+	role = payload.strip()
+	if reference is None or reference.sheet.casefold() != sheet.name.casefold():
+		diagnostic(document, "role-region", location, "Invalid worksheet role region",
+			"Use a bounded A1 range on this worksheet")
+		return
+	if role not in ("source", "calculation", "results", "interpretation"):
+		diagnostic(document, "role-region", location, f"Unknown worksheet role {role}",
+			"Use source, calculation, results, or interpretation")
+		return
+	for previous in sheet.role_regions:
+		other = previous.reference
+		if (max(reference.start_row, other.start_row) <= min(reference.end_row, other.end_row)
+			and max(reference.start_column, other.start_column)
+			<= min(reference.end_column, other.end_column)):
+			diagnostic(document, "role-region-overlap", location, "Explicit role regions overlap",
+				"Keep explicit role regions disjoint", related=previous.span)
+			return
+	sheet.role_regions.append(model.RoleRegion(role, reference, location))
+
+
+def _compile_bindings(document: model.Document, inline: object, index: int,
+	scope: str | None, step: str | None, item_stack: list) -> None:
+	children = inline.children
+	for position, child in enumerate(children):
+		if child.type != "link_open":
+			continue
+		href = urllib.parse.unquote(child.attrGet("href"))
+		kind = bindings.binding_kind(href)
+		if kind is None:
+			continue
+		location = span(document, inline)
+		raw = child.meta["binding_payload"]
+		value = raw
+		default_sheet = scope if scope else (
+			document.worksheets[0].name if len(document.worksheets) == 1 else "")
+		target_text = href.split(":", 1)[1]
+		target = references.parse_reference(target_text, default_sheet)
+		action = model.Action(kind, location, index, "Down" if kind == "fill" else raw,
+			target=target, worksheet=default_sheet)
+		alternatives = [item["alternative"] for item in item_stack if item["alternative"] is not None]
+		if alternatives:
+			action.alternative_group, action.alternative_branch = alternatives[-1]
+		if step is None:
+			diagnostic(document, "action-scope", location, "Binding has no containing Step",
+				"Move this instruction beneath a Step")
+		if target is None or kind not in ("fill", "select") and ":" in target_text:
+			diagnostic(document, "action-target", location, "Invalid binding target",
+				"Use one bounded A1 cell for assignments or a range for Fill or Select")
+		if kind == "fill" and target is not None and target.start_row == target.end_row:
+			diagnostic(document, "action-target", location, "Fill needs more than one row",
+				"Include the formula source row and at least one destination row")
+		if kind in ("label", "enter", "replace"):
+			try:
+				value = bindings.scalar_payload(raw, tutorial_lib.parser.markdown_parser(), kind)
+				if kind == "label":
+					action.scalar = model.Scalar("text", value)
+				else:
+					action.scalar = _scalar_value(value)
+				if not raw.strip() or action.scalar.kind == "blank":
+					raise ValueError("Assignment payload is empty")
+			except ValueError as error:
+				diagnostic(document, "action-scalar", location, str(error),
+					"Use one scalar value as the visible binding text")
+		child.meta["binding_action"] = action
+		end = position + 1
+		while end < len(children) and children[end].type != "link_close":
+			children[end].meta["binding_action"] = action
+			if action.scalar is not None and action.scalar.kind == "text":
+				children[end].meta.pop("role", None)
+			end += 1
+		if end < len(children):
+			children[end].meta["binding_action"] = action
+		# Raw JSON and formula-looking labels must never acquire inferred formula markup.
+		if action.scalar is not None and action.scalar.kind == "text" and (
+			value.startswith("=") or kind != "label" and value.startswith('"')):
+			# Keep enclosing author emphasis; literal punctuation inside the payload
+			# cannot introduce its own Markdown formatting or formula-role tokens.
+			first, last = position + 1, end
+			while first < last and (children[first].type in ("strong_open", "em_open")
+				or children[first].type == "text" and not children[first].content):
+				first += 1
+			while last > first and (children[last - 1].type in ("strong_close", "em_close")
+				or children[last - 1].type == "text" and not children[last - 1].content):
+				last -= 1
+			literal = markdown_it.token.Token("text", "", 0)
+			if last - first == 1 and children[first].type == "code_inline":
+				literal = children[first]
+			literal.content = value
+			literal.meta["binding_action"] = action
+			children[first:last] = [literal]
+		document.actions.append(action)
+
+
 def _scalar_action(document: model.Document, action: model.Action, index: int,
 	item_end: int) -> None:
 	raw = action.payload
@@ -584,10 +689,6 @@ def _scalar_action(document: model.Document, action: model.Action, index: int,
 			action.scalar = parse_scalar(raw)
 			if action.scalar.kind == "blank":
 				raise ValueError("Assignment payload is empty")
-			if action.scalar.kind == "formula" and not fences:
-				children = document.tokens[index].children
-				if sum(child.type == "code_inline" for child in children) != 1:
-					raise ValueError("Instruction formulas require one code span")
 	except ValueError as error:
 		diagnostic(document, "action-scalar", action.span, str(error),
 			"Use one scalar; put explanations in a separate paragraph")

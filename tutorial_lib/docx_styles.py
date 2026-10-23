@@ -17,6 +17,7 @@ LIST_INDENT_TWIPS = 360
 LIST_HANGING_TWIPS = 240
 LIST_INDENT_INCHES = 0.25
 TABLE_HEADER_FILL = "E7E6E6"
+FORMULA_COLOR = "188038"
 
 
 #============================================
@@ -34,7 +35,7 @@ def _set_explicit_font(style: object, font_name: str) -> None:
 def format_run(run: object, role: str | None = None, linked: bool = False,
 	font_name: str | None = None) -> None:
 	"""Apply portable role formatting directly, without custom character styles."""
-	if role in ("code", "cell", "menu"):
+	if role in ("code", "cell", "menu", "formula"):
 		font_name = CODE_FONT
 		run.font.size = docx.shared.Pt(CODE_SIZE)
 	# Ordinary text inherits its editable paragraph style; only roles override fonts.
@@ -45,6 +46,16 @@ def format_run(run: object, role: str | None = None, linked: bool = False,
 	if linked:
 		run.font.underline = True
 		run.font.color.rgb = docx.shared.RGBColor.from_string("174F91")
+	if role == "formula":
+		run.font.color.rgb = docx.shared.RGBColor.from_string(FORMULA_COLOR)
+
+
+#============================================
+def format_list(paragraph: object) -> None:
+	"""Compact every paragraph within a list, including continuation paragraphs."""
+	paragraph.paragraph_format.space_before = docx.shared.Pt(0)
+	paragraph.paragraph_format.space_after = docx.shared.Pt(2)
+	paragraph.paragraph_format.line_spacing = 1.0
 
 
 #============================================
@@ -90,6 +101,10 @@ def configure(document: object) -> None:
 		style = styles[name]
 		_set_explicit_font(style, BODY_FONT)
 		if name.startswith("Heading"):
+			level = int(name[-1])
+			size = {1: 18, 2: 15, 3: 12}[level]
+			style.font.size = docx.shared.Pt(size)
+			style.font.bold = True
 			style.paragraph_format.keep_with_next = True
 			style.paragraph_format.space_before = docx.shared.Pt(14)
 			style.paragraph_format.space_after = docx.shared.Pt(6)

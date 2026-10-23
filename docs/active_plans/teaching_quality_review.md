@@ -53,7 +53,7 @@ as task-design references; this is not an accessibility conformance claim.
 | Substantive authored lesson corrections | Complete | The first-pass edits and the fresh Caffeine figure corrections are recorded; review the corrected renders after rebuild. |
 | Converter changes for recurring design issues | Complete | Fill Down, label-driven workbook sizing, six-style DOCX output, role formatting, and Label-to-Instruction pagination grouping are implemented; the latest 70-page visual review is clean. |
 | Fresh independent review after corrections | Complete | Both HCI reviews, all 12 workbook walkthroughs, and the accepted typography SPEC recheck cover the rebuilt outputs. Expert inspection does not establish student outcomes. |
-| README and screenshots | Complete | The README now describes starting data and blank answer cells accurately and embeds two current Caffeine 3 images; the capture receipt records source hashes and rendering methods in `docs/screenshots/README.md`. Final integration acceptance remains open. |
+| README and screenshots | Complete | The README now describes starting data and blank answer cells accurately and embeds two current Caffeine 3 images; the capture receipt records source hashes and rendering methods in `docs/screenshots/README.md`. Final integration acceptance is recorded in [the integration review](reports/teaching_integration_review.md). |
 
 ## Review record
 

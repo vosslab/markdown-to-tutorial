@@ -2,6 +2,7 @@
 
 import json
 import tutorial_lib.compiler
+import tutorial_lib.parser
 
 
 def compile_tutorial(instructions: str, workbook: str = "") -> object:
@@ -37,6 +38,53 @@ def test_scalar_fidelity_and_student_destinations() -> None:
 	assert literal.actions[0].scalar.value == 'a\\b'
 
 
+def test_automatic_formula_scalars_preserve_copy_text_and_validation() -> None:
+	"""Plain formulas must retain operators and take the same validation path as code."""
+	formulas = ['=A2*B2*3', '=IF(A2 > 0, "A*B", SUM(A2:B2))', "='Data'!A2 + B2"]
+	for formula in formulas:
+		variants = [formula, '`' + formula + '`', '\n\n  ```sheets\n  ' + formula + '\n  ```']
+		for value in variants:
+			document = compile_tutorial('- **Enter C2:** ' + value)
+			assert not document.has_errors
+			assert document.actions[0].scalar.value == formula
+			assert document.formula_checks[0].formula == formula
+			assert document.formula_checks[0].references
+			assert (2, 3) not in document.worksheets[0].cells
+	literals = [
+		('Enter', '"=A2*B2*3"', '=A2*B2*3'),
+		('Enter', '`"=A2*B2*3"`', '=A2*B2*3'),
+		('Enter', json.dumps('*literal* _text_ <br> a\\b'), '*literal* _text_ <br> a\\b'),
+		('Label', '=A2*B2*3', '=A2*B2*3'),
+		('Label', '`=A2*B2*3`', '=A2*B2*3'),
+	]
+	for action, encoded, value in literals:
+		document = compile_tutorial(f'- **{action} C2:** ' + encoded)
+		assert not document.has_errors
+		assert document.actions[0].scalar.kind == "text"
+		assert document.actions[0].scalar.value == value
+		assert not document.formula_checks
+	invalid = compile_tutorial('- **Enter C2:** =SUM(Absent!A2:B2)')
+	assert any(item.category == "unknown-sheet" for item in invalid.diagnostics)
+
+
+def test_narrative_formulas_stop_before_prose_and_preserve_markdown() -> None:
+	"""Protect prose boundaries without surrendering multiplication to Markdown."""
+	source = 'Use =A2*B2*C2, then **compare** =SUM(A2:B2) with (=XXXX).\n\n'
+	source += 'Keep alpha = 0.05, x=3, a<=b, a>=b and https://example.org/?x=3.\n\n'
+	source += '[=IF(A2<3,"A B",0)](https://example.org) and **=A2*B2**.'
+	source += '\n\nCompare =A1+B1. Use =T.TEST(A2:A3,B2:B3,2,3).'
+	document = tutorial_lib.parser.parse_source(source, 'narrative.md')
+	children = [child for token in document.tokens for child in token.children or []]
+	formulas = [child.content for child in children if child.meta.get("role") == "formula"]
+	assert formulas == [
+		'=A2*B2*C2', '=SUM(A2:B2)', '=XXXX', '=IF(A2<3,"A B",0)', '=A2*B2',
+		'=A1+B1', '=T.TEST(A2:A3,B2:B3,2,3)',
+	]
+	assert document.source == source
+	assert any(child.type == "strong_open" for child in children)
+	assert sum(child.type == "link_open" for child in children) == 1
+
+
 def test_invalid_tables_report_physical_and_related_locations() -> None:
 	workbook = '### Sheet: Data\n\n| A | B |\n| --- | --- |\n| 1 | 2 |\n'
 	workbook += '\n#### At: B2\n\n| | |\n| --- | --- |'
@@ -58,6 +106,16 @@ def test_alternatives_preserve_possible_states_and_numbering() -> None:
 	conditional = compile_tutorial(instructions.replace(
 		'  - **Enter D2:** `=AVERAGE(A2:B2)`', '  - **Explain:** No entry.'))
 	assert any(item.category == "replacement-unavailable" for item in conditional.diagnostics)
+
+
+def test_informational_hyphenated_headings_and_structural_typos() -> None:
+	"""Step-by-Step is prose, while malformed numbered Step prefixes remain errors."""
+	document = compile_tutorial('##### Step-by-Step Tutorial:\n\nRead the instructions.')
+	assert not document.has_errors
+	assert document.headings[-1].display == 'Step-by-Step Tutorial:'
+	for heading in ('Step2: Calculate', 'Step 2 Calculate', 'Step:'):
+		document = compile_tutorial('#### ' + heading + '\n\nRead the instructions.')
+		assert any(item.category == 'heading-syntax' for item in document.diagnostics)
 
 
 def test_static_formula_tokens_skip_strings_and_report_partial_coverage() -> None:

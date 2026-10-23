@@ -39,7 +39,6 @@ def test_fill_translation_replay_and_blank_concise_outputs(tmp_path: pathlib.Pat
 	tutorial_lib.workbook.write_workbook(document, workbook_path)
 	book = openpyxl.load_workbook(workbook_path)
 	assert all(book["Data"][write["address"]].value is None for write in writes)
-	assert book["Data"]["F4"].fill.fgColor.rgb == "00FFF2CC"
 	book.close()
 	docx_path = tmp_path / "student.docx"
 	tutorial_lib.docx_renderer.write_document(document, docx_path)

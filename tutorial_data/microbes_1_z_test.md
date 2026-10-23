@@ -1,12 +1,15 @@
-# Microbial diversity Z-test
-
-For BIOL 318/418. This teaching scenario uses the complete original workbook observations. The
-ecological story is a hypothesis for practice; the supplied artifacts do not establish a real
-field-study provenance or a causal effect of urbanization.
+# **Microbial Diversity Z-Test Tutorial** **for BIOL 318/418**
 
 ## Workbook
 
 ### Sheet: Microbial Z-Test
+
+- **Region A1:B101:** source
+- **Region C1:D9:** calculation
+- **Region C10:D12:** results
+- **Region C14:D14:** calculation
+- **Region C15:D17:** results
+- **Region C19:D19:** interpretation
 
 | "Sample Location" | `"2024\nShannon\nIndex "` | "Statistical Names" | "Values" |
 | --- | --- | --- | --- |
@@ -37,180 +40,215 @@ field-study provenance or a causal effect of urbanization.
 
 ## Tutorial
 
-### Part 1: Scenario
-
-- **Worksheet:** Microbial Z-Test
+### Part: Scenario:
 
 ![Busse Woods, with wooded shorelines around the lake.](assets/microbes_1_z_test_image1.png)
 
-Busse Woods is the setting for your microbial diversity investigation.
+For this teaching scenario, assume representative independent observations from normally distributed populations. Choose the hypothesis and alpha = 0.05 before inspecting results; calculating all three tails is a comparison exercise, not permission to select the smallest p-value. Treat the benchmark mean 4.0 and population standard deviation 0.6 as known stipulated values.
 
-You are analyzing microbial diversity in soil samples from different locations in **Busse Woods
-Forest Preserve**. Urbanization around Busse Woods is raising concerns about soil health and
-biodiversity. Your task is to compare the current diversity with a benchmark for similar ecosystems.
+Urbanization around **Busse Woods** may have disrupted the ecosystem, leading to a possible decline in microbial diversity. By comparing the current microbial diversity in **Busse Woods** to the benchmark for similar ecosystems, we can ask whether microbial diversity is lower than the benchmark; this comparison cannot identify an environmental cause. You are analyzing microbial diversity in soil samples collected from different locations in **Busse Woods Forest Preserve** using **SSU rRNA sequencing**. Urbanization around **Busse Woods** is raising concerns that human activities and environmental pressures may be negatively affecting soil health and biodiversity.
 
-Compare the current population mean Shannon Index with the stipulated benchmark **4.0**, assuming a
-known population SD **0.6**. The main question is whether the mean is **lower**: H0: mean >= 4.0;
-H1: mean < 4.0. For the two-tail comparison use H0: mean = 4.0 versus H1: mean != 4.0; for higher
-use H0: mean <= 4.0 versus H1: mean > 4.0.
+The **Shannon Index** is a widely used measure of biodiversity that takes into account both the number of species present, known as **species richness**, and how evenly individuals are distributed among those species, known as **evenness**. The index is calculated by summing the proportion of individuals belonging to each species in a community and multiplying this by the natural logarithm of that proportion, then summing the results for all species and taking the negative of the total. A higher **Shannon Index** value indicates greater biodiversity, with no universal upper bound independent of community size and logarithm base.
 
-The Shannon Index combines **richness** (the number of taxa detected) and **evenness**
-(their relative abundances). It is calculated as **H = -sum(p_i ln(p_i))**, where p_i
-is the proportion assigned to taxon i and ln is the natural logarithm. Higher values indicate
-greater diversity at the chosen taxonomic
-resolution; the index has no universal upper bound independent of community size and log base.
-In the teaching scenario, soil microbial diversity at Busse Woods is estimated using SSU rRNA
-sequencing. Urbanization motivates the questions, but these tests compare diversity summaries;
-they cannot identify an environmental cause.
+The primary goal of this exercise is to determine whether microbial diversity (measured using the **Shannon Index**) in **Busse Woods** has decreased compared to the benchmark of 4.0, which is stipulated for similar ecosystems in this exercise. The population standard deviation for microbial diversity in similar ecosystems is stipulated to be known and equal to 0.6.
 
-Choose the hypothesis and significance level **before inspecting results**. Use alpha = 0.05
-throughout. Calculating all three tails is a comparison exercise, not permission to select the
-smallest p-value. A p-value is a probability of a result at least as extreme in the specified
-tail or tails, under the null model and its assumptions. It is not the probability that the null
-hypothesis is true. Failure to reject means insufficient evidence for the alternative.
+In this tutorial, you will use **Google Sheets** to conduct a **Z-test** using the sample data to investigate whether microbial diversity at **Busse Woods** is lower than the benchmark.
 
-Assume a representative independent sample and a normally distributed population for the
-known-SD Z model. Inspect observations for outliers and distribution shape.
-Larger samples cannot repair biased sampling or dependence.
+* **Null Hypothesis H&#x2080;**: The population mean microbial diversity in the forest preserve is at least the benchmark (Shannon Index >= 4.0).
+* **Alternative Hypothesis H&#x2081;**: The population mean microbial diversity in the forest preserve is lower than the benchmark (Shannon Index < 4.0).
 
-#### Step 1: Find Your Copy of the Spreadsheet
+#### Step: Find Your Copy of the Spreadsheet
 
-The generated workbook already contains the observations. Calculation labels are deliberately
-left for you to enter, so constructing the results table remains part of the exercise. Open the
-XLSX workbook in Google Sheets, then inspect the named worksheet before entering formulas.
+1. Open the generated XLSX workbook in Google Sheets.
+2. Select the **"Microbial Z-Test"** worksheet; its source data are already supplied.
+3. Inspect the source observations before entering calculations.
 
-- **Open:** Open the generated XLSX workbook in Google Sheets and select the worksheet named above.
-- **Inspect:** Check the raw-data headers and counts. Keep the source observations intact while calculating the original results.
+The original course spreadsheet remains a [source reference](https://docs.google.com/spreadsheets/d/1cAlU997q8IazW6wJhBwYRrrO2l6ls0yCAo3Rx9BlUY0/edit).
 
-Each current-year dataset has 24 observations in rows 2:25. Formula ranges end at row 101 to
-leave room for later practice. `AVERAGE`, `STDEV`, `VAR.S`, and `COUNT` ignore empty cells;
-blank observations are not zeroes. Enter numeric practice data only within the stated ranges.
-The original course workbook is retained as a [source
-reference](https://docs.google.com/spreadsheets/d/1cAlU997q8IazW6wJhBwYRrrO2l6ls0yCAo3Rx9BlUY0/edit).
+4. The data in Column B represents the **Shannon Index** for microbial samples from Busse Woods.
 
+Each year has 24 observations in rows 2:25. Formula ranges extend through row 101 for practice; empty observations are ignored, not treated as zeroes.
 
-#### Step 2: Set Up the Known Population Values
+#### Step: Set Up the Known Population Values
 
-The benchmark mean is **4.0** and the population standard deviation is **0.6**, both stipulated for
-this exercise. A Z-test requires the population SD to be known; do not estimate it from the current
-sample.
+1. **Column C** will be used for **Statistical Names**.
+2. **Column D** will contain the **calculated values**.
+3. In **cell C1**, the header already contains **"Statistical Names"**.
+4. In **cell D1**, the header already contains **"Values"**.
+5. In **cell C2**, type **"[Population Mean](label:C2)"**, and in **cell D2**, enter **[4.0](enter:D2)** (the stipulated benchmark for similar ecosystems).
+6. In **cell C3**, type **"[Population Standard Deviation](label:C3)"**, and in **cell D3**, enter **[0.6](enter:D3)** (the stipulated known population standard deviation).
 
-- **Label C2:** Population Mean
-- **Enter D2:** 4.0
-- **Label C3:** Population Standard Deviation
-- **Enter D3:** 0.6
+#### Step: Calculate the Sample Mean
 
-#### Step 3: Calculate the Sample Mean
+1. In **cell C5**, type **"[Sample Mean](label:C5)"**.
+2. In **cell D5**, use the **AVERAGE** function to calculate the sample mean for your microbial diversity values:
+   * Enter: [`=AVERAGE(B2:B101)`](enter:D5)
+   * This formula calculates the mean of Shannon Index values from cells B2 to B101, allowing for flexibility if you add more data. It will automatically ignore empty cells.
+3. In **cell C6**, type **"[Sample Size](label:C6)"**, and in **cell D6**, use the **COUNT** function to count the number of samples:
+   * Enter: [`=COUNT(B2:B101)`](enter:D6)
 
-`AVERAGE` calculates the sample mean and `COUNT` counts numeric observations. Use the same
-observation range for both; the current count should be **24**.
+#### Step: Calculate the Z-Statistic
 
-- **Label C5:** Sample Mean
-- **Enter D5:** `=AVERAGE(B2:B101)`
-- **Label C6:** Sample Size
-- **Enter D6:** `=COUNT(B2:B101)`
+1. In **cell C8**, type **"[Z-Statistic](label:C8)"**.
+2. In **cell D8**, calculate the Z-statistic using the formula:
+   * Enter: [`=(D5 - D2) / (D3 / SQRT(D6))`](enter:D8)
+   * This formula uses the sample mean (D5), population mean (D2), population standard deviation (D3), and sample size (D6). The Z-statistic helps you determine how far the sample mean is from the population mean, accounting for sample size.
 
-#### Step 4: Calculate the Z-Statistic
+#### Explanation:
 
-The **Z-statistic** is the sample mean minus the benchmark, divided by the standard error,
-population SD / square root of sample size. It expresses the difference in **standard-error units**.
-Negative values favor the lower alternative.
+The Z-statistic standardizes the difference between the **sample mean** and the **population mean** by converting it into units of standard error. This allows you to assess whether the observed microbial diversity at Busse Woods is significantly different from the expected diversity.
 
-- **Label C8:** Z-Statistic
-- **Enter D8:** `=(D5 - D2) / (D3 / SQRT(D6))`
+#### Step: Determine the Type of Test (One-Tailed or Two-Tailed)
 
-#### Step 5: Determine the Type of Test (One-Tailed or Two-Tailed)
+Main lower-tail question: H0: mean >= 4.0; H1: mean < 4.0. The two-tailed comparison uses H0: mean = 4.0 versus H1: mean != 4.0; the higher-tail comparison uses H0: mean <= 4.0 versus H1: mean > 4.0.
 
-For the main question, use the **one-tailed lower** alternative selected in the scenario.
-The two-tailed alternative asks about a difference in either direction; the higher alternative
-asks about an increase. Each has its own null hypothesis. Keep these interpretations separate.
+When performing a Z-test on microbial diversity data from Busse Woods, you need to decide whether you are testing for **any significant difference** or a **specific directional difference** from the known benchmark (Shannon Index of 4.0).
 
+#### **Two-Tailed Test:**
 
-#### Step 6: Calculate the P-Values
+This is used when you want to test if there is any **significant difference** in the microbial diversity of your forest preserve, regardless of whether it's higher or lower than the known benchmark. You're checking for **any deviation** from the benchmark value.
 
-![A standard normal curve with the lower-tail area shaded to the left of a negative Z value.](assets/microbes_1_z_test_image2.png)
+* **Example Hypothesis**:
 
-The shaded area illustrates a lower-tail probability, not the result for this dataset.
+  * **Null Hypothesis (H&#x2080;)**: The average microbial diversity in the forest preserve is equal to the benchmark (Shannon Index \= 4.0).
 
-`NORM.DIST(z, 0, 1, TRUE)` returns the standard normal cumulative probability to the left of z.
-The **0** sets the mean, **1** sets the standard deviation, and **TRUE** selects cumulative
-probability. Use it to construct the following tail probabilities.
+  * **Alternative Hypothesis (H&#x2081;)**: The average microbial diversity in the forest preserve is different from the benchmark (either higher or lower).
 
-##### Substep 6.1: Two-Tailed Test:
+Use a **two-tailed test** if you do not have a specific expectation about whether the microbial diversity is **higher or lower** than the benchmark. You're testing for any difference.
 
-The **two-tailed** alternative includes extremes in both directions. Double the smaller tail; using
-the absolute Z or t statistic makes this the upper tail beyond its magnitude. Compare alternate
-methods where provided.
+#### **One-Tailed Test:**
 
-- **Label C10:** P-Value (Two-Tailed)
-- **Enter D10:** `=2 * (1 - NORM.DIST(ABS(D8), 0, 1, TRUE))`
+This is used when you have a **specific direction** in mind. For example, if you believe that the microbial diversity in your forest preserve is **higher** than the benchmark, you would use a **one-tailed test**.
 
-##### Substep 6.2: One-Tailed Test (for lower values):
+* **Example Hypothesis**:
 
-The **one-tailed lower** alternative uses the probability to the left of the signed statistic. For a
-positive statistic, this probability is large; do not force it to be the smaller tail.
+  * **Null Hypothesis (H&#x2080;)**: The microbial diversity in the forest preserve is less than or equal to the benchmark (Shannon Index <= 4.0).
 
-- **Label C11:** P-Value (One-Tailed, Lower)
-- **Enter D11:** `=NORM.DIST(D8, 0, 1, TRUE)`
+  * **Alternative Hypothesis (H&#x2081;)**: The microbial diversity in the forest preserve is **greater** than the benchmark (Shannon Index \> 4.0).
 
-##### Substep 6.3: One-Tailed Test (for higher values):
+Use a **one-tailed test** if you have a specific hypothesis about whether the microbial diversity is **higher** (or lower, if reversed) than the benchmark. This allows you to test for a **directional** difference.
 
-The **one-tailed higher** alternative uses the probability to the right of the signed statistic.
-Subtract the cumulative probability from one. For a negative statistic, this probability is large.
+#### Step: Calculate the P-Values
 
-- **Label C12:** P-Value (One-Tailed, Higher)
-- **Enter D12:** `=1 - NORM.DIST(D8, 0, 1, TRUE)`
+To help **you** better understand the different types of tests and how p-values are calculated, **we will guide you** through the steps for calculating all possible p-values (one-tailed and two-tailed).
 
-#### Step 7: Make a Decision Using an IF Statement
+##### Substep: Two-Tailed Test:
 
-An `IF` formula evaluates whether p <= alpha. It returns **Reject the Null Hypothesis** when true
-and **Fail to Reject the Null Hypothesis** otherwise. Use the matching p-value for each tail; the
-lower decision answers the main question.
+A two-tailed test is used when you want to check for any difference, whether microbial diversity in Busse Woods is higher or lower than the benchmark.
 
-- **Label C14:** Significance Level (alpha)
-- **Enter D14:** 0.05
-- **Label C15:** Two-Tail Decision
-- **Enter D15:** `=IF(D10 <= D14, "Reject the Null Hypothesis", "Fail to Reject the Null Hypothesis")`
-- **Label C16:** One-Tail Decision (Lower)
-- **Enter D16:** `=IF(D11 <= D14, "Reject the Null Hypothesis", "Fail to Reject the Null Hypothesis")`
-- **Label C17:** One-Tail Decision (Higher)
-- **Enter D17:** `=IF(D12 <= D14, "Reject the Null Hypothesis", "Fail to Reject the Null Hypothesis")`
+* **In cell C10**, type **"[P-Value (Two-Tailed)](label:C10)"**.
+* **In cell D10**, enter the formula:
+  [`=2 * (1 - NORM.DIST(ABS(D8), 0, 1, TRUE))`](enter:D10)
 
-#### Step 8: Interpret the Results
+#### Explanation for Two-Tailed Test:
 
-Use the **lower-tail p-value in D11** and the decision in D16. The original observations give Z
-about **-1.65817** and lower p about **0.04864**: reject the directional null at 0.05. Under the
-stated model, there is evidence that the population mean Shannon Index is below 4.0. The two-tail p
-is about **0.09728**, so the two-tailed comparison fails to reject. These different decisions answer
-different hypotheses; neither establishes an effect of urbanization.
+In a two-tailed test, **you're checking for deviations in both directions**-whether microbial diversity is higher or lower than the benchmark. The formula starts by calculating the **absolute value** of the Z-statistic using the **`ABS(D8)`** function, which ensures **we only focus on the magnitude** of the difference between the sample mean and the benchmark. This step is crucial since we're concerned with both positive and negative deviations.
 
-- **Label C19:** Interpretation
+The function **`NORM.DIST(ABS(D8), 0, 1, TRUE)`** gives the cumulative probability to the left of the absolute Z-statistic **you've calculated**. Since **we want to test both sides** (higher and lower), we subtract this value from 1 to find the **probability in the upper tail**, and then multiply by 2 to account for both tails. **This final formula ensures you include both extremes** in your analysis.
 
-- **Explain:** Write your interpretation in `D19`. Include the p-value, tail and alternative, alpha, and the evidence-based conclusion. If p > alpha, state that evidence is insufficient; do not claim equality or absence of an effect.
+However, because we are performing a **two-tailed test**, we are interested in deviations in **both directions**-whether the microbial diversity in Busse Woods is **higher or lower** than the benchmark. To account for this, we first need to find the probability in the **upper tail** of the distribution. The function **`NORM.DIST(ABS(D8), 0, 1, TRUE)`** gives the cumulative probability for the area under the curve to the **left** of the absolute value of the Z-statistic (i.e., the probability that the Z-statistic is less than or equal to this value). To find the probability of observing a Z-statistic **greater than or equal to the absolute value** of D8 (the upper tail), we subtract this cumulative probability from **1**. This gives us the likelihood of observing a value in the **right tail** of the distribution, beyond the calculated Z-statistic.
 
-#### Practice: Explore sensitivity
+Take a look at this image of the **normal distribution curve**, which will help visualize this process:
+![A standard normal curve with the area left of Z = -1 shaded.](assets/microbes_1_z_test_image2.png)
+The shaded area to the left of **Z \= -1** in the image represents **P(Z \< -1)**, or the cumulative probability to the left of -1. This area is given by **`NORM.DIST(-1, 0, 1, TRUE)`**. The complement of this illustrated cumulative probability is the area to the right of -1. For our two-tailed calculation, instead subtract the cumulative probability at **ABS(D8)** from **1** to obtain the upper tail beyond the positive magnitude. By the symmetry of the normal distribution, **`1 - NORM.DIST(ABS(D8), 0, 1, TRUE)`** is equivalent to **`NORM.DIST(-ABS(D8), 0, 1, TRUE)`**, since the normal curve is symmetric around zero. Both approaches give the probability of observing a value in the **upper tail**.
 
-Save a separate practice copy after recording the original result. Treat modified observations
-as hypothetical examples, not newly collected evidence.
+Since we are conducting a **two-tailed test**, we need to account for **extreme values in both tails**-those significantly **higher** and those significantly **lower** than the benchmark. To do this, we multiply the **upper tail probability** by **2**, which ensures that we include both the **left** and **right** tails of the distribution. The final formula, **`2 * (1 - NORM.DIST(ABS(D8), 0, 1, TRUE))`**, gives the total probability of observing a Z-statistic as extreme or more extreme than the one calculated, regardless of direction.
 
-- **Change:** Modify a few values in column B. Compare the sample mean, Z-statistic, p-value, and decision before and after. The stipulated population SD in D3 stays fixed at 0.6; this Z-test does not calculate a sample SD or variance. Explain how changing the mean and count changes the standard error and result.
-- **Add:** Enter hypothetical numeric observations in blank cells within rows 2:101 of the raw-data columns. Check the updated counts; leave unobserved entries blank. Compare adding values near a group mean with adding extreme values.
-- **Compare:** Discuss how sample size, effect size, variability, and assumptions influence the result. More observations can reduce standard errors under the model, but do not guarantee a smaller p-value or repair biased or dependent observations.
+##### Substep: One-Tailed Test (for lower values):
 
-#### Key Takeaways
+A one-tailed test is used when you have a specific directional hypothesis. In this case, we are testing if microbial diversity in Busse Woods is **lower** than the benchmark.
 
-- **Flexibility:** The range B2:B101 lets you explore how adding or removing observations changes
-  the result. More observations do not guarantee a smaller p-value.
-- **Z-statistics:** Compare the sample mean with a benchmark in standard-error units, using a
-  known population SD.
-- **Dynamic calculations:** Google Sheets recalculates the statistic and p-values as you modify
-  your practice data.
+* **In cell C11**, type **"[P-Value (One-Tailed, Lower)](label:C11)"**.
+* **In cell D11**, enter the formula:
+  [`=NORM.DIST(D8, 0, 1, TRUE)`](enter:D11)
 
-#### Moving to the t-test
+#### Explanation for One-Tailed Test (Lower):
 
-As you prepare your report, your supervisor sends a question: "The population SD was stipulated
-for this exercise. What if we did not know it? Recalculate using the sample SD and a t-test."
-You open your spreadsheet again to see how estimating SD changes the result. The reason for this
-change is the unknown population SD, rather than a sample-size cutoff.
+For a one-tailed test, we are only interested in whether microbial diversity is **lower** than the benchmark. The function **`NORM.DIST(D8, 0, 1, TRUE)`** calculates the cumulative probability of observing a Z-statistic less than or equal to the calculated Z-statistic. This directly gives us the p-value for the **lower tail**, which is the probability, under the null model, of a Z-statistic this low or lower.
 
-Ask the instructor for the next tutorial link.
+##### Substep: One-Tailed Test (for higher values):
+
+Even though the hypothesis is about **lower** microbial diversity, we can still calculate the p-value for the **opposite direction** (whether microbial diversity is **higher** than the benchmark) to see how such results would be interpreted.
+
+* **In cell C12**, type **"[P-Value (One-Tailed, Higher)](label:C12)"**.
+* **In cell D12**, enter the formula:
+  [`=1 - NORM.DIST(D8, 0, 1, TRUE)`](enter:D12)
+
+#### Explanation for One-Tailed Test (Higher):
+
+For testing whether microbial diversity is **higher** than the benchmark, we calculate the complement of the cumulative probability. The function **`NORM.DIST(D8, 0, 1, TRUE)`** gives the cumulative probability for values **less than or equal** to D8. By subtracting this value from **1**, we obtain the probability of observing a value **greater than** the calculated Z-statistic, representing the probability, under the null model, of a Z-statistic this high or higher.
+
+#### Step: Make a Decision Using an IF Statement
+
+In hypothesis testing, the decision to reject or fail to reject the null hypothesis depends on the comparison between the p-value and the significance level (&alpha;). The significance level is typically set at 0.05, meaning that if the p-value is less than or equal to 0.05, we consider the result statistically significant and reject the null hypothesis.
+
+To automate this decision-making process in Google Sheets, **we use the IF statement**, a logical function that **evaluates a condition** and returns one value if the condition is true, and another if it is false. In this case, the condition will check **whether the p-value is less than or equal to the significance level**.
+
+1. In **cell C14**, type **"[Significance Level (&alpha;)](label:C14)."**
+2. In **cell D14**, enter **[0.05](enter:D14)**.
+3. In **cell C15**, type **"[Two-Tail Decision](label:C15)."**
+4. In **cell D15**, use an **IF statement** to determine whether to reject the null hypothesis using the two-tailed p-value:
+   * [`=IF(D10 <= D14, "Reject the Null Hypothesis", "Fail to Reject the Null Hypothesis")`](enter:D15)
+5. In **cell C16**, type **"[One-Tail Decision (Lower)](label:C16)"**
+6. In **cell D16**, use the IF statement to make a decision based on the one-tailed lower p-value:
+   * [`=IF(D11 <= D14, "Reject the Null Hypothesis", "Fail to Reject the Null Hypothesis")`](enter:D16)
+7. In **cell C17**, type **"[One-Tail Decision (Higher)](label:C17)"**
+8. In **cell D17**, use the IF statement to make a decision based on the one-tailed higher p-value:
+   * [`=IF(D12 <= D14, "Reject the Null Hypothesis", "Fail to Reject the Null Hypothesis")`](enter:D17)
+
+#### Explanation
+
+The **IF statement** is a fundamental programming concept that allows you to make decisions based on conditions. In this case, **we use it to compare** the p-value to the significance level (**&alpha;**) and **decide** whether to reject or fail to reject the null hypothesis.
+
+In hypothesis testing, if the **p-value is less than or equal to the significance level** (0.05), we consider the result **statistically significant**. This means you have enough evidence to reject the null hypothesis. For example, if we are conducting a two-tailed test and the two-tailed p-value is less than or equal to 0.05, we reject the null hypothesis, which would indicate that microbial diversity in Busse Woods is significantly different from the benchmark. If the p-value is greater than 0.05, the evidence is insufficient to reject the null hypothesis, meaning there is insufficient evidence of a difference; this does not establish equality.
+
+For one-tailed tests, we perform the same comparison but only focus on testing either higher or lower values. The formula **`IF(D11 <= D14, "Reject the Null Hypothesis", "Fail to Reject the Null Hypothesis")`** is used when testing whether microbial diversity is lower than the benchmark. If the p-value is less than or equal to 0.05, we reject the null hypothesis and conclude that microbial diversity is significantly lower. Conversely, for testing whether microbial diversity is higher than the benchmark, the formula **`IF(D12 <= D14, "Reject the Null Hypothesis", "Fail to Reject the Null Hypothesis")`** performs the same function, but focused on higher values. If the p-value in this case is less than or equal to 0.05, we reject the null hypothesis and conclude that the microbial diversity is significantly higher.
+
+By using the IF statement in Google Sheets, you can automate the process of making these decisions based on your p-values, ensuring clarity and accuracy in interpreting the results of your hypothesis tests.
+
+#### Step: Interpret the Results
+
+At this point, you should have determined that we are only interested in the results of the **one-tailed (lower)** test. You are specifically testing whether the microbial diversity in Busse Woods is **lower than the benchmark**. This comparison does not identify whether urbanization or other environmental pressures caused a difference. The goal is to see if the data supports the hypothesis that microbial diversity has declined.
+
+1. In **cell C19**, type **"[Interpretation](label:C19)"**.
+2. In **cell D19**, write a brief interpretation of your findings based on the one-tailed (lower) test:
+   **One-Tailed Test Example (Lower):**
+   "With a p-value of \[calculated value\], we \[reject/fail to reject\] the null hypothesis, indicating that the data \[provide/do not provide\] sufficient evidence of a population mean lower than the benchmark."
+
+#### Explanation:
+
+In hypothesis testing, the interpretation relies on comparing the **p-value** to the significance level (**&alpha; \= 0.05**). If the p-value is less than or equal to 0.05, the result is considered **statistically significant**, and the null hypothesis is rejected. Rejecting the null hypothesis means that the data provides enough evidence to conclude that microbial diversity in Busse Woods is **significantly lower** than the benchmark. This does not establish that environmental factors, such as urbanization, caused the difference.
+
+If the p-value is greater than 0.05, you fail to reject the null hypothesis. This means there is **not enough evidence** to claim that microbial diversity is lower than the benchmark. This does not establish equality with the benchmark or rule out an effect of external factors.
+
+By completing this interpretation, you can clearly state whether the data provide evidence of lower microbial diversity in Busse Woods based on your hypothesis test results. This helps you draw a meaningful conclusion about the health of the ecosystem.
+
+#### Practice Task:
+
+Save a separate practice copy after recording the original result. Add hypothetical numeric observations only within rows 2:101; leave unobserved cells blank.
+
+* **Add more diversity index values** to Column B. Observe how the **Z-statistic** and **p-value** adjust as you increase the sample size. Notice how adding more data points, especially extreme values, can affect the outcome of the hypothesis test. This will help you understand the sensitivity of the test to the number of samples.
+* **Modify some existing values** in Column B by increasing or decreasing the Shannon Index values. Watch how the **Z-statistic** and **p-value** change as a result. This will show how changes to individual values can impact the test results. Try adding values that are either much higher or much lower than the current ones to see the extent of the changes.
+* **Think about** how both **changing the dataset size** and modifying individual Shannon Index values impacts the hypothesis test results. Think about how a larger representative independent sample can reduce the standard error, while extreme individual values might skew the results; more data do not guarantee a smaller p-value or repair biased sampling. This exercise will reinforce the importance of both sample size and data consistency in hypothesis testing.
+
+#### Key Takeaways:
+
+1. **Flexibility:** This setup allows you to vary the number of samples dynamically by entering values in **Column B**. By using a flexible range (B2:B101), you can observe how adding or removing data points influences the outcome of the test. This highlights how sample size plays a critical role in the reliability of statistical results, especially in ecological data where sample numbers can vary widely.
+2. **Z-Statistics**: Z-statistics provide a standardized way to compare the **sample mean** to a known **population mean**. Even when the sample size changes, using the Z-statistic allows for a clear comparison. Understanding how to standardize values using Z-statistics is essential for comparing your sample to a benchmark, helping you determine whether the microbial diversity in Busse Woods deviates significantly from the expected value.
+3. **Dynamic Calculations**: One of the advantages of using Google Sheets is that it automatically recalculates the **Z-statistic** and **p-value** when you modify the data. This allows you to perform real-time analysis and instantly see how changes in your data affect the results. Being able to experiment with different values and sample sizes will help you better grasp the relationship between your data and hypothesis testing, showing the effects of data changes without needing to manually recalculate each time.
+
+#### Setup: Microbial Diversity at Busse Woods
+
+After conducting the Z-test on microbial diversity at Busse Woods, you were confident that the diversity was significantly lower than the benchmark in the preselected lower-tail test. You were ready to present your findings and celebrate a successful environmental analysis.
+
+However, just as you began preparing your report, your supervisor sent a critical email:
+
+"*While you compared Busse Woods' microbial diversity to the benchmark using a Z-test, we noticed a major issue. You assumed that the population standard deviation was known, but for environmental data like this, making that assumption is risky. Ecosystems vary greatly depending on factors like soil type and vegetation cover, and these can differ even within the same location. The key question is whether the population standard deviation is truly known, not whether N is below 30. If it is unknown, you should be using a T-test, which accounts for the extra uncertainty when estimating the population standard deviation from your sample data. To validate your findings, you must redo the analysis using a T-test.*"
+
+You realize that the Z-test may not have been appropriate because of these assumptions. To ensure the accuracy of your conclusions, you now need to switch to a **T-test** and recalculate your results. This new approach will take into account the uncertainty in estimating the population standard deviation. By using the T-test, you hope to avoid any doubts about the validity of your findings and deliver a solid environmental assessment.
+
+#### Moving to the T-Test
+
+In the next part of this tutorial, we will learn how to conduct a **T-test** when the population standard deviation is **unknown**, and the sample size is relatively small. The **T-test** adjusts for the extra uncertainty when estimating the population standard deviation from the sample, under the stated sampling assumptions.
+
+***...Ask the instructor for the next tutorial link.***

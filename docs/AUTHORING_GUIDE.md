@@ -34,7 +34,7 @@ Use exactly one title, then the two required sections:
 #### Step: Calculate the means
 
 - **Label D2:** Group A mean
-- **Enter E2:** `=AVERAGE(A2:A3)`
+- **Enter E2:** =AVERAGE(A2:A3)
 - **Interpret:** Use `E2` as the sample mean for Group A.
 ```
 
@@ -48,12 +48,28 @@ Use `### Part:`, `#### Step:`, and `##### Substep:` headings. The converter gene
 you can include legacy numbers when migrating existing materials. Put the worksheet name in a
 `**Worksheet:**` item within each part.
 
-Every list item should begin with a bold action and colon. Decide who supplies each label: seed it
-in the Workbook table for students to inspect, or leave it blank and ask students to type it with
-`Label`. Do not seed a label and ask students to re-enter it. `Label`, `Enter`, and `Replace` record
-student assignments for validation but leave those answers blank in the generated workbook.
-`Select` records a cell/range reference; `Choose` records a menu path. Other bold openings, such as
-`**Compare:**` and `**Explain:**`, remain ordinary instructions.
+Write instructions as ordinary prose and numbered or nested lists that read naturally. Attach cell
+actions to the words already present with semantic links, for example:
+
+```markdown
+1. In D5, type [**Sample Mean**](label:D5); in E5, enter [=AVERAGE(B2:B26)](enter:E5).
+2. [Select C2:C26](select:C2:C26), then [fill down](fill:C2:C26) to copy the first-row formula.
+```
+
+Keep each value or formula once in the visible instructions; multiple linked actions may appear
+within one paragraph. The link destination carries the operation while the link text remains the
+student-facing wording. Links render without exposing semantic URIs. Ordinary GFM numbered and
+nested lists retain their grouping. Do not add bold action labels to every list item.
+Name each destination cell or range in the visible instruction or its parent item; a hidden link
+target does not tell the student where to type. Label links decode ordinary Markdown emphasis and
+entities as label text; quoted labels retain their visible quotes. Enter/Replace quoted scalars
+follow JSON rules and retain their copy text until scalar decoding.
+
+Legacy `**Label D2:**`, `**Enter E2:**`, `**Replace E2:**`, `**Select:**`, and `**Fill C2:C26:**`
+openings remain supported. `Label`, `Enter`, and `Replace` record assignments for validation but
+leave student answers blank in the generated workbook. Do not seed a label and ask students to
+re-enter it. `Choose` records a menu path. Other bold openings, such as `**Compare:**` and
+`**Explain:**`, remain ordinary instructions.
 Write menu segments with ASCII `>` separators; the DOCX renders them in bold Roboto Mono.
 
 Give each list item actual content. A bold, colon-terminated label by itself is incomplete unless
@@ -62,9 +78,21 @@ substantive descendant. An empty child does not complete its parent. The linter 
 structure and points to the source line. Repeated identical assignments still receive a redundancy
 warning.
 
-Put a formula in one code span after `Enter` or `Replace`. Use backticks around cell references in
-prose when they should become linked references. An A1-shaped string without backticks is left as
-ordinary text unless it is the target of a recognized action.
+After `Enter` or `Replace`, write a formula directly, such as `- **Enter C2:** =A2^2`. Backticks
+around an expression remain optional when they make the intended formula boundary clearer. In a
+Workbook cell or `Enter`/`Replace` payload, a JSON double-quoted value such as `"=not a formula"` is
+literal text. Tutorial prose and ordinary Tutorial tables use narrative semantics: a bounded
+spreadsheet formula remains a formula when quoted as an example. In an action payload, formula
+recognition runs before Markdown interprets arithmetic characters. Complete spreadsheet expressions
+such as `=SUM(A1:A3)` and `=A1+B1` in prose are recognized when their boundaries are clear; statistical
+equations, comparison operators, and URLs remain prose. Use backticks around cell references in prose
+when they should become linked references. An A1-shaped string without backticks is left as ordinary
+text unless it is the target of a recognized action.
+
+Formula roles are recognized in action payloads, code spans, formula fences, and workbook tables.
+The renderer preserves the authored formula text and formats formulas in Roboto Mono with dark green
+(`#188038`). No author color markup is needed. In GFM tables, escape a literal pipe as `\|` as
+required by the table syntax.
 
 After entering a formula in the first row, use `- **Fill C2:C26:** Down` to teach copying it
 through the remaining rows. For adjacent formula columns, use `- **Fill E2:F26:** Down`.

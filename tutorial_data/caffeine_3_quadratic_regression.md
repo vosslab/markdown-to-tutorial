@@ -1,16 +1,6 @@
 # Dr. Caffeine's All-Nighter Academy: quadratic regression
 
-Dr. Caffeine is staring at the straight-line fit like he just failed his own exam. The observations
-rise and then fall: students with moderate sleep tend to score higher than students near either
-end of this dataset. A straight line cannot capture that academic roller coaster. Time for a
-new plan, another coffee, and possibly a nap!
-
-This is tutorial 3 of 3. Complete
-**Dr. Caffeine's All-Nighter Academy: linear regression** first, or bring equivalent
-knowledge of scatterplots, slope, intercept, R-squared, and two-tailed regression tests.
-This workbook includes all 25 original pairs and recreates the linear comparison, so it does not
-require a completed previous workbook. Data provenance:
-[original class template](https://docs.google.com/spreadsheets/d/1mhOQhC_1hqnbvYItPT3y-V-_9l9q3pN7MtZDcOevaA0/edit?gid=0#gid=0).
+This is tutorial 3 of 3. Complete the linear regression tutorial first or bring equivalent knowledge of scatterplots, slope, intercept, R-squared, and two-tailed regression tests. This workbook repeats all 25 observations and recreates the linear comparison, so no previous workbook is required.
 
 ## Workbook
 
@@ -44,175 +34,139 @@ require a completed previous workbook. Data provenance:
 | 9 | 97 |
 | 8.5 | 100 |
 
+- **Region A1:B26:** source
+- **Region C1:C26:** calculation
+- **Region E1:F26:** calculation
+- **Region H1:I11:** results
+- **Region L1:M4:** results
+- **Region L7:N16:** interpretation
+
 ## Tutorial
 
-### Part: Let the model curve
+### Part: **Why Straight Lines Fail, The Plot Twist! - QUADRATIC Regression!**
 
-- **Worksheet:** Sleep and scores
+Now that we&#8217;ve officially run our linear regression, Dr. Caffeine is staring at the results like he just failed his own exam. The line exists, sure, and its positive slope is statistically significant, but it misses the curve in these data. Looking at our scatterplot, the points form an upside-down U, almost like students&#8217; brains function perfectly until they sleep near the low or high end of the observed 3-to-11.5-hour range. Apparently, there IS a curve in this dataset! Students in this dataset who get a moderate amount of sleep tend to score the highest, while those near either end of the observed range tend to score lower. Unfortunately, a straight line cannot capture this academic roller coaster. Dr. Caffeine needs a new plan, another cup of coffee, and possibly a nap himself?
 
-#### Step: Revisit the linear fit
+![All-Nighter Academy illustration](assets/caffeine_09.png)
 
-- **Open:** Upload the generated XLSX workbook to Google Drive and open it in Google Sheets.
-- **Choose:** File > Make a copy
-- **Rename:** Include your name and the date. Work in Sleep and scores.
-- **Select:** `A1:B26`
-- **Choose:** Insert > Chart
-- **Choose:** Chart editor > Setup > Chart type > Scatter chart
-- **Check:** Use hours of sleep on x and exam score (%) on y; add these axis labels and an
-  informative chart title.
-- **Choose:** Chart editor > Customize > Series
-- **Set:** Add a Linear trendline, use the equation as its label, and display R-squared.
-  Turn on the legend under Customize > Legend if R-squared is hidden.
-- **Label L1:** Linear comparison
-- **Label L2:** Slope
-- **Enter M2:** `=SLOPE(B2:B26,A2:A26)`
-- **Label L3:** Intercept
-- **Enter M3:** `=INTERCEPT(B2:B26,A2:A26)`
-- **Label L4:** Linear R-squared
-- **Enter M4:** `=RSQ(B2:B26,A2:A26)`
-- **Compare:** If you completed the previous tutorial, these values should agree with its
-  results. Does the line follow both the rising and falling portions of the scatterplot?
+#### Step: Set Up Your Google Sheet
 
-A straight line can show a positive overall slope while missing curvature. Do not assume the
-linear R-squared must be near zero. Compare the calculated value with the actual shape.
+1. Open the generated XLSX workbook in Google Sheets and make a personal copy under **File** and **Make a Copy**. Rename it with your name and date. Use **Sleep and scores**, where A1:B26 contains the same 25 paired observations. Keep each student's pair together; record written responses in L7:N16 or in accompanying notes.
+2. [Select A1:B26](select:A1:B26), choose **Insert &#8594; Chart**, and choose **Scatter chart**. Label the x-axis Hours of Sleep and the y-axis Final Exam Score (%), and add an informative title.
+3. Recreate the linear comparison: label L1 [Linear comparison](label:L1), L2 [Slope](label:L2), L3 [Intercept](label:L3), and L4 [Linear R-squared](label:L4). Enter [=SLOPE(B2:B26,A2:A26)](enter:M2) in M2, [=INTERCEPT(B2:B26,A2:A26)](enter:M3) in M3, and [=RSQ(B2:B26,A2:A26)](enter:M4) in M4.
 
-![Why consider a curve?](assets/caffeine_10.png)
+**Let&#8217;s see why our linear regression is not giving what it needs to give.**
 
-Research question: Does adding a squared sleep-hours term better describe this relationship?
-For a **two-tailed** test of the quadratic term, H<sub>0</sub>: &beta;2 = 0 versus
-H<sub>1</sub>: &beta;2 &ne; 0, with the linear term retained. This asks about curvature in either
-direction, not whether sleep causes scores to change.
+#### Step: **Straight Linear Regression**
 
-![Question about the quadratic model](assets/caffeine_11.png)
+1. **Add the Linear Trendline First:** On your scatterplot, open the Chart Editor and select **Customize &#8594; Series**. Turn on the **Trendline** and select **Linear**. Make sure to display the equation and (R^2) value. We need receipts because Dr. Caffeine is NOT about to trust a line just because it looks official.\
+2. **Observe the Disconnect:** Look at that straight line running through the middle of the scatterplot. Like&#8230; respectfully, what is going on here? Our data is forming a whole upside-down U, and this line is acting like everything is perfectly linear. Students who get a moderate amount of sleep tend to score higher, while those who barely sleep or sleep like they&#8217;re in a three-day coma tend to score lower. The pattern is an academic roller coaster.\
+3. **Check your linear receipts:** Use the linear R2 value in M4; if you completed the previous tutorial, it should agree with that result. Does it capture the rise and fall in the data? Dr. Caffeine has his coffee, we have our calculations, and yet this line is still not connecting the dots. R2 describes the variation accounted for by the linear fit; its value alone cannot show whether a straight line captures this pattern. At this point, we need to regroup.
 
-#### Step: Square the predictor
+**Time for QUADRATIC REGRESSION!** Since exam scores appear to peak at a moderate amount of sleep and decrease when students get either too little or too much, a curved model may better represent the relationship. Because apparently, sleep has a sweet spot, and statistics refuse to let us have a simple answer. Let&#8217;s see if quadratic regression can save this project before Dr. Caffeine has a full academic crisis!
 
-Squaring lets the model curve. Six hours squared is 36 hours squared; the student did not
-sleep for 36 hours! Keep exam scores out of the predictor table.
+![All-Nighter Academy illustration](assets/caffeine_10.png)
 
-- **Label C1:** Sleep hours squared
-- **Enter C2:** `=A2^2`
-- **Fill C2:C26:** Down
-- **Do:** Select `C2:C26`, including the formula you entered in the first row, then press
-  Ctrl+D (Windows) or Command+D (Mac). You can also drag the blue fill handle from `C2` to `C26`.
-  Relative references
-  change with the row: the last formula should be `=A26^2`.
-- **Check:** `C2` should be 9 and `C26` should be 72.25.
-- **Label E1:** Sleep hours predictor
-- **Label F1:** Squared sleep predictor
-- **Enter E2:** `=A2`
-- **Enter F2:** `=C2`
-- **Fill E2:F26:** Down
-- **Do:** Select `E2:F26` and use the same Fill down shortcut, or select `E2:F2` and drag its
-  fill handle down to row 26. Each column copies its own first formula; both predictors must stay
-  aligned with the same student in column B.
-- **Check:** `E26` should contain `=A26` and show 8.5; `F26` should contain `=C26` and show 72.25.
+**Our New Research Question:** Does the quadratic regression model BETTER describe the relationship between hours of sleep and final exam scores than a linear model?
 
-#### Step: Understand the equation
+![All-Nighter Academy illustration](assets/caffeine_11.png)
 
-![Quadratic regression illustration](assets/caffeine_12.png)
+**Hypotheses for Quadratic Term:** This time, we&#8217;re looking at whether adding a squared sleep-hours term provides evidence of curvature
 
-Quadratic regression fits a polynomial that curves with respect to x:
-y-hat = b0 + b1 x + b2 x<sup>2</sup>.
-Here y-hat is predicted score, b0 is the intercept, b1 x is the linear term, b2 x<sup>2</sup>
-is the quadratic term, and x is hours of sleep. It remains a linear regression in its coefficients;
-the squared predictor allows a curved relationship in sleep hours.
+* **H&#8320;: &#946;&#8322; = 0** &#8212; There is no quadratic term in the population model.\
+* **H&#8321;: &#946;&#8322; &#8800; 0** &#8212; There is evidence of a quadratic term in the population model
 
-- **Explain:** What would happen to the equation if b2 were zero?
-- **Predict:** Would a negative or positive b2 make an upside-down U? Record your prediction.
+**Basically, we&#8217;re asking whether the relationship needs a curve instead of a straight line.**
 
-#### Step: Fit the quadratic model
+#### Step: **Create a SQUARED Sleep-Hours Column**
 
-LINEST uses exam score as response and both adjacent predictor columns `E2:F26` as inputs.
-The coefficient order is reversed: first squared sleep, then sleep, then intercept.
-INDEX extracts scalar results without occupying a spill range.
+To let our regression model curve, we need to square our predictor variable (x).
 
-- **Label H1:** Quadratic statistic
-- **Label I1:** Value
-- **Label H2:** Quadratic coefficient b2
-- **Enter I2:** `=INDEX(LINEST(B2:B26,E2:F26,TRUE,TRUE),1,1)`
-- **Label H3:** Linear coefficient b1
-- **Enter I3:** `=INDEX(LINEST(B2:B26,E2:F26,TRUE,TRUE),1,2)`
-- **Label H4:** Intercept b0
-- **Enter I4:** `=INDEX(LINEST(B2:B26,E2:F26,TRUE,TRUE),1,3)`
-- **Label H5:** Quadratic R-squared
-- **Enter I5:** `=INDEX(LINEST(B2:B26,E2:F26,TRUE,TRUE),3,1)`
-- **Label H6:** Standard error of b2
-- **Enter I6:** `=INDEX(LINEST(B2:B26,E2:F26,TRUE,TRUE),2,1)`
-- **Label H7:** Residual degrees of freedom
-- **Enter I7:** `=INDEX(LINEST(B2:B26,E2:F26,TRUE,TRUE),4,2)`
-- **Check:** Degrees of freedom should be 25 - 3 = 22. Write your fitted equation using `I2:I4`.
-- **Interpret:** A negative `I2` bends the model downward. Unlike the straight-line slope,
-  `I3` alone is not the score change for every extra hour: that change also depends on sleep
-  through the squared term. Does the fitted sign of `I2` agree with your prediction?
-- **Label H8:** Predicted score at 7 hours
-- **Enter I8:** `=I4+I3*7+I2*7^2`
-- **Explain:** Compare this model prediction with the linear prediction `=M3+M2*7` in your notes.
-  Neither is a guarantee for an individual student.
+1. Use blank column C in your spreadsheet.\
+2. Label it [Sleep Hours Squared (x^2)](label:C1)\
+3. If the sleep hours are in cell A2, enter: [=A2^2](enter:C2)\
+4. Press Enter, then [drag the little blue square all the way down to the bottom](fill:C2:C26) to make sure it applies to all students! Basically, we&#8217;re taking each student&#8217;s hours of sleep and multiplying that number by itself. If someone slept 6 hours, their squared sleep value is 36! Don&#8217;t worry, they didn&#8217;t sleep for 36 hours!
 
-#### Step: Test the curvature
+#### Step: **Calculate Quadratic Regression**
 
-The two-tailed test asks whether the population quadratic coefficient differs from zero in either
-direction while the linear term stays in the model. Use &alpha; = 0.05. Inference assumes a suitable
-quadratic mean model with independent normal errors of constant variance; a p-value alone cannot
-check those assumptions.
+![All-Nighter Academy illustration](assets/caffeine_12.png)
 
-- **Label H10:** t-statistic for quadratic term
-- **Enter I10:** `=I2/I6`
-- **Label H11:** Two-tailed p-value (quadratic term differs from zero)
-- **Enter I11:** `=T.DIST.2T(ABS(I10),I7)`
-- **Record:** Two-tailed p-value for a nonzero quadratic term in either direction = _____.
-- **Decide:** If p < 0.05, reject H<sub>0</sub>; otherwise fail to reject it. State your conclusion
-  about evidence of a quadratic term, conditional on the model assumptions.
+Now we are moving beyond the straight line!\
+**Quadratic Regression:** a type of polynomial regression that is curved with respect to x.\
 
-The nominal p-value assumes this quadratic model and test were chosen before examining this
-pattern. Because the curve is motivated by the rise and fall already seen in these same data,
-treat the p-value as exploratory: selecting a model after seeing the pattern can make the usual
-p-value too optimistic. Confirm the curvature with new, independent data and a model specified
-before examining those data.
+Our Equation is:\
+y-hat = b0 + b1 x + b2 x<sup>2</sup>
 
-#### Step: Compare the models
+**Here&#8217;s the breakdown:**\
+y-hat = Predicted exam score\
+b0 = intercept\
+b1 x = linear term\
+b2 x<sup>2</sup> = quadratic term, which lets the relationship curve\
+x = hours of sleep
+
+*That extra x^2 term is what gives the model its curve.  Now that we know what all these symbols mean, let&#8217;s get into Google Sheets and see whether or not your data actually is giving us a curve.*
+
+This remains linear regression in its coefficients; the squared predictor lets the relationship curve with respect to sleep hours.
+
+Prepare adjacent predictors: label E1 [Sleep Hours](label:E1) and F1 [Sleep Hours Squared](label:F1), enter [=A2](enter:E2) in E2 and [=C2](enter:F2) in F2, then [fill both predictor columns down to row 26](fill:E2:F26). Both predictors must remain aligned with the same student in column B; E26 should show 8.5 and F26 should show 72.25.
+
+#### Step: **Run Quadratic Regression in Google Sheets**
+
+We can use LINEST to fit the quadratic model by including both sleep hours and squared sleep hours as predictors. To avoid accidentally including exam scores as a predictor, use the separate adjacent predictor table in E2:F26 and the response range B2:B26. INDEX extracts scalar results without an array spilling into neighboring cells.
+
+This tells Google Sheets to predict exam scores using both sleep hours and sleep hours squared! The first term captures the linear part of the relationship, while the squared term lets the model CURVE!
+
+An important note, the output from LINEST can be a little confusing sometimes because it lists the coefficients in reverse order of the predictor columns. For our model:
+
+* The first coefficient is for sleep hours squared\
+* The second coefficient is for sleep hours\
+* The last value in the first row is the intercept.
+
+Once we have the coefficients, we can plug them into our quadratic equation and see what the model predicts for exam scores at different amounts of sleep.
+
+Label H1 [Quadratic statistic](label:H1) and I1 [Value](label:I1), then calculate:
+
+1. Label H2 [Quadratic coefficient b2](label:H2), and enter [=INDEX(LINEST(B2:B26,E2:F26,TRUE,TRUE),1,1)](enter:I2) in I2.
+2. Label H3 [Linear coefficient b1](label:H3), and enter [=INDEX(LINEST(B2:B26,E2:F26,TRUE,TRUE),1,2)](enter:I3) in I3.
+3. Label H4 [Intercept b0](label:H4), and enter [=INDEX(LINEST(B2:B26,E2:F26,TRUE,TRUE),1,3)](enter:I4) in I4.
+4. Label H5 [Quadratic R-squared](label:H5), and enter [=INDEX(LINEST(B2:B26,E2:F26,TRUE,TRUE),3,1)](enter:I5) in I5.
+5. Label H6 [Standard error of b2](label:H6), and enter [=INDEX(LINEST(B2:B26,E2:F26,TRUE,TRUE),2,1)](enter:I6) in I6. Label H7 [Residual degrees of freedom](label:H7), and enter [=INDEX(LINEST(B2:B26,E2:F26,TRUE,TRUE),4,2)](enter:I7) in I7; the result should be 25 - 3 = 22.
+6. Write your fitted equation using I2:I4. Does the sign of b2 give an upside-down U? Unlike the straight-line slope, b1 alone is not the score change for every extra hour; the change also depends on sleep through the squared term. Label H8 [Predicted score at 7 hours](label:H8), and enter [=I4+I3*7+I2*7^2](enter:I8) in I8. Compare with the linear prediction M3 + M2 * 7; neither guarantees an individual student's score.
+
+##### Substep: Test the quadratic term
+
+For a **two-tailed** test, H0: beta2 = 0 versus H1: beta2 differs from zero in either direction, with the linear term retained. Use alpha = 0.05. Inference assumes a suitable quadratic mean model with independent normal errors of constant variance.
+
+1. Label H10 [t-statistic for quadratic term](label:H10), and enter [=I2/I6](enter:I10) in I10.
+2. Label H11 [Two-tailed p-value (quadratic term differs from zero)](label:H11), and enter [=T.DIST.2T(ABS(I10),I7)](enter:I11) in I11. Record the **two-tailed p-value for a nonzero quadratic term in either direction = _____**.
+3. If p < 0.05, reject H0; otherwise fail to reject it. State your conclusion about evidence of curvature conditional on the model assumptions.
+
+The nominal p-value assumes this model and test were chosen before examining the pattern. Because we selected the curve after seeing these same data, treat the p-value as exploratory: selecting a model after seeing a pattern can make the usual p-value too optimistic. Confirm curvature using new, independent data and a model specified before examining those data.
+
+#### Step: **Compare the Models**
+
+Okay, here comes the question! Did quadratic regression actually improve our model, or did we just make the equation more complicated for fun? Compare the R2 values from the linear and quadratic models in M4 and I5.
 
 ![Linear and quadratic fits to the same 25 observations](assets/caffeine_sleep_score_model_comparison.png)
 
-Both panels use the 25 observations in your workbook. Check your chart and R-squared values
-against these fitted models.
+Remember:
 
-Did the extra curve help, or did we merely complicate the equation? Linear regression describes
-a straight line; quadratic regression allows curvature. A larger R-squared accounts for a larger
-fraction of variation **in this dataset**. Adding a predictor cannot lower ordinary training
-R-squared, so that increase alone does not prove the more complex model is preferable.
+* **Linear regression:** Models the relationship using a straight line.\
+* **Quadratic regression:** Allows the relationship to curve.
 
-- **Compare:** Record linear R-squared from `M4` and quadratic R-squared from `I5`.
-- **Open chart:** Double-click your scatterplot.
-- **Choose:** Chart editor > Customize > Series > Trendline
-- **Set:** For the chart trendline setting, change Linear to Polynomial and set Degree to 2.
-  Display the equation and R-squared; this chart setting is separate from spreadsheet cells.
-- **Compare:** Does the polynomial curve follow the rise and fall of the observations more
-  faithfully? Check the chart against your fitted coefficients, allowing for display rounding.
-- **Reflect:** Combine the visual pattern, R-squared values, and quadratic-term test. What evidence
-  supports curvature? Why is a high R-squared alone insufficient to validate a model?
-- **Explain:** What would you examine next, such as residual patterns or performance on new data,
-  before relying on predictions beyond this exercise?
+A higher R2 means the model explains a larger proportion of the variation in the exam scores of this dataset. If your quadratic model has a higher R2, that will suggest that the curve fits these data better. HOWEVER! Adding another term will generally make R2 stay the same or even increase, so a higher value alone does not necessarily prove that quadratic regression is the better choice. Look at the actual pattern in the data, too. Does exam performance seem to increase with sleep and then level off? Do you see any curved pattern, or are we just trying to make the data tell us what we want to hear?
 
-#### Step: Give Dr. Caffeine a verdict
+1. Open your scatterplot's **Chart Editor &#8594; Customize &#8594; Series &#8594; Trendline**, change **Linear** to **Polynomial**, and set **Degree** to 2. Display the equation and R-squared. Compare the chart against your fitted coefficients, allowing for display rounding.
+2. Combine the visual pattern, both R-squared values, and the exploratory quadratic-term test. What supports curvature? What residual checks or new-data performance would you examine before relying on the model?
 
-Congratulations! You survived two regression models. Your reward is a better understanding of
-statistics and maybe a snack, with no more coffee.
+#### Step: **Our final TAKEAWAY!**
 
-![Final academy celebration](assets/caffeine_14.png)
+**Congratulations! You survived two regression models, your reward is hopefully a better understanding of statistics and maybe a snack (no coffee.)**
 
-- **Conclude:** Answer the research question in a short paragraph: describe the observed pattern,
-  compare the models, and distinguish evidence of association from a causal conclusion.
-- **Reflect:** Could studying, stress, or caffeine contribute to this pattern? What kind of study
-  would help investigate causal effects?
-- **Apply:** A student asks you to predict a score after 16 hours of sleep. Explain why neither
-  the larger R-squared nor the significant quadratic term justifies that extrapolation.
-- **Submit:** Include the labeled scatterplot with the quadratic trendline, both fitted equations
-  and R-squared values, your seven-hour prediction, and your two-tailed curvature-test decision.
-  Add your verdict and one reason to check the model on new data.
+![All-Nighter Academy illustration](assets/caffeine_14.png)
 
-A relationship does not automatically mean causation. The observed sleep range is 3 to 11.5 hours;
-these data do not establish that increasing or reducing any student's sleep will change their score,
-or define a universally optimal amount of sleep. Class dismissed: drink some water, close those
-50 browser tabs, and get some sleep!
+Linear regression helps us describe a straight-line relationship between sleep and exam scores. Quadratic regression gives us the option to model a curved relationship, and comparing the two models helps us figure out whether that extra curve is actually useful.
+
+One thing to remember: **A RELATIONSHIP DOES NOT AUTOMATICALLY MEAN CAUSATION!** Even if students who sleep more tend to score higher, this alone cannot prove that sleep caused their scores to improve. Other factors could be involved, including studying, stress, and how much caffeine Dr. Caffeine has been distributing. With that, class is dismissed! Drink some water, close the 50 browser tabs you have open, and PLEASE get some sleep!
+
+The observed sleep range is 3 to 11.5 hours. These observations do not define a universally optimal sleep duration. A student asks for a prediction after 16 hours of sleep: why would that be extrapolation, and why do a higher R-squared and a significant term not justify it? Submit the labeled scatterplot with the quadratic trendline, both fitted equations and R-squared values, the seven-hour prediction, the two-tailed curvature-test decision, and your conclusion about association and model limits.

@@ -11,6 +11,12 @@ origin belongs there too. Rules: [REPO_STYLE.md](REPO_STYLE.md).
 - Make durable changes in starter-repo-template; consumer copies are vendored.
 - A temporary, easily removable wrapper is acceptable for the Graphify crash.
   Make the edited node count match the expected normalized count.
+- Semantic links should attach spreadsheet actions to the original natural prose; ordinary numbered
+  and nested list grouping should remain intact. Do not require every list item to begin with a bold
+  action label.
+
+- Use readme-docs and screenshot-docs to showcase the repository's finished tutorial and workbook
+  outputs.
 
 ## Tutorial converter
 
@@ -45,10 +51,14 @@ origin belongs there too. Rules: [REPO_STYLE.md](REPO_STYLE.md).
 - Compare every original lesson directly with its generated materials, walk through the actual
   generated XLSX as a student, and invite independent challenges. Preserve author voice; change the
   converter only for recurring design issues, and do not add validation infrastructure for this review.
+- Preserve existing lesson prose unless a change has a clear, evidence-based reason; keep the author's
+  voice.
 - Babies and Microbes are established lessons; preserve their teaching experience and voice while
   correcting verified errors, typos, and format faults. Make as few wording changes as practical.
 - Treat the Dr Caffeine materials as a draft foundation, not a quality benchmark. Complete all three
   parts as polished, independently usable classroom lessons, with efficient Enter once / Fill down work.
+- Make the source-to-output workflow produce engaging, scientifically accurate, classroom-ready
+  lessons while preserving author voice; do not claim learner outcomes without evidence.
 - For the teaching-quality pass, use HCI cognitive-walkthrough methods and targeted humanizer edits;
   expert inspection does not count as student testing. Keep wording changes focused on actual learner
   needs and preserve the source voice.
@@ -59,3 +69,9 @@ origin belongs there too. Rules: [REPO_STYLE.md](REPO_STYLE.md).
 - In generated DOCX, use Google Docs' Normal text, Title, Subtitle, and Heading 1-3 paragraph styles.
   Map Title to titles, Subtitle to optional metadata, Heading 1-3 to parts/steps/substeps, and Normal
   text to body/list/formula/quote/table text and the page footer. Use direct formatting for emphasis.
+- Keep the GFM-to-DOCX/XLSX/PDF workflow easy to author: auto-style spreadsheet formulas from `=`
+  in dark green without color markup, and make tutorial lists more compact. The older 4:55 samples
+  feel less fun; preserve lesson voice and fonts, and keep student answer cells blank.
+- Restore the original wording, descriptive headings, humor, and compact numbered groups across all
+  tutorials. Change prose only for technical references, formulas, data, or genuine science errors;
+  complete missing Caffeine content while preserving its good prose.

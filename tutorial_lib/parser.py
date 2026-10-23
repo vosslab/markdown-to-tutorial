@@ -3,12 +3,31 @@
 import pathlib
 import markdown_it
 import tutorial_lib.model
+import tutorial_lib.formulas
+import tutorial_lib.semantic_bindings
 
 
 def markdown_parser() -> markdown_it.MarkdownIt:
 	parser = markdown_it.MarkdownIt("commonmark", {"html": True})
 	parser.enable("table")
+	parser.inline.ruler.before("link", "semantic_binding", tutorial_lib.semantic_bindings.inline_binding)
+	parser.inline.add_terminator_char("=")
+	parser.inline.ruler.before("text", "spreadsheet_formula", tutorial_lib.formulas.inline_formula)
+	parser.core.ruler.before("inline", "terminal_hardbreak", restore_terminal_hardbreak)
+	parser.core.ruler.after("inline", "formula_roles", tutorial_lib.formulas.annotate_formulas)
 	return parser
+
+
+def restore_terminal_hardbreak(state: object) -> None:
+	"""Retain authored line breaks that block parsing trims at paragraph boundaries."""
+	lines = state.src.splitlines(keepends=True)
+	for token in state.tokens:
+		if token.type != "inline" or token.map is None or not token.content.endswith("\\"):
+			continue
+		backslashes = len(token.content) - len(token.content.rstrip("\\"))
+		if backslashes % 2 and lines[token.map[1] - 1].endswith("\n"):
+			# Fences/code spans retain their own parsing; never rewrite source bytes.
+			token.content += "\n"
 
 
 def parse_source(source: str, path: str | pathlib.Path) -> tutorial_lib.model.Document:

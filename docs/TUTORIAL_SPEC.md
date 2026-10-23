@@ -124,7 +124,10 @@ Parse cell content after Markdown table escaping, using this ordered convention:
 | Signed decimal or scientific-notation number | Numeric cell |
 | Other plain text, optionally in one code span | Text |
 
-Thus `0` is not blank; `"001"` preserves leading zeroes; `"=not a formula"` is text, not a formula.
+Thus `0` is not blank; `"001"` preserves leading zeroes; and in a Workbook cell,
+`"=not a formula"` is text, not a formula. This JSON scalar rule also applies to `Enter` and
+`Replace` payloads. Tutorial prose and ordinary Tutorial tables use narrative semantics: quoting a
+spreadsheet formula as an example does not make it a JSON literal scalar.
 Implement strict finite numeric parsing, using decimal/scientific notation rather than locale
 commas, currency, percentages, or date guessing. JSON strings use ordinary JSON escaping.
 Reject malformed quoted strings. An explicit empty JSON string is distinct from a blank.
@@ -205,11 +208,32 @@ Cross-sheet references use familiar spreadsheet syntax: `'Other sheet'!B2` or
 `'Other sheet'!B2:B25`. Apostrophes inside names are doubled. Assignment targets are single cells;
 references, Select, and Fill actions may be ranges. Cross-sheet targets must name a declared worksheet.
 
+### Workbook region roles
+
+Workbook-only declarations use `- **Region A1:B26:** source` (or another supported role) to describe
+the meaning of cells. The closed role set is `source`, `calculation`, `results`, and
+`interpretation`. Seeded table cells default to `source`; calculation, results, and interpretation
+regions are declared in the hidden Workbook section when needed. Roles describe meaning and do not
+grant permissions. Explicit regions may not overlap.
+
 ## List-authored instructions
 
-Interpret an action only when it is the opening strong span of a list item. The span contains
-the action and its colon, as shown below. Subsequent text is the payload. Preserve that span as
-bold in the rendered document. Ordinary strong openings remain ordinary instructions.
+Semantic action links bind an operation to the linked source text without changing the paragraph's
+visible wording or list structure. Use ordinary Markdown links with one of these destinations:
+`label:<cell>`, `enter:<cell>`, `replace:<cell>`, `fill:<range>`, or `select:<cell-or-range>`.
+For example, `[**Sample Mean**](label:D5)`, `[=AVERAGE(B2:B26)](enter:E5)`,
+`[Select C2:C26](select:C2:C26)`, and `[drag down](fill:C2:C26)` preserve the authored words as
+the student-facing text; the semantic destination is not rendered. Multiple actions may be linked
+in one paragraph, in source order, with each value or formula written once. Ordinary GFM numbered
+and nested list grouping is preserved. There is no requirement to start every list item with a bold
+action label.
+Name the destination cell or range in visible prose or its parent instruction whenever the linked
+text does not already name it. Hidden semantic destinations do not provide a student-facing cue.
+
+Legacy action openings are also supported. Interpret an action when it is the opening strong span
+of a list item; the span contains the action and its colon, and subsequent text is the payload.
+Preserve that span as bold in the rendered document. Ordinary strong openings remain ordinary
+instructions.
 
 | Opening | Meaning | Effect on initial XLSX |
 | --- | --- | --- |
@@ -218,22 +242,46 @@ bold in the rendered document. Ordinary strong openings remain ordinary instruct
 | `**Replace G2:**` | Student deliberately changes a previously populated cell | Preserve initial value |
 | `**Fill E2:F26:** Down` | Student copies first-row formulas down each selected column | Do not fill the answers |
 | `**Select:**` | Student selects the single cell or range in the payload | None |
+| `[...](select:A1:B26)` | Student selects the referenced cell or range | None |
+| `[...](label:A1)` | Student types the linked visible text as a label | Do not fill the answer |
+| `[...](enter:A1)` | Student enters the linked visible scalar or formula | Do not fill the answer |
+| `[...](replace:A1)` | Student replaces a previously populated cell with linked text | Preserve initial value |
+| `[...](fill:A2:A26)` | Student fills the referenced range down from its first row | Do not fill the answers |
 | `**Choose:**` | Student follows a menu path | None |
 | `**Compare:**`, `**Explain:**`, other prose openings | Ordinary instruction | None |
 
-`Label` takes plain text (or one code span for literal text). `Enter` and `Replace` use the workbook
-scalar rules, with formulas required to occupy one code span or one fenced `sheets` block. A fenced
-formula may follow an otherwise empty action item as its nested block. Require one logical formula
-line; visual wrapping is a renderer concern. Reject an additional competing value or formula.
-Explanations belong in a subsequent paragraph or nested ordinary list item, outside the scalar.
+Legacy `Label` takes plain text (or one code span for literal text). Semantic `label:` links also
+decode Markdown emphasis and entities for the assigned label while preserving that formatting in
+the visible instruction. Quotes in a label are visible prose rather than JSON delimiters; code and
+formula-looking literal label text retain their bytes. `Enter` and `Replace` use the workbook
+scalar rules, preserving raw JSON-quoted copy text until scalar decoding. A formula may be written
+directly after the action, optionally in one code span, or
+in a fenced `sheets` block. A fenced formula may follow an otherwise empty action item as its nested
+block. Require one logical formula line; visual wrapping is a renderer concern. Reject an additional
+competing value or formula. Explanations belong in a subsequent paragraph or nested ordinary list
+item, outside the scalar. A JSON double-quoted value beginning with `=` remains literal text in these
+scalar contexts; quotation marks in Tutorial prose and ordinary Tutorial tables do not invoke the
+workbook scalar convention.
+
+Recognize a standalone spreadsheet formula before Markdown interprets operators such as `*` as
+formatting. Apply formula semantics only at clear boundaries: an `Enter` or `Replace` scalar, a
+complete formula code span or fence, a workbook cell, or a bounded spreadsheet expression in
+narrative text. Narrative recognition covers complete spreadsheet-style expressions such as
+`=SUM(A1:A3)`, `=A1+B1`, and `=(A1-B1)/SQRT(C1)`; it does not consume following explanation. Do not
+classify statistical equations such as `alpha = 0.05` or `H = -sum(p_i ln(p_i))`, comparison
+operators such as `<=` and `>=`, or URLs as spreadsheet formulas. JSON-quoted values are literal only
+where Workbook and action scalar rules apply; a quoted formula example in narrative text keeps its
+formula role.
+Preserve the semantic formula text exactly; do not add color or other author markup. GFM table pipes
+still require standard escaping (`\|`) when they are formula content.
 
 Actions are valid in ordered or unordered lists and may appear in nested lists. A malformed
 recognized action is an error, not silently demoted to prose. Actions require a containing Step.
 Reject a list item when its only content is one or more bold, colon-terminated labels and it has no
 substantive continuation, nonempty fenced instruction, valid action, or substantive descendant.
 An empty child item does not make its parent substantive. This check follows parsed Markdown
-structure and source locations. Other list items without an opening strong span remain style
-warnings; do not guess or rewrite the author's words. Lists inside literal examples are exempt.
+structure and source locations. Ordinary prose list items need no action label or opening strong
+span. Lists inside literal examples are exempt from semantic action parsing.
 
 `Label`/`Enter` targeting a nonempty seeded cell or a previously assigned cell with a different
 value is an error; use `Replace` for an intentional change. Identical repeated assignments are
@@ -353,14 +401,20 @@ Use PT Sans for body text and headings, PT Sans Narrow for compact table text, a
 formulas, cell references, and menu entries. Apply PT Sans Narrow only where rendered table content
 needs the narrower face. These fonts are available in Google Docs and must also be installed in the
 local PDF build environment. The builder does not download or install fonts. This DOCX/PDF font
-contract does not change XLSX font styling.
+contract does not change XLSX font styling. Formula-role text uses Roboto Mono and dark green
+(`188038`); ordinary inline formulas, code spans, formula fences, and formula cells receive the same
+formula treatment while preserving their text. Keep PT Sans, PT Sans Narrow, and Roboto Mono
+available in regular, bold, and italic variants. These font variants are independent of the six
+paragraph styles named above.
 
 Formula blocks use a readable monospace face, light shading, and sufficient padding. Display the
 destination cell beside the instruction. Preserve copyable formula text; do not insert soft hyphens,
 smart quotes, invisible separators, or manual line breaks into it. Wrap visually where possible;
 report a formula that cannot fit readably. Use text weight/borders in addition to color distinctions.
-Use comfortable page margins and heading spacing; keep headings with following content. Keep a
-short instruction and its formula together, but allow a long Step to span pages.
+Use comfortable page margins and heading spacing; keep headings with following content. Set list
+paragraphs to 2 pt after, 0 pt before, and single line spacing. Body paragraphs use 6 pt after and
+1.08 line spacing. Keep a short instruction and its formula together, but allow a long Step to span
+pages.
 
 Render valid cell references as visibly styled text and, where mapped, hyperlinks to the supplied
 spreadsheet/tab/range. Encode query/fragment values correctly. Links navigate to the instructor

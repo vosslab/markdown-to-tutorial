@@ -1,14 +1,21 @@
-# Microbial diversity ANOVA
+# **Microbial Diversity ANOVA Tutorial** **for BIOL 318/418**
 
-For BIOL 318/418. This teaching scenario uses the complete original workbook observations. The
-ecological story is a hypothesis for practice; the supplied artifacts do not establish a real
-field-study provenance or a causal effect of urbanization.
+For BIOL 318/418. Continue the Busse Woods teaching scenario using the original workbook observations.
 
 ## Workbook
 
 ### Sheet: 30 Year ANOVA Test
 
-| `"Sample\nID"` | `"1994\nShannon\nIndices"` | `"2004\nShannon\nIndices "` | `"2009\nShannon\nIndices "` | `"2014\nShannon\nIndices "` | `"2024\nShannon\nIndices "` | "." |  |  |  |  |  |  |
+- **Region A1:G25:** source
+- **Region H1:K11:** calculation
+- **Region L1:M1:** calculation
+- **Region L3:M11:** calculation
+- **Region L2:M2:** results
+- **Region H13:I13:** calculation
+- **Region H14:I14:** results
+- **Region H16:I16:** interpretation
+
+| `"Sample\nID"` | `"1994\nShannon\nIndices"` | `"2004\nShannon\nIndices "` | `"2009\nShannon\nIndices "` | `"2014\nShannon\nIndices "` | `"2024\nShannon\nIndices "` |  |  |  |  |  |  |  |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1.0 | 3.66 | 4.96 | 5.43 | 1.754 | 2.413 |  |  |  |  |  |  |  |
 | 2.0 | 3.98 | 5.12 | 5.43 | 3.173 | 3.853 |  |  |  |  |  |  |  |
@@ -37,224 +44,279 @@ field-study provenance or a causal effect of urbanization.
 
 ## Tutorial
 
-### Part 5: Scenario
+### Part: Scenario
 
 - **Worksheet:** 30 Year ANOVA Test
 
 ![ANOVA.](assets/microbes_5_anova_image1.png)
 
-After comparing the two recent years, you return to the older student theses. You now have
-Shannon Index data spanning **30 years**, from **1994 to 2024**. With your advisor, you decide
-to use **ANOVA (Analysis of Variance)** to compare five population means at once.
+After successfully rejecting the **null hypothesis** using the **F-test**, you found evidence that Shannon Index values in Busse Woods had lower **variance** in 2024 than in 2014 under the test assumptions. The earlier t-test addressed the mean; neither result establishes more uniform species composition. However, this raised new questions: Has this pattern of declining diversity and reduced variability been happening for even longer? To investigate, you now have microbial diversity data spanning **30 years**, from **1994 to 2024**.
 
-Extend the comparison to **1994, 2004, 2009, 2014, and 2024**. A one-way ANOVA tests H0: all five
-population mean Shannon indices are equal; H1: at least one mean differs. The null model produces a
-**right-tailed F test**. It tests differences among means, not whether variance changed or a decline
-continued for 30 years.
+To analyze how microbial diversity has shifted over time, you decide to use **ANOVA** (Analysis of Variance). This statistical test will allow you to compare microbial diversity across **five different time points**: **1994**, **2004**, **2009**, **2014**, and **2024**. By comparing these years, you can ask whether at least one population mean differs; identifying a longer-term decline or periods of **stability** would require further analysis.
 
-The Shannon Index combines **richness** (the number of taxa detected) and **evenness**
-(their relative abundances). It is calculated as **H = -sum(p_i ln(p_i))**, where p_i
-is the proportion assigned to taxon i and ln is the natural logarithm. Higher values indicate
-greater diversity at the chosen taxonomic
-resolution; the index has no universal upper bound independent of community size and log base.
-In the teaching scenario, soil microbial diversity at Busse Woods is estimated using SSU rRNA
-sequencing. Urbanization motivates the questions, but these tests compare diversity summaries;
-they cannot identify an environmental cause.
+#### Why Use ANOVA Now?
 
-Choose the hypothesis and significance level **before inspecting results**. Use alpha = 0.05
-throughout. This ANOVA has one right-tailed p-value; do not reinterpret it as a lower-tail or
-two-tail variance comparison. A p-value is a probability of a result at least as extreme in the
-specified
-tail or tails, under the null model and its assumptions. It is not the probability that the null
-hypothesis is true. Failure to reject means insufficient evidence for the alternative.
+**ANOVA** is ideal for comparing more than two groups, making it the perfect tool for analyzing microbial diversity across multiple years. This test will help determine whether the **diversity values** have changed significantly over time by comparing the **variance** within each year to the **variance** between the years. By doing so, you can assess evidence for differences among year means. ANOVA alone does not establish a **decline**, **homogenization**, or a long-term trend.
 
-The classical model assumes independent observations, approximately normal residuals,
-and a common population variance. Inspect distributions, outliers, and sampling design before
-applying it. Matched sites need a model that respects dependence.
+Choose the hypothesis and **alpha = 0.05** before inspecting results. This one-way ANOVA tests
+**H0: all five population mean Shannon indices are equal**, against **H1: at least one differs**.
+It uses a **right-tailed F test**; it is not a lower-tail or two-tail variance comparison.
 
-The historical part of this teaching scenario comes from older student thesis datasets collected
-before modern sequencing was available. For **1994, 2004, and 2009**, the hypothetical projects
-used culture-based methods: soil organisms were grown on selected media, colonies were counted and
-described by visible features such as color, shape, and growth pattern, and isolates were examined
-with staining methods such as Gram staining. The later **2014 and 2024** datasets represent SSU
-rRNA sequencing. These methods observe different portions of microbial communities: cultivation
-misses organisms that do not grow under the selected conditions, colony appearance does not uniquely
-identify species, staining provides broad phenotypic categories, and a CFU is not necessarily one
-cell. The historical narrative is a hypothetical teaching scenario, not verified provenance for
-the supplied values. Method changes are confounded with year, so even an ANOVA difference would not
-show that time or urbanization caused a biological change.
+The model assumes independent observations, approximately normal residuals within groups, and
+common population variances. For this method exercise, assume independent samples within and
+across years; repeated measurements at the same locations would require a model accounting for
+dependence. In the scenario, the older theses used culture-based methods while later datasets
+used sequencing. Their different detection and taxonomic limits confound year with measurement
+method, so this calculation alone cannot establish a historical ecological trend.
 
-The ANOVA workbook's **2014 observations differ from Part 3/4**: analyze its supplied data as
-a separate exercise; do not replace them with the two-year data.
+#### Step: Copy the Data
 
-#### Step 1: Open the workbook
+1. Open the generated XLSX workbook in Google Sheets.
+2. Select the worksheet named above. It already contains the original observations, so you do not
+   need to copy the data into a new sheet.
+3. Keep the original observations intact while you calculate the results.
 
-The generated workbook already contains the observations. Calculation labels are deliberately
-left for you to enter, so constructing the results table remains part of the exercise. Open the
-XLSX workbook in Google Sheets, then inspect the named worksheet before entering formulas.
+The original course workbook remains a [source reference](https://docs.google.com/spreadsheets/d/1cAlU997q8IazW6wJhBwYRrrO2l6ls0yCAo3Rx9BlUY0/edit).
+Formula ranges end at row 101 to leave room for practice. The summary functions ignore empty
+cells; blank observations are not zeroes. Add hypothetical numeric data only within these ranges.
 
-- **Open:** Open the generated XLSX workbook in Google Sheets and select the worksheet named above.
-- **Inspect:** Check the raw-data headers and counts. Keep the source observations intact while calculating the original results.
+#### Step: Organize Your Sheet into an ANOVA Table Layout
 
-Each current-year dataset has 24 observations in rows 2:25. Formula ranges end at row 101 to
-leave room for later practice. `AVERAGE`, `STDEV`, `VAR.S`, and `COUNT` ignore empty cells;
-blank observations are not zeroes. Enter numeric practice data only within the stated ranges.
-The original course workbook is retained as a [source
-reference](https://docs.google.com/spreadsheets/d/1cAlU997q8IazW6wJhBwYRrrO2l6ls0yCAo3Rx9BlUY0/edit).
+In this step, we will set up a traditional ANOVA table with **source of variation**, **sum of squares (SS)**, **degrees of freedom (DF)**, **mean square (MS)**, **F-statistic**, and **P-value**.
 
+#### **ANOVA Table Setup:**
 
-#### Step 2: Organize Your Sheet into an ANOVA Table Layout
+1. **Column A**: Sample ID. **Columns B-F**: Your raw data for each year (1994, 2004, 2009, 2014, and 2024).
+2. **Column G**: we will leave this blank to separate the data from the calculations
+3. **Column H**: This column will be used to label the **sources of variation** in the ANOVA.
+4. **Columns I-M**: These columns will contain the calculated values for sums of squares, degrees of freedom, mean squares, F-statistic, and p-value.
 
-Construct the ANOVA table in **H1:M4**, leaving the raw data in **A:F** untouched. Column A contains
-sample IDs; **B:F** contain years 1994, 2004, 2009, 2014, and 2024. Column G separates raw data and
-results. The original dot in G1 is only a separator.
+#### Step-by-Step Tutorial:
 
-- **Label H1:** Source of Variation
-- **Label I1:** Degrees of Freedom (DF)
-- **Label J1:** Sum of Squares (SS)
-- **Label K1:** Mean Square (MS)
-- **Label L1:** F-Statistic
-- **Label M1:** P-Value (Right-Tailed)
-- **Label H2:** Between Groups
-- **Label H3:** Within Groups
-- **Label H4:** Total
+1. In **Column H**, create the row headers for the **ANOVA table**:
+   * **H1**: Type "[**Source of Variation**](label:H1)".
+   * **H2**: Type "[**Between Groups**](label:H2)".
+   * **H3**: Type "[**Within Groups**](label:H3)".
+   * **H4**: Type "[**Total**](label:H4)".
+2. In **Columns I-M**, add the following column headers:
+   * **I1**: Type "[**Degrees of Freedom (DF)**](label:I1)".
+   * **J1**: Type "[**Sum of Squares (SS)**](label:J1)".
+   * **K1**: Type "[**Mean Square (MS)**](label:K1)".
+   * **L1**: Type "[**F-Statistic**](label:L1)".
+   * **M1**: Type "[**P-Value**](label:M1)".
+3. The final table should look something like this
 
-#### Step 3: Calculate the Group Statistics
+| Source of Variation | Degrees of Freedom (DF) | Sum of Squares (SS) | Mean Square (MS) | F-Statistic | P-Value |
+| :---: | ----- | ----- | ----- | ----- | ----- |
+| **Between Groups** |  |  |  |  |  |
+| **Within Groups** |  |  |  |  |  |
+| **Total** |  |  |  |  |  |
 
-Build a second table in **H6:M9**. Calculate each year's sample **mean**, **variance**, and
-**size**. `VAR.S` estimates sample variance using n - 1. Blank observations remain blank. The five
-sample sizes should be **10, 15, 20, 24, 24**, a total of **93** observations.
+#### Step: Calculate the Group Statistics
 
-- **Label H6:** Sample Name
-- **Label I6:** 1994 Sample
-- **Label J6:** 2004 Sample
-- **Label K6:** 2009 Sample
-- **Label L6:** 2014 Sample
-- **Label M6:** 2024 Sample
-- **Label H7:** Sample Means
-- **Label H8:** Sample Variances
-- **Label H9:** Sample Sizes
-- **Enter I7:** `=AVERAGE(B2:B101)`
-- **Enter J7:** `=AVERAGE(C2:C101)`
-- **Enter K7:** `=AVERAGE(D2:D101)`
-- **Enter L7:** `=AVERAGE(E2:E101)`
-- **Enter M7:** `=AVERAGE(F2:F101)`
-- **Enter I8:** `=VAR.S(B2:B101)`
-- **Enter J8:** `=VAR.S(C2:C101)`
-- **Enter K8:** `=VAR.S(D2:D101)`
-- **Enter L8:** `=VAR.S(E2:E101)`
-- **Enter M8:** `=VAR.S(F2:F101)`
-- **Enter I9:** `=COUNT(B2:B101)`
-- **Enter J9:** `=COUNT(C2:C101)`
-- **Enter K9:** `=COUNT(D2:D101)`
-- **Enter L9:** `=COUNT(E2:E101)`
-- **Enter M9:** `=COUNT(F2:F101)`
+The first step in an ANOVA test is to calculate the basic statistics for each group (in this case, each year). You need to calculate the **mean**, **variance**, and **sample size** for each group. These statistics will help us understand how each group differs individually before comparing them across time.
 
-#### Step 4: Calculate the Grand Mean
+#### Step-by-Step Tutorial:
 
-The **grand mean** is the average of all 93 observations, so each observation has equal weight.
-Because group sizes differ, do not take the unweighted average of the five group means.
-`AVERAGE(B2:F101)` ignores blanks and supplies the correctly weighted grand mean.
+We will set up another table to organize the **group statistics** for each year.
 
-- **Label H11:** Grand Mean
-- **Enter I11:** `=AVERAGE(B2:F101)`
+1. **Setup Another Table:**
+   * In **cell H6**, type [**Sample Name**](label:H6).
+   * In **cell I6**, type [**1994 Sample**](label:I6).
+   * In **cell J6**, type [**2004 Sample**](label:J6).
+   * In **cell K6**, type [**2009 Sample**](label:K6).
+   * In **cell L6**, type [**2014 Sample**](label:L6).
+   * In **cell M6**, type [**2024 Sample**](label:M6).
+2. **For Sample Means:**
+   * In **cell H7**, type [**Sample Means**](label:H7).
+   * In **cell I7**, use the formula [`=AVERAGE(B2:B101)`](enter:I7) to calculate the **sample mean** for 1994.
+   * In **cell J7**, use the formula [`=AVERAGE(C2:C101)`](enter:J7) to calculate the **sample mean** for 2004.
+   * In **cell K7**, use the formula [`=AVERAGE(D2:D101)`](enter:K7) to calculate the **sample mean** for 2009.
+   * In **cell L7**, use the formula [`=AVERAGE(E2:E101)`](enter:L7) to calculate the **sample mean** for 2014.
+   * In **cell M7**, use the formula [`=AVERAGE(F2:F101)`](enter:M7) to calculate the **sample mean** for 2024.
+3. **For Sample Variances:**
+   * In **cell H8**, type [**Sample Variances**](label:H8).
+   * In **cell I8**, use the formula [`=VAR.S(B2:B101)`](enter:I8) to calculate the **sample variance** for 1994.
+   * In **cell J8**, use the formula [`=VAR.S(C2:C101)`](enter:J8) to calculate the **sample variance** for 2004.
+   * In **cell K8**, use the formula [`=VAR.S(D2:D101)`](enter:K8) to calculate the **sample variance** for 2009.
+   * In **cell L8**, use the formula [`=VAR.S(E2:E101)`](enter:L8) to calculate the **sample variance** for 2014.
+   * In **cell M8**, use the formula [`=VAR.S(F2:F101)`](enter:M8) to calculate the **sample variance** for 2024.
+4. **For Sample Sizes:**
+   * In **cell H9**, type [**Sample Sizes**](label:H9).
+   * In **cell I9**, use the formula [`=COUNT(B2:B101)`](enter:I9) to calculate the **sample size** for 1994.
+   * In **cell J9**, use the formula [`=COUNT(C2:C101)`](enter:J9) to calculate the **sample size** for 2004.
+   * In **cell K9**, use the formula [`=COUNT(D2:D101)`](enter:K9) to calculate the **sample size** for 2009.
+   * In **cell L9**, use the formula [`=COUNT(E2:E101)`](enter:L9) to calculate the **sample size** for 2014.
+   * In **cell M9**, use the formula [`=COUNT(F2:F101)`](enter:M9) to calculate the **sample size** for 2024.
 
-#### Step 5: Calculate the Degrees of Freedom (DF)
+#### Explanation:
 
-Let **k = 5** groups and **N = 93** total observations. Between-group df is k - 1 = **4**;
-within-group df is N - k = **88**; total df is N - 1 = **92**. Check that between + within = total.
+This step focuses on calculating the **group statistics**: the **means**, **variances**, and **sample sizes** for each year's data. These values will be crucial for the ANOVA test because they allow us to assess how each group behaves individually. The **means** show us the average microbial diversity in each year, while the **variances** tell us how much the data is spread out within each year. Finally, the **sample sizes** help evaluate the reliability of these statistics for each year.
 
-- **Enter I2:** `=COUNT(I7:M7) - 1`
-- **Enter I3:** `=COUNT(B2:F101) - COUNT(I7:M7)`
-- **Enter I4:** `=COUNT(B2:F101) - 1`
+These statistics will feed into the next step, where we calculate the **sums of squares** and start filling out the ANOVA table.
 
-#### Step 6: Calculate the Regression Sum of Squares (SSR)
+#### Step: Calculate the Grand Mean
 
-The **between-group sum of squares**, also called regression sum of squares (SSR) here, sums n times
-(group mean - grand mean) squared across years. `SUMPRODUCT` multiplies each squared deviation by
-its matching group size, then adds the products. Use the group table, preserving the year order.
+In this step, you will calculate the **grand mean**, which is the overall average of all data points across the different groups. The grand mean helps you compare individual group means to the overall dataset. It serves as a reference point for future steps, such as calculating the total variability and assessing how much each group deviates from the overall dataset. You will calculate the grand mean using the **AVERAGE** function to capture the mean of all values in the dataset.
 
-- **Enter J2:** `=SUMPRODUCT((I7:M7 - I11)^2, I9:M9)`
+#### Step-by-Step Tutorial:
 
-#### Step 7: Calculate the Error Sum of Squares (SSE)
+* In **cell H11**, type [**Grand Mean**](label:H11).
+* In **cell I11**, use the formula [`=AVERAGE(B2:F101)`](enter:I11) to calculate the **overall mean** of all the Shannon Index values.
 
-The **within-group sum of squares**, or error sum of squares (SSE), sums (n - 1) times sample
-variance across years. This equals the sum of squared deviations of observations from their own
-group means. It describes variation remaining within years, not a proven random or biological cause.
+#### Step: Calculate the Degrees of Freedom (DF)
 
-- **Enter J3:** `=SUMPRODUCT((I9:M9 - 1), I8:M8)`
+In this step, you will calculate the **Degrees of Freedom (DF)** for both the **between groups** (DF treatment) and **within groups** (DF error) components, as well as the **total DF**. The DF reflects the number of independent data points contributing to each variance estimate. In ANOVA, the DF for each component helps us understand the amount of information available for estimating the variability between and within groups.
 
-#### Step 8: Calculate the Total Sum of Squares (SST)
+#### Step-by-Step Tutorial:
 
-The **total sum of squares (SST)** equals SSR + SSE. It also equals the sum of squared deviations of
-all observations from the grand mean. The two components partition total variation into between-year
-and within-year contributions.
+* In **cell `I2`**, use the formula [`=COUNT(I7:M7) - 1`](enter:I2) to calculate the **DF Between** (DF treatment). This calculates the degrees of freedom for the variation between groups, which is the number of groups minus one.
+* In **cell `I3`**, use the formula [`=COUNT(B2:F101) - COUNT(I7:M7)`](enter:I3) to calculate the **DF Within** (DF error). This calculates the degrees of freedom for the variation within groups by subtracting the number of groups from the total number of observations.
+* In **cell `I4`**, use the formula [`=COUNT(B2:F101) - 1`](enter:I4) to calculate the **DF Total**. This is the degrees of freedom for the total variability, representing the total number of observations minus one.
 
-- **Enter J4:** `=J2 + J3`
+#### Explanation:
 
-#### Step 9: Calculate the Mean Square (MS)
+The **Degrees of Freedom (DF)** reflect the number of independent values that contribute to the variance estimates in the ANOVA table. Here is how the different components of the DF are calculated:
 
-Divide each sum of squares by its corresponding df to obtain a **mean square**. Between-group MS and
-within-group MS are the two components of the ANOVA F-statistic. Total MS is not needed for this
-test.
+* **DF Between (DF treatment)**: This is the degrees of freedom associated with the variability between groups (for example, between different years). It is calculated as the number of groups (**k**) minus one. The formula `=COUNT(I7:M7) - 1` counts the number of groups and subtracts one.
+* **DF Within (DF error)**: This is the degrees of freedom associated with the variability within groups. It is calculated as the total number of observations (**n**) minus the number of groups (**k**). The formula `=COUNT(B2:F101) - COUNT(I7:M7)` calculates the total number of observations and subtracts the number of groups to give the DF within.
+* **DF Total**: This is the total degrees of freedom, representing the total variability in the dataset. It is calculated as the total number of observations (**n**) minus one. The formula `=COUNT(B2:F101) - 1` calculates this directly.
 
-- **Enter K2:** `=J2/I2`
-- **Enter K3:** `=J3/I3`
+The relationship between these degrees of freedom is: `DF Total = DF Between + DF Within`
 
-#### Step 10: Calculate the F-Statistic
+#### Step: Calculate the Regression Sum of Squares (SSR)
 
-The ANOVA **F-statistic** is between-group MS / within-group MS. Under equal population means, both
-estimate the common variance. A large ratio is evidence against equality of means; it does not
-identify which means differ.
+In this step, you will calculate the **Regression Sum of Squares (SSR)**. This represents how much of the total variance is explained by the differences between the group means. The SSR helps quantify the portion of the total variation that can be attributed to the differences between the groups, such as the different years in your dataset.
 
-- **Enter L2:** `=K2/K3`
+#### Step-by-Step Tutorial:
 
-#### Step 11: Calculate the P-Value
+* Go back up to our original table.
+* In **cell `J2`**, type the formula [`=SUMPRODUCT((I7:M7 - I11)^2, I9:M9)`](enter:J2) to calculate the **SS Between**.
 
-The ANOVA p-value uses the **right tail** only: large F values oppose the equality-of-means null.
-`F.DIST.RT` takes F from **L2**, numerator df from **I2**, and denominator df from **I3**. Unlike
-Part 4, this is not a two-tail test of two variances.
+#### Explanation:
 
-- **Enter M2:** `=F.DIST.RT(L2, I2, I3)`
+The **SSR** quantifies the variation between the group means and how much of the total variance can be explained by the differences between those means. By comparing the mean values of each group to the **grand mean** (the overall average), the **SSR** isolates the variance due to differences between the groups. This is calculated by summing the squared deviations of each group mean from the grand mean, weighted by the sample size of each group.
 
-#### Step 12: Decision Using an IF Statement
+The **SUMPRODUCT** function multiplies corresponding elements from two arrays and sums the products. In this case, `(I7:M7 - I11)^2` calculates the squared differences between each group mean (from cells `I7:M7`) and the grand mean (in `I11`). The second array, `I9:M9`, contains the sample sizes for each group. **SUMPRODUCT** multiplies these squared differences by the respective sample sizes and sums them to yield the **SSR**, which tells us how much of the total variance is explained by the differences between the group means.
 
-Use `IF` to compare the right-tail p-value in **M2** with alpha **0.05**. Reject if p <= alpha;
-otherwise fail to reject. Choose alpha before evaluating the result.
+#### Step: Calculate the Error Sum of Squares (SSE)
 
-- **Label H13:** Significance Level (alpha)
-- **Label H14:** Decision
-- **Enter I13:** 0.05
-- **Enter I14:** `=IF(M2 <= I13, "Reject the Null Hypothesis", "Fail to Reject the Null Hypothesis")`
+In this step, you will calculate the **Error Sum of Squares (SSE)**. This measures the variation within each group that cannot be explained by differences between the group means. It captures how much of the total variability is due to random differences within the groups.
 
-#### Step 13: Interpret the Results
+#### Step-by-Step Tutorial:
 
-The original data give **F about 0.87893**, df **4, 88**, and **right-tail p about 0.47999**. Fail
-to reject at 0.05: evidence is insufficient to conclude that the five population mean Shannon
-indices differ. This does not demonstrate stable or identical means. A significant result would
-support at least one differing mean, requiring planned comparisons or appropriately adjusted
-post-hoc tests to locate differences. Neither outcome establishes a monotonic time trend or an
-environmental cause.
+1. In **cell `J3`**, use the formula [`=SUMPRODUCT((I9:M9 - 1), I8:M8)`](enter:J3) to calculate the SSE. This formula calculates the squared deviations of each observation from its respective group mean.
 
-- **Label H16:** Interpretation
+#### Explanation:
 
-- **Explain:** Write your interpretation in `I16`. Include the p-value, tail and alternative, alpha, and the evidence-based conclusion. If p > alpha, state that evidence is insufficient; do not claim equality or absence of an effect.
+The **SSE** quantifies the variability within the groups that is not explained by the differences between the group means. By calculating the squared deviations of each observation from the group mean, this step identifies the portion of variance due to random fluctuations within each group. Summing these squared deviations provides the **SSE**, which is essential for understanding how much of the total variation is due to within-group differences.
 
-#### Practice: Explore sensitivity
+#### Step: Calculate the Total Sum of Squares (SST)
 
-Save a separate practice copy after recording the original result. Treat modified observations
-as hypothetical examples, not newly collected evidence.
+In this step, you will calculate the **Total Sum of Squares (SST)**, which measures the overall variability in the dataset. The SST accounts for both the variability between the group means (SSR) and the variability within each group (SSE). It compares each data point to the **grand mean** to capture the total variance in the dataset.
 
-- **Change:** Modify a few values in columns B:F (the five year columns). Compare the mean, SD or variance, statistic, p-value, and decision before and after. Explain which quantities changed and why.
-- **Add:** Enter hypothetical numeric observations in blank cells within rows 2:101 of the raw-data columns. Check the updated counts; leave unobserved entries blank. Compare adding values near a group mean with adding extreme values.
-- **Compare:** Discuss how sample size, effect size, variability, and assumptions influence the result. More observations can reduce standard errors under the model, but do not guarantee a smaller p-value or repair biased or dependent observations.
+#### Step-by-Step Tutorial:
 
-#### Key Takeaways
+1. In **cell `J4`**, use the formula [`=J2 + J3`](enter:J4) to calculate the SST.
 
-- **ANOVA** compares multiple population means at once by comparing variation between groups
-  with variation within groups.
-- The **right-tail p-value** tests whether all five population means are equal; a rejection
-  supports at least one difference and requires follow-up comparisons to locate it.
-- **Sample size:** It affects precision, but larger samples do not repair dependence, biased sampling,
-  or differences in measurement methods.
-- **Comparing years:** This does not by itself establish a time trend or an environmental cause.
+#### Explanation:
+
+The **Total Sum of Squares (SST)** measures the overall variance in the dataset by comparing each individual data point to the grand mean. It captures all the variability present in the data. The **SST** is broken down into two components:
+
+1. **SSR**: The portion of the total variance explained by the differences between the group means.
+2. **SSE**: The portion of the total variance that is due to random variability within the groups, not explained by the group means.
+
+The relationship between these terms is: `SST = SSR + SSE`
+
+By calculating the **SST**, you quantify the total variability in your dataset, which you will later partition into the components explained by group differences (SSR) and the remaining unexplained variation (SSE).
+
+#### Step: Calculate the Mean Square (MS)
+
+The **mean square (MS)** is calculated by dividing the **sum of squares (SS)** by the **degrees of freedom (DF)**. This represents the average variability for each source of variance (between groups and within groups).
+
+#### Step-by-Step Tutorial:
+
+* In cell **`K2`**, type [`=J2/I2`](enter:K2) to calculate the **MS Between**.
+* In cell **`K3`**, type [`=J3/I3`](enter:K3) to calculate the **MS Within**.
+
+#### Explanation:
+
+The **mean squares (MS)** are the average variability per **degree of freedom** for each source of variance. The **MS Between** tells us how much variability is due to the differences between years, while the **MS Within** captures the average variability within each year. These values are crucial for calculating the **F-statistic** in the next step.
+
+#### Step: Calculate the F-Statistic
+
+Now that you have calculated the **mean squares**, the next step is to calculate the **F-statistic** for the observed differences in microbial diversity between years. In an ANOVA, the F-statistic compares the **between groups** mean square with the **within groups** mean square. In the next step, you will use it and the **degrees of freedom** to calculate the **p-value**.
+
+#### Step-by-Step Tutorial:
+
+* In cell **`L2`**, type [`=K2/K3`](enter:L2) to calculate the **F-statistic**.
+
+#### Explanation:
+
+The **F-statistic** is the ratio of the **between groups variance** to the **within groups variance**. A larger F-statistic suggests that more of the variance is due to differences between years, and provides stronger evidence against equal population means under the ANOVA assumptions. We will use the F-statistic in the next step to determine statistical significance.
+
+#### Step: Calculate the P-Value
+
+Now that the F-statistic has been calculated, we can determine whether the differences in microbial diversity between the years are statistically significant by calculating the **P-value**. The P-value gives the probability, under the equal-means null model and its assumptions, of an F-statistic at least as large as the one observed. A smaller P-value (typically less than 0.05) indicates that the differences between the groups are statistically significant.
+
+#### Step-by-Step Tutorial:
+
+* In **cell `M2`**, use the formula [`=F.DIST.RT(L2, I2, I3)`](enter:M2) to calculate the P-value.
+
+#### **Explanation:**
+
+The **F.DIST.RT** function calculates the right-tailed probability of the F-distribution. This function takes the following inputs:
+
+* The **F-statistic** (calculated in cell **L2**),
+* **Degrees of freedom** between the groups (**I2**),
+* **Degrees of freedom** within the groups (**I3**).
+
+The result of this function gives us the **P-value**, which shows whether the differences in microbial diversity across the years (1994, 2004, 2009, 2014, and 2024) are statistically significant. If the P-value is less than or equal to 0.05, you can reject equal population means in favor of at least one differing mean. This does not identify which years differ or show that every year-to-year change is significant.
+
+#### Step: Decision Using an IF Statement
+
+In hypothesis testing, the decision to **reject** or **fail to reject** the **null hypothesis** is based on the **p-value** and the significance level (**&alpha;**) set before the test. In most cases, **&alpha;** is 0.05. If the **p-value** is less than or equal to 0.05, the result is considered **statistically significant**, meaning an F-statistic at least as large as observed would be unlikely under the equal-means null model. To simplify this decision-making process in **Google Sheets**, we will use the **IF** statement to evaluate whether the **p-value** is less than or equal to the significance level (0.05).
+
+#### Step-by-Step Tutorial:
+
+1. In cell **H13**, type [**Significance Level (&alpha;)**](label:H13).
+2. In cell **I13**, enter [**0.05**](enter:I13).
+3. In cell **H14**, type [**Decision**](label:H14).
+4. In cell **I14**, use the formula [`=IF(M2 <= I13, "Reject the Null Hypothesis", "Fail to Reject the Null Hypothesis")`](enter:I14) to decide whether to reject the null hypothesis based on the **ANOVA** p-value.
+
+#### Explanation
+
+The **IF** statement evaluates whether the **p-value** (in **M2**) is less than or equal to **0.05** (the significance level). If the **p-value** is smaller than or equal to 0.05, you will **reject the null hypothesis**, indicating that the variation in microbial diversity across the years is statistically significant. If the **p-value** is greater than 0.05, you will **fail to reject the null hypothesis**, meaning there is insufficient evidence that the population means differ. This does not establish equality.
+
+This process simplifies the interpretation of your **ANOVA** results, ensuring that you can quickly assess whether there is a statistically significant difference in microbial diversity over the years.
+
+#### Step: Interpret the Results
+
+Now that you have calculated the **ANOVA** results, the next step is to **interpret** the findings. This involves assessing whether microbial diversity in Busse Woods has changed significantly over the decades (1994 to 2024). By comparing the **p-value** to **0.05**, you can assess evidence against equal population means. This comparison cannot determine whether environmental pressures like **urbanization** or **climate change** caused the differences.
+
+#### Step-by-Step Tutorial:
+
+* In **cell H16**, type [**Interpretation.**](label:H16)
+* **In cell I16**, write a brief interpretation of your findings based on the **ANOVA** results. Example:
+  * "With a **right-tail p-value** of [calculated value] and alpha = 0.05, we [reject/fail to reject] the equal-means null hypothesis, providing [sufficient/insufficient] evidence that at least one population mean Shannon Index differs among years."
+
+#### Explanation:
+
+The interpretation hinges on comparing the **p-value** to the **significance level** (&alpha; = 0.05). If the **p-value** is less than or equal to 0.05, the **null hypothesis** is **rejected**, which suggests that there are **statistically significant differences** in microbial diversity between the different years. The omnibus result does not identify which means differ, establish a declining trend, or identify an environmental cause.
+
+If the **p-value** is greater than 0.05, you would **fail to reject the null hypothesis**, meaning there is insufficient evidence against equal population means. It does not establish unchanged diversity or equal variances, and cannot determine whether **environmental pressures** caused the observed pattern.
+
+#### Practice Task:
+
+Save a separate practice copy after recording the original result. Modified values are hypothetical examples.
+
+* Modify some of the Shannon Index values for the **1994**, **2004**, **2009**, **2014**, and **2024** data columns. Observe how the **sample means**, **F-statistic**, and **p-value** change.
+* Add hypothetical numeric observations within rows 2:101 (increase the sample size) and note the impact on the **ANOVA** results.
+* Discuss how sample size influences the **ANOVA** test and compare this to earlier F-test results.
+
+#### Key Takeaways:
+
+1. **ANOVA** allows for the comparison of **multiple groups** at once, making it useful for assessing whether microbial diversity has changed over multiple decades.
+2. The **p-value** helps determine whether the differences in **microbial diversity** across years are **statistically significant**.
+3. A larger sample size can reduce uncertainty under the model, but does not repair biased sampling, dependence, or measurement-method differences.
+4. **ANOVA** is a powerful tool for testing differences among multiple population means. Identifying **trends over time** or the impact of **environmental factors** requires additional analyses and evidence.

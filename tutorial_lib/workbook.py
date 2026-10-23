@@ -23,6 +23,13 @@ import tutorial_lib.formula_io
 MAIN_NS = "{http://schemas.openxmlformats.org/spreadsheetml/2006/main}"
 MAX_IMPORT_CELLS = 250000
 
+ROLE_STYLES = {
+	"source": ("DCEAF7", "24527A", "FFFFFF"),
+	"calculation": ("DCEFEA", "176B5B", "FFFFFF"),
+	"results": ("FCE6CF", "A64B00", "FFFFFF"),
+	"interpretation": ("EAE2F5", "604080", "FFFFFF"),
+}
+
 
 #============================================
 def _xml_cells(path: pathlib.Path) -> dict[str, dict[str, tuple[str, bool]]]:
@@ -120,12 +127,72 @@ def write_workbook(document: tutorial_lib.model.Document, output_path: pathlib.P
 			if scalar.kind == "text":
 				# Leading equals signs and explicit empty strings remain literal text.
 				cell.data_type = "s"
+			cell.font = openpyxl.styles.Font(name="PT Sans", size=10, color="202124")
 			cell.alignment = openpyxl.styles.Alignment(vertical="top", wrap_text=True)
 			length = max((len(line) for line in str(scalar.value).splitlines()), default=0)
 			widths[column] = min(48, max(widths.get(column, 12), length + 2))
+
+		# Infer source and calculation meaning from the authored table and answer geometry.
+		role_cells = {}
 		for region in source.regions:
-			for column in range(region.start_column, region.end_column + 1):
-				sheet.cell(region.start_row, column).font = openpyxl.styles.Font(bold=True)
+			for row in range(region.start_row, region.end_row + 1):
+				for column in range(region.start_column, region.end_column + 1):
+					role_cells[(row, column)] = "source"
+		for row, column in source.entry_cells:
+			role_cells[(row, column)] = "calculation"
+		for region in source.role_regions:
+			for row in range(region.reference.start_row, region.reference.end_row + 1):
+				for column in range(region.reference.start_column,
+					region.reference.end_column + 1):
+					role_cells[(row, column)] = region.role
+		for (row, column), role in role_cells.items():
+			if role not in ROLE_STYLES:
+				raise ValueError(f"Unknown workbook role {role!r} in {source.name}")
+			background, header_color, header_text = ROLE_STYLES[role]
+			cell = sheet.cell(row, column)
+			cell.fill = openpyxl.styles.PatternFill("solid", fgColor=background)
+			cell.border = openpyxl.styles.Border(
+				bottom=openpyxl.styles.Side(style="thin", color=header_color))
+			cell.font = openpyxl.styles.Font(name="PT Sans", size=10, color="202124")
+			cell.alignment = openpyxl.styles.Alignment(vertical="top", wrap_text=True)
+			if (row, column) in source.entry_cells and cell.value in (None, ""):
+				cell.border = openpyxl.styles.Border(
+					bottom=openpyxl.styles.Side(style="medium", color=header_color))
+		for region in source.regions:
+			_apply_region_outline(sheet, region.start_row, region.start_column,
+				region.end_row, region.end_column, ROLE_STYLES["source"][1])
+		for region in source.role_regions:
+			_apply_region_outline(sheet, region.reference.start_row,
+				region.reference.start_column, region.reference.end_row,
+				region.reference.end_column, ROLE_STYLES[region.role][1])
+
+		# Emphasize authored table headers and declared role headers that contain text.
+		header_ranges = [(region.start_row, region.start_column, region.end_column)
+			for region in source.regions]
+		for region in source.role_regions:
+			if region.reference.start_row == region.reference.end_row:
+				continue
+			row = region.reference.start_row
+			columns = range(region.reference.start_column, region.reference.end_column + 1)
+			if any(isinstance(sheet.cell(row, column).value, str)
+				and sheet.cell(row, column).value.strip() for column in columns):
+				header_ranges.append((row, region.reference.start_column,
+					region.reference.end_column))
+		for row, start_column, end_column in header_ranges:
+			for column in range(start_column, end_column + 1):
+				cell = sheet.cell(row, column)
+				role = role_cells.get((row, column))
+				if role is None:
+					continue
+				_, header_color, header_text = ROLE_STYLES[role]
+				cell.fill = openpyxl.styles.PatternFill("solid", fgColor=header_color)
+				cell.font = openpyxl.styles.Font(
+					name="PT Sans", size=10, bold=True, color=header_text)
+				cell.alignment = openpyxl.styles.Alignment(
+					vertical="center", horizontal="center", wrap_text=True)
+				sheet.row_dimensions[row].height = max(sheet.row_dimensions[row].height or 15, 30)
+			if row == 1:
+				sheet.freeze_panes = "A2"
 		# Authored text estimates space without inserting or evaluating student answers.
 		authored_texts = {}
 		for action in document.actions:
@@ -142,12 +209,16 @@ def write_workbook(document: tutorial_lib.model.Document, output_path: pathlib.P
 			# Empty answer columns have no seed from which to infer a useful width.
 			widths[column] = max(widths.get(column, 12), 12)
 			seed = source.cells.get((row, column))
-			if seed is None or seed.scalar.kind == "blank":
+			if (seed is None or seed.scalar.kind == "blank"
+				or seed.scalar.kind == "text" and seed.scalar.value == ""):
 				cell = sheet.cell(row, column)
 				cell.alignment = openpyxl.styles.Alignment(vertical="top", wrap_text=True)
-				cell.fill = openpyxl.styles.PatternFill("solid", fgColor="FFF2CC")
+				role = role_cells.get((row, column), "calculation")
+				background, header_color, _ = ROLE_STYLES[role]
+				cell.fill = openpyxl.styles.PatternFill("solid", fgColor=background)
 				cell.border = openpyxl.styles.Border(
-					bottom=openpyxl.styles.Side(style="thin", color="9C6500"))
+					left=cell.border.left, right=cell.border.right, top=cell.border.top,
+					bottom=openpyxl.styles.Side(style="medium", color=header_color))
 		for column, width in widths.items():
 			sheet.column_dimensions[openpyxl.utils.get_column_letter(column)].width = width
 		# Explicit heights survive typing beside an occupied result cell without auto-fit.
@@ -160,6 +231,21 @@ def write_workbook(document: tutorial_lib.model.Document, output_path: pathlib.P
 	book.save(output_path)
 	book.close()
 	_preserve_numbers(document, pathlib.Path(output_path))
+
+
+#============================================
+def _apply_region_outline(sheet: openpyxl.worksheet.worksheet.Worksheet, start_row: int,
+		start_column: int, end_row: int, end_column: int, color: str) -> None:
+	"""Give an authored block a clear boundary while keeping interior spacing light."""
+	line = openpyxl.styles.Side(style="medium", color=color)
+	for row in range(start_row, end_row + 1):
+		for column in range(start_column, end_column + 1):
+			cell = sheet.cell(row, column)
+			cell.border = openpyxl.styles.Border(
+				left=line if column == start_column else cell.border.left,
+				right=line if column == end_column else cell.border.right,
+				top=line if row == start_row else cell.border.top,
+				bottom=line if row == end_row else cell.border.bottom)
 
 
 #============================================

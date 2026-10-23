@@ -189,6 +189,13 @@ def _fill_down(document: model.Document, action: model.Action, states: list[dict
 
 def _content(document: model.Document, states_before: dict[int, list[dict]]) -> None:
 	scope = document.worksheets[0].name if len(document.worksheets) == 1 else ""
+	write_targets = {}
+	for action in document.actions:
+		if action.kind == "select" or action.target is None:
+			continue
+		write_targets.setdefault(action.token_index, set()).add((
+			action.target.sheet.casefold(), action.target.start_row,
+			action.target.start_column, action.target.end_row, action.target.end_column))
 	heading_slugs = {}
 	for heading in document.headings:
 		heading_slugs.setdefault(heading.slug, []).append(heading)
@@ -237,6 +244,8 @@ def _content(document: model.Document, states_before: dict[int, list[dict]]) -> 
 			if child.type == "image":
 				_asset(document, child, location)
 			if child.type == "link_open":
+				if "binding_action" in child.meta:
+					continue
 				href = child.attrGet("href")
 				if href.startswith("#"):
 					slug = urllib.parse.unquote(href[1:])
@@ -248,6 +257,8 @@ def _content(document: model.Document, states_before: dict[int, list[dict]]) -> 
 					else:
 						child.meta["heading"] = matches[0]
 			if child.type == "code_inline":
+				if "binding_action" in child.meta:
+					continue
 				# A literal scalar payload may look exactly like a sheet reference.
 				# It is already parsed as the action value, so prose-reference
 				# classification here would incorrectly treat e.g. `Absent!A1` as
@@ -262,7 +273,12 @@ def _content(document: model.Document, states_before: dict[int, list[dict]]) -> 
 					if resolved is not None:
 						child.meta["reference"] = resolved
 						# Select payload is already checked once as an action.
-						if action is None:
+						# A prose reference to a destination in this same paragraph names
+						# what the paragraph is assigning. It is not a read of a prior
+						# workbook value; formula inputs still use _formula's ordered check.
+						destination = (resolved.sheet.casefold(), resolved.start_row,
+							resolved.start_column, resolved.end_row, resolved.end_column)
+						if (action is None and destination not in write_targets.get(index, set())):
 							_check_reference(document, resolved, location, states_before[index])
 
 
@@ -324,7 +340,9 @@ def validate_document(document: model.Document) -> None:
 			if sheet.google.gid is not None and sheet.google.gid == previous.google.gid:
 				compiler.diagnostic(document, "google-mapping", sheet.span,
 					"Different worksheets share a Google tab gid", "Supply distinct tab IDs")
-	by_token = {action.token_index: action for action in document.actions}
+	by_token = {}
+	for action in document.actions:
+		by_token.setdefault(action.token_index, []).append(action)
 	states_before = {}
 	active_group = None
 	incoming = None
@@ -344,7 +362,7 @@ def validate_document(document: model.Document) -> None:
 				"Alternative group needs at least two branches", "Add a contiguous sibling alternative")
 	for index in range(len(document.tokens)):
 		token = document.tokens[index]
-		action = by_token.get(index)
+		actions = by_token.get(index, [])
 		if active_group is not None and token.map is not None and token.map[0] >= group_ends[active_group]:
 			states = [state for branch_states in branches.values() for state in branch_states]
 			active_group = None
@@ -357,7 +375,7 @@ def validate_document(document: model.Document) -> None:
 			branches[branch] = states
 			active_group = group
 		states_before[index] = [state.copy() for state in states]
-		if action is not None:
+		for action in actions:
 			_apply_action(document, action, states)
 	_content(document, states_before)
 	_ranges(document)

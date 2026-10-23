@@ -62,5 +62,4 @@ the [typography recheck](teaching_typography_spec_recheck.md), and the
 
 These were expert inspections and cognitive walkthroughs without student participants. They are not
 an accessibility conformance claim or evidence of classroom learning. Google Sheets import and live
-behavior remain unverified. PETase data remain synthetic. Complete overall quality integration before
-closing the plan.
+behavior remain unverified. PETase data remain synthetic.

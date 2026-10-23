@@ -63,6 +63,13 @@ class GoogleMapping:
 	gid: str | None
 
 
+@dataclasses.dataclass(frozen=True)
+class RoleRegion:
+	role: str
+	reference: CellReference
+	span: SourceSpan
+
+
 @dataclasses.dataclass
 class Worksheet:
 	name: str
@@ -71,6 +78,7 @@ class Worksheet:
 	regions: list[TableRegion] = dataclasses.field(default_factory=list)
 	entry_cells: set[tuple[int, int]] = dataclasses.field(default_factory=set)
 	google: GoogleMapping | None = None
+	role_regions: list[RoleRegion] = dataclasses.field(default_factory=list)
 
 
 @dataclasses.dataclass
@@ -98,6 +106,7 @@ class Heading:
 	token_index: int
 	kind: str = "informational"
 	number: str | None = None
+	prefix_length: int = 0
 
 
 @dataclasses.dataclass(frozen=True)

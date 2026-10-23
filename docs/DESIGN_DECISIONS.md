@@ -51,6 +51,62 @@ files do not synchronize edits back to Markdown.
 
 **Owner.** [TUTORIAL_SPEC.md](TUTORIAL_SPEC.md).
 
+### Semantic actions stay attached to authored prose
+
+**Decision.** Encode spreadsheet actions as semantic links around the natural student-facing words
+and formulas already in a paragraph. Preserve ordinary GFM numbered and nested list grouping; do
+not require bold action labels at the start of every list item.
+
+**Why.** Action meaning needs to reach validation and the workbook without turning an instructional
+paragraph into an operation log or duplicating a value or formula in visible text.
+
+**Consequence.** Use destinations such as `[**Sample Mean**](label:D5)`,
+`[=AVERAGE(B2:B26)](enter:E5)`, `[Select C2:C26](select:C2:C26)`, and
+`[drag down](fill:C2:C26)`. The renderer shows the link text and hides the semantic destination;
+multiple actions may be attached in source order within one paragraph. Legacy bold action openings
+remain supported. Scalar decoding removes formatting wrappers from assigned values while preserving
+authored emphasis in rendered prose; a same-instruction mention of its write target is not treated
+as a missing input, while formula dependencies remain validated in action order.
+
+**Owner.** [TUTORIAL_SPEC.md](TUTORIAL_SPEC.md), [semantic_bindings.py](../tutorial_lib/semantic_bindings.py),
+and [compiler.py](../tutorial_lib/compiler.py).
+
+### Restore authored Markdown boundaries
+
+**Decision.** Preserve literal scalar payloads, authored emphasis, paragraph-terminal Markdown hard
+breaks, and informational headings such as `Step-by-Step Tutorial:` at the parser/rendering
+boundary. Require genuine structural numbering before treating a `Step` prefix as syntax.
+
+**Why.** Source recovery exposed cases where parsing changed visible wording or formatting, or
+misdiagnosed ordinary prose as malformed structure. Those repairs must preserve the authored lesson
+while keeping formula-order and structural validation meaningful.
+
+**Consequence.** Decode binding values separately from their Markdown presentation; restore a
+terminal backslash-newline as a hard break only when the source line contains that break; retain
+literal backslashes in code and scalar payloads; and keep hyphenated informational headings as prose.
+
+**Owner.** [TUTORIAL_SPEC.md](TUTORIAL_SPEC.md), [parser.py](../tutorial_lib/parser.py),
+[semantic_bindings.py](../tutorial_lib/semantic_bindings.py), and [docx_inline.py](../tutorial_lib/docx_inline.py).
+
+### Keep short instructional units together in DOCX
+
+**Decision.** Use native DOCX `keepNext` for an immediately adjacent semantic label and its
+same-row, next-column entry. A numbered instruction may place that entry in its first nested list
+item. Keep the final body paragraph with its predecessor when both are consecutive paragraphs, and
+trim a redundant hardbreak at the end of a list paragraph.
+
+**Why.** Page breaks should not separate a spreadsheet result label from the next instruction, add
+blank lines between compact list items, or strand a short closing prompt by itself. Later formula
+explanations remain free to move independently.
+
+**Consequence.** Match the adjacent list-token structure and validated cell targets; do not infer
+page numbers or keep a whole list branch together. Preserve internal hardbreaks and the authored
+paragraph text. Terminal paragraph pairing applies only when the final two document blocks are both
+paragraphs.
+
+**Owner.** [docx_renderer.py](../tutorial_lib/docx_renderer.py) and
+[test_tutorial_docx.py](../tests/test_tutorial_docx.py).
+
 ### Shared meaning and explicit validation limits
 
 **Decision.** Parse source once into a source-located semantic model consumed by validators
@@ -250,6 +306,28 @@ point sizes, spacing, and margins unless rendered evidence requires a focused ch
 **Owner.** [docx_styles.py](../tutorial_lib/docx_styles.py) and the PDF conversion contract in
 [TUTORIAL_SPEC.md](TUTORIAL_SPEC.md).
 
+### Automatic formula roles and paragraph spacing
+
+**Decision.** Recognize formulas from Markdown structure and context, then pass a semantic formula
+role to the DOCX renderer for Roboto Mono and dark-green (`188038`) presentation. Keep formula
+recognition separate from rendering styles. Use 2 pt after, 0 pt before, and single spacing for list
+paragraphs; retain 6 pt after and 1.08 line spacing for body paragraphs.
+
+**Why.** Authors should be able to enter ordinary spreadsheet formulas without presentation markup,
+while prose equations, URLs, and scalar literal text retain their intended meaning. Semantic roles
+let output formats share the interpretation without embedding DOCX/PDF presentation choices in the
+parser.
+
+**Consequence.** Bare `=...` formulas are accepted in `Enter` and `Replace` payloads; code spans and
+fences remain supported, and formula text is preserved. JSON-quoted `=...` is literal in Workbook
+and action scalar contexts. Narrative prose and ordinary Tutorial tables retain narrative semantics,
+so a quoted formula example keeps its formula role. Formula classification is limited to clear
+spreadsheet contexts and does not introduce a new authoring language. Keep the standard GFM `\|`
+escape for a literal table pipe. The XLSX student starting content remains unchanged.
+
+**Owner.** [TUTORIAL_SPEC.md](TUTORIAL_SPEC.md), [compiler.py](../tutorial_lib/compiler.py), and
+[docx_styles.py](../tutorial_lib/docx_styles.py).
+
 ### ASCII menu separators
 
 **Decision.** Continue accepting `>` and the Unicode right arrow as `Choose` path delimiters. Render
@@ -263,3 +341,23 @@ fourth font or arrow-glyph fallback.
 
 **Owner.** [TUTORIAL_SPEC.md](TUTORIAL_SPEC.md) and
 [docx_inline.py](../tutorial_lib/docx_inline.py).
+
+### Original lesson voice and final-output evidence
+
+**Decision.** Use the original lesson as the authority for sound wording, headings, humor, and
+numbered grouping. Adapt content only for verified technical or scientific corrections, current
+workbook destinations/data, or missing Caffeine instruction. Treat source review, generated-page
+review, workbook walkthroughs, calculation checks, and integration fingerprints as distinct
+evidence.
+
+**Why.** Passing tests and successful builds did not catch a student-visible shift from explanatory
+prose to repeated action labels. A source correction is useful only when the current generated
+materials preserve it, and expert review does not establish student outcomes or Google behavior.
+
+**Consequence.** Keep dated intermediate reports as historical records; the consolidated ledger
+must link to the evidence and list remaining checks. Do not mark the active restoration complete
+until a fresh integration review accepts the exact current sources and artifacts. State Google
+Docs/Sheets validation and student-study limits explicitly.
+
+**Owner.** [instructional voice restoration plan](active_plans/instructional_voice_restoration.md)
+and its [review ledger](active_plans/reports/voice_restoration_summary.md).

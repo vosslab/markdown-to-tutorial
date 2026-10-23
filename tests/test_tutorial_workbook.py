@@ -33,11 +33,55 @@ def test_seed_types_and_student_targets_roundtrip(tmp_path: pathlib.Path) -> Non
 	assert book["Data"]["A4"].data_type == "s"
 	assert book["Data"]["H100"].value is None
 	assert book["Data"]["C4"].fill.fill_type == "solid"
-	assert book["Data"]["A4"].fill.fill_type is None
+	assert book["Data"]["A4"].fill.fill_type == "solid"
 	assert book["Data"].freeze_panes is None
 	assert book["Data"].column_dimensions["H"].width == 12
 	with zipfile.ZipFile(path) as archive:
 		assert b"secret answer" not in b"".join(archive.read(n) for n in archive.namelist())
+	book.close()
+
+
+#============================================
+def test_semantic_workbook_roles_style_regions_without_changing_content(
+	tmp_path: pathlib.Path,
+) -> None:
+	"""Role styling distinguishes authored regions and preserves every workbook value."""
+	model = tutorial_lib.model
+	span = model.SourceSpan("source.md", 1, 1)
+	sheet = model.Worksheet("Data", span)
+	sheet.regions.append(model.TableRegion(1, 1, 3, 2, span))
+	for address, row, column, value, kind in (
+		("A1", 1, 1, "Sample", "text"), ("B1", 1, 2, "Value", "text"),
+		("A2", 2, 1, 1.25, "number"), ("B2", 2, 2, 2.5, "number"),
+		("D1", 1, 4, "Mean", "text"), ("E1", 1, 5, "Calculated mean", "text"),
+		("D2", 2, 4, "", "text"), ("E2", 2, 5, "", "text"),
+		("D3", 3, 4, "Conclusion", "text"),
+	):
+		sheet.cells[(row, column)] = model.CellSeed(
+			row, column, model.Scalar(kind, value), span)
+	sheet.entry_cells.update({(2, 5), (3, 4)})
+	sheet.role_regions.extend([
+		model.RoleRegion("results", model.CellReference("Data", 1, 4, 2, 5, "D1:E2"), span),
+		model.RoleRegion("interpretation",
+			model.CellReference("Data", 3, 4, 3, 5, "D3:E3"), span),
+	])
+	document = model.Document(pathlib.Path("source.md"), "", worksheets=[sheet])
+	path = tmp_path / "roles.xlsx"
+	tutorial_lib.workbook.write_workbook(document, path)
+	tutorial_lib.workbook.verify_workbook(document, path)
+	book = openpyxl.load_workbook(path, data_only=False)
+	output = book["Data"]
+	assert output["A1"].fill.fgColor.rgb.endswith("24527A")
+	assert output["A2"].fill.fgColor.rgb.endswith("DCEAF7")
+	assert output["D1"].fill.fgColor.rgb.endswith("A64B00")
+	assert output["E2"].fill.fgColor.rgb.endswith("FCE6CF")
+	assert output["D3"].fill.fgColor.rgb.endswith("EAE2F5")
+	assert output["E3"].fill.fgColor.rgb.endswith("EAE2F5")
+	assert output["E2"].value is None
+	assert output["E2"].border.bottom.style == "medium"
+	assert output["C1"].fill.fill_type is None
+	assert output["A1"].font.name == "PT Sans"
+	assert output["A1"].font.color.rgb.endswith("FFFFFF")
 	book.close()
 
 

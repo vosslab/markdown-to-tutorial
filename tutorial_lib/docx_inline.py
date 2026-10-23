@@ -95,6 +95,12 @@ def add_image(paragraph: object, token: object, document: object,
 
 
 #============================================
+def has_binding(tokens: list) -> bool:
+	"""Return whether an inline token sequence carries semantic link bindings."""
+	return any("binding_action" in token.meta for token in tokens)
+
+
+#============================================
 def render(paragraph: object, tokens: list, document: object, action: object = None,
 	font_name: str | None = None) -> None:
 	"""Preserve inline emphasis, HTML scripts, formula bytes, images and links."""
@@ -108,7 +114,11 @@ def render(paragraph: object, tokens: list, document: object, action: object = N
 		elif kind in ("em_open", "em_close"):
 			state["italic"] = kind.endswith("open")
 		elif kind == "link_open":
-			links.append(link_element(paragraph, token.attrGet("href")))
+			if "binding_action" in token.meta:
+				# Semantic links carry spreadsheet meaning, not a navigable URI.
+				links.append(None)
+			else:
+				links.append(link_element(paragraph, token.attrGet("href")))
 		elif kind == "link_close":
 			links.pop()
 		elif kind == "image":
@@ -125,15 +135,17 @@ def render(paragraph: object, tokens: list, document: object, action: object = N
 			else:
 				raise ValueError(f"Unsupported DOCX inline HTML: {token.content}")
 		elif kind in ("text", "code_inline"):
-			role = "code" if kind == "code_inline" else None
+			role = token.meta.get("role", "code" if kind == "code_inline" else None)
 			text = token.content
 			parent = links[-1] if links else None
-			if action is not None and action.kind.lower() == "choose" and not state["bold"]:
+			if (action is not None and action.kind.lower() == "choose"
+				and not has_binding(tokens) and not state["bold"]):
 				if text.strip() and not menu_rendered:
 					add_text(paragraph, " " + " > ".join(action.menu), state, "menu")
 					menu_rendered = True
 				continue
-			if action is not None and action.target is not None and state["bold"]:
+			if (action is not None and action.target is not None and state["bold"]
+				and not has_binding(tokens)):
 				address = action.target.address
 				if address in text and text.startswith(action.kind.capitalize() + " "):
 					before, address, after = text.partition(address)

@@ -3,12 +3,15 @@
 import pathlib
 import base64
 import zipfile
+import copy
+import json
 
 import markdown_it
 import defusedxml.ElementTree
 import docx
 
 import tutorial_lib.model
+import tutorial_lib.parser
 import tutorial_lib.compiler
 import tutorial_lib.docx_renderer
 import tutorial_lib.docx_styles
@@ -18,6 +21,114 @@ NAMESPACES = {
 	"w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
 	"r": "http://schemas.openxmlformats.org/package/2006/relationships",
 }
+
+
+#============================================
+def test_authored_backslash_breaks_keep_formula_and_literal_bytes() -> None:
+	"""Paragraph and list boundaries consume break markers without corrupting escapes."""
+	formula = '=IF(A2="a\\b",1,0)'
+	source = '**Strong**\\\ncontinued with ' + formula + '\\\nnext.\n\n'
+	source += '- First\\\n- **Second**\\\n- Use ' + formula + '\\\n\n'
+	source += '`literal\\` and "JSON a\\\\b".\n\nEscaped slash\\\\\n'
+	document = tutorial_lib.parser.parse_source(source, 'breaks.md')
+	document.content_token_indices = list(range(len(document.tokens)))
+	output = docx.Document()
+	tutorial_lib.docx_styles.configure(output)
+	tutorial_lib.docx_renderer.render_tokens(output, document)
+	assert document.source == source
+	assert [paragraph.text for paragraph in output.paragraphs] == [
+		'Strong\ncontinued with ' + formula + '\nnext.',
+		'First', 'Second', 'Use ' + formula,
+		'literal\\ and "JSON a\\b".', 'Escaped slash\\',
+	]
+	formula_runs = [run for paragraph in output.paragraphs for run in paragraph.runs
+		if run.text == formula]
+	assert len(formula_runs) == 2
+	assert all(run.font.color.rgb == docx.shared.RGBColor.from_string('188038')
+		for run in formula_runs)
+	assert len(output._element.findall('.//w:br', NAMESPACES)) == 2
+
+
+#============================================
+def test_automatic_formula_color_and_compact_list_paragraphs() -> None:
+	"""All formula routes share copyable green type; lists leave body spacing intact."""
+	formula = '=IF(A2<3,"A*B",SUM(A2:B2))'
+	source = '# Automatic\n\n## Workbook\n\n### Sheet: Data\n\n'
+	source += '| A | B |\n| --- | --- |\n| 1 | 2 |\n\n'
+	source += '## Tutorial\n\n### Part: Analysis\n\n#### Step: Calculate\n\n'
+	source += 'Body use ' + formula + ', then compare.\n\n'
+	source += 'Body quote "' + formula + '".\n\n'
+	source += '- **Enter C2:** ' + formula + '\n\n'
+	source += '  Continuation with `' + formula + '`.\n\n'
+	source += '  - **Explain:** [' + formula + '](https://example.org)\n\n'
+	source += '- **Enter C3:**\n\n  ```sheets\n  ' + formula + '\n  ```\n\n'
+	source += '| Note | Formula |\n| --- | --- |\n| Compare | ' + formula + ' |\n'
+	source += '| Quoted | "' + formula + '" |\n'
+	document = tutorial_lib.compiler.compile_source(source)
+	assert not document.has_errors
+	before = copy.deepcopy([token.as_dict() for token in document.tokens])
+	output = docx.Document()
+	tutorial_lib.docx_styles.configure(output)
+	tutorial_lib.docx_renderer.render_tokens(output, document)
+	assert [token.as_dict() for token in document.tokens] == before
+	formula_runs = [run for run in output._element.findall('.//w:r', NAMESPACES)
+		if ''.join(node.text or '' for node in run.findall('w:t', NAMESPACES)) == formula]
+	assert len(formula_runs) == 8
+	for run in formula_runs:
+		assert run.find('w:rPr/w:color', NAMESPACES).get(docx.oxml.ns.qn('w:val')) == '188038'
+		assert run.find('w:rPr/w:rFonts', NAMESPACES).get(
+			docx.oxml.ns.qn('w:ascii')) == 'Roboto Mono'
+	linked = output._element.find('.//w:hyperlink/w:r', NAMESPACES)
+	assert linked.find('w:rPr/w:u', NAMESPACES) is not None
+	compact = [paragraph for paragraph in output.paragraphs
+		if paragraph.text.startswith(('Enter ', 'Continuation', 'Explain:'))
+		or paragraph.text == formula]
+	assert len(compact) == 5
+	for paragraph in compact:
+		assert paragraph.paragraph_format.space_before.pt == 0
+		assert paragraph.paragraph_format.space_after.pt == 2
+		assert paragraph.paragraph_format.line_spacing == 1
+	body = next(paragraph for paragraph in output.paragraphs if paragraph.text.startswith('Body '))
+	assert body.paragraph_format.space_after is None
+	assert body.style.paragraph_format.space_after.pt == 6
+	assert round(body.style.paragraph_format.line_spacing, 2) == 1.08
+
+
+#============================================
+def test_literal_action_payloads_keep_copy_text_without_formula_style() -> None:
+	"""JSON and Label scalars keep operators, quotes and explicit code formatting."""
+	formula = '=A2*B2*3'
+	value = '*literal* _text_ <br> a\\b'
+	cases = [
+		('Enter', json.dumps(formula), formula, False),
+		('Enter', '`' + json.dumps(formula) + '`', formula, True),
+		('Enter', json.dumps(value), value, False),
+		('Replace', json.dumps(formula), formula, False),
+		('Label', formula, formula, False),
+		('Label', '`' + formula + '`', formula, True),
+	]
+	for kind, payload, expected_value, code in cases:
+		source = '# Literal\n\n## Workbook\n\n### Sheet: Data\n\n'
+		source += '| A | B |\n| --- | --- |\n| 1 | 2 |\n\n'
+		source += '## Tutorial\n\n### Part: Analysis\n\n#### Step: Calculate\n\n'
+		if kind == 'Replace':
+			source += '- **Enter C2:** before\n'
+		source += f'- **{kind} C2:** ' + payload
+		document = tutorial_lib.compiler.compile_source(source)
+		assert not document.has_errors
+		assert document.actions[-1].scalar.kind == 'text'
+		assert document.actions[-1].scalar.value == expected_value
+		assert not document.formula_checks
+		output = docx.Document()
+		tutorial_lib.docx_styles.configure(output)
+		tutorial_lib.docx_renderer.render_tokens(output, document)
+		paragraph = output.paragraphs[-1]
+		expected_text = payload[1:-1] if code else payload
+		assert paragraph.text == f'{kind} C2: ' + expected_text
+		for run in paragraph.runs:
+			assert str(run.font.color.rgb) != '188038'
+		payload_run = paragraph.runs[-1]
+		assert payload_run.font.name == ('Roboto Mono' if code else None)
 
 
 #============================================
@@ -83,7 +194,7 @@ def test_editable_formula_links_and_independent_lists(tmp_path: pathlib.Path) ->
 	for index, token in enumerate(document.tokens):
 		if token.type == "heading_open" and token.tag == "h4":
 			heading = tutorial_lib.model.Heading(4, "Calculate", "Step 1: Calculate",
-				"step-calculate", span, index, kind="step", number="1")
+				"step-calculate", span, index, kind="step", number="1", prefix_length=6)
 			token.meta["heading"] = heading
 		if token.children:
 			for child in token.children:
@@ -128,6 +239,54 @@ def test_editable_formula_links_and_independent_lists(tmp_path: pathlib.Path) ->
 
 
 #============================================
+def test_semantic_bindings_preserve_numbered_caffeine_instruction_text() -> None:
+	"""Bindings keep their authored paragraph text, heading emphasis and GFM numbering."""
+	source = "# Caffeine model\n\n## Workbook\n\n### Sheet: Data\n\n"
+	source += "| Sleep | Score |\n| --- | --- |\n| 6 | 91 |\n\n## Tutorial\n\n"
+	source += "### **pArT:** **Build** the predictor\n\n"
+	source += "#### Step: **Square** the predictor\n\n"
+	source += "1. Add a squared predictor column.\n"
+	source += "2. Set its heading to [Sleep hours squared](label:C1).\n"
+	source += "3. Enter [=A2^2](enter:C2) for the first student.\n"
+	source += "4. Copy [C2:C26](fill:C2:C26), then select [A1:B26](select:A1:B26).\n\n"
+	source += "See the [original class template](https://example.org/template).\n"
+	document = tutorial_lib.compiler.compile_source(source)
+	assert not document.has_errors
+	assert [action.kind for action in document.actions] == ["label", "enter", "fill", "select"]
+	output = docx.Document()
+	tutorial_lib.docx_styles.configure(output)
+	tutorial_lib.docx_renderer.render_tokens(output, document)
+	paragraph_text = [paragraph.text for paragraph in output.paragraphs]
+	assert paragraph_text == [
+		"Caffeine model", "Part 1: Build the predictor", "Step 1: Square the predictor",
+		"Add a squared predictor column.", "Set its heading to Sleep hours squared.",
+		"Enter =A2^2 for the first student.",
+		"Copy C2:C26, then select A1:B26.",
+		"See the original class template.",
+	]
+	assert any(run.text == "Build" and run.bold for run in output.paragraphs[1].runs)
+	assert any(run.text == "Square" and run.bold for run in output.paragraphs[2].runs)
+	assert output.paragraphs[4].runs[1].font.color.rgb is None
+	formula_run = next(run for run in output.paragraphs[5].runs if run.text == "=A2^2")
+	assert str(formula_run.font.color.rgb) == "188038"
+	assert [paragraph.style.name for paragraph in output.paragraphs[3:7]] == [
+		"Normal", "Normal", "Normal", "Normal",
+	]
+	assert [paragraph._p.find("w:pPr/w:numPr", NAMESPACES) is not None
+		for paragraph in output.paragraphs[3:7]] == [True, True, True, True]
+	assert output.paragraphs[-1]._p.find(".//w:hyperlink", NAMESPACES) is not None
+	relationships = output.part.rels
+	assert not any("label:" in relation.target_ref or "enter:" in relation.target_ref
+		or "fill:" in relation.target_ref or "select:" in relation.target_ref
+		for relation in relationships.values())
+	assert all(paragraph.paragraph_format.space_after.pt == 2
+		for paragraph in output.paragraphs[3:7])
+	assert output.styles["Heading 1"].font.size.pt == 18
+	assert output.styles["Heading 2"].font.size.pt == 15
+	assert output.styles["Heading 3"].font.size.pt == 12
+
+
+#============================================
 def test_result_labels_stay_with_adjacent_entries(tmp_path: pathlib.Path) -> None:
 	"""Keep adjacent result pairs without joining chains or crossing block boundaries."""
 	source = "# Results\n\n## Workbook\n\n### Sheet: Data\n\n"
@@ -157,6 +316,7 @@ def test_result_labels_stay_with_adjacent_entries(tmp_path: pathlib.Path) -> Non
 	source += "- Instruction: In cell `D10`, explain the result.\n"
 	source += "- **Label C11:** Before later bold label\n"
 	source += "- Read this **Instruction:** carefully.\n"
+	source += "\nClosing context.\n\nFinal line.\n"
 	document = tutorial_lib.compiler.compile_source(source, tmp_path / "results.md")
 	assert not document.has_errors
 	output = tmp_path / "results.docx"
@@ -179,6 +339,64 @@ def test_result_labels_stay_with_adjacent_entries(tmp_path: pathlib.Path) -> Non
 		"Label C8: Nested label", "Label C9: Before table",
 		"Label C10: Before plain instruction", "Label C11: Before later bold label",
 	})
+
+
+#============================================
+def test_semantic_adjacent_label_stays_with_direct_or_nested_entry(tmp_path: pathlib.Path) -> None:
+	"""Only adjacent sibling labels pair with same-row entries, including first nested formulas."""
+	base = "# Pagination\n\n## Workbook\n\n### Sheet: Data\n\n| A | B | C | D | E |\n"
+	base += "| --- | --- | --- | --- | --- |\n| 1 | 2 | 3 | 4 | 5 |\n\n## Tutorial\n\n"
+	base += "### Part: Analysis\n\n#### Step: Prepare\n\n"
+	cases = {
+		"direct": "1. Label [D13](label:D13)\n2. Enter [=1](enter:E13)\n",
+		"nested": "1. Label [D13](label:D13)\n2. In cell E13, enter:\n"
+			"   - [=1](enter:E13)\n   - Explanation text.\n",
+		"different_row": "1. Label [D13](label:D13)\n2. Enter [=1](enter:E14)\n",
+		"heading_barrier": "1. Label [D13](label:D13)\n\n#### Step: Next\n\n"
+			"1. Enter [=1](enter:E13)\n",
+	}
+	for name, body in cases.items():
+		source = base + body + "\nClosing context.\n\nFinal line.\n"
+		document = tutorial_lib.compiler.compile_source(source, tmp_path / (name + ".md"))
+		assert not document.has_errors
+		path = tmp_path / (name + ".docx")
+		tutorial_lib.docx_renderer.write_document(document, path)
+		with zipfile.ZipFile(path) as archive:
+			xml = defusedxml.ElementTree.fromstring(archive.read("word/document.xml"))
+		paragraphs = {
+			"".join(node.text or "" for node in item.findall(".//w:t", NAMESPACES)): item
+			for item in xml.findall(".//w:body/w:p", NAMESPACES)
+		}
+		is_kept = paragraphs["Label D13"].find("w:pPr/w:keepNext", NAMESPACES) is not None
+		assert is_kept is (name in ("direct", "nested"))
+		if name == "nested":
+			parent_keep = paragraphs["In cell E13, enter:"].find("w:pPr/w:keepNext", NAMESPACES)
+			assert parent_keep is not None
+			assert paragraphs["=1"].find("w:pPr/w:keepNext", NAMESPACES) is None
+			assert paragraphs["Explanation text."].find("w:pPr/w:keepNext", NAMESPACES) is None
+
+
+#============================================
+def test_final_body_paragraph_stays_with_its_predecessor(tmp_path: pathlib.Path) -> None:
+	"""A short closing paragraph cannot be stranded by itself at a page break."""
+	source = "# Closing\n\n## Workbook\n\n### Sheet: Data\n\n| A | B |\n| --- | --- |\n| 1 | 2 |\n\n"
+	source += "## Tutorial\n\n### Part: Analysis\n\n#### Step: Finish\n\n"
+	source += "Review the result before moving on.\n\n"
+	source += "**_Ask the instructor for the next tutorial link._**\n"
+	document = tutorial_lib.compiler.compile_source(source, tmp_path / "closing.md")
+	assert not document.has_errors
+	path = tmp_path / "closing.docx"
+	tutorial_lib.docx_renderer.write_document(document, path)
+	with zipfile.ZipFile(path) as archive:
+		xml = defusedxml.ElementTree.fromstring(archive.read("word/document.xml"))
+	paragraphs = {
+		"".join(node.text or "" for node in item.findall(".//w:t", NAMESPACES)): item
+		for item in xml.findall(".//w:body/w:p", NAMESPACES)
+	}
+	assert paragraphs["Review the result before moving on."].find(
+		"w:pPr/w:keepNext", NAMESPACES) is not None
+	assert paragraphs["Ask the instructor for the next tutorial link."].find(
+		"w:pPr/w:keepNext", NAMESPACES) is None
 
 
 #============================================
