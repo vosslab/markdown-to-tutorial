@@ -21,10 +21,10 @@ against the source text itself. Current source hashes match those reported in th
 ### Babies 1: z test
 
 - The conceptual statistic formula is present as its own nested `Formula:` item before the
-  spreadsheet entry (`babies_1_z_test.md:165-170`): “(sample mean - population mean) / [ population
-  standard deviation / sqrt(sample size) ]”. It is distinct from the cell formula and explanation.
+  spreadsheet entry (`babies_1_z_test.md:165-170`): "(sample mean - population mean) / [ population
+  standard deviation / sqrt(sample size) ]". It is distinct from the cell formula and explanation.
 - Step 3's numbered cell instructions retain nested `Enter:` and explanation bullets; E5 says
-  “we will use,” and E7 retains the note that the sample standard deviation is not used
+  "we will use," and E7 retains the note that the sample standard deviation is not used
   (`:148-164`).
 - The p-value branches are numbered parents 1 and 2, with their cell instructions nested below
   (`:199-204`). The decision entries retain nested formula instructions and the numbered
@@ -37,22 +37,22 @@ against the source text itself. Current source hashes match those reported in th
 
 ### Babies 2: one-sample t test
 
-- The scenario's “This time, he must:” instructions are bullets (`babies_2_t_test.md:120-124`),
-  and D2 retains “it should say” (`:147`). Steps 3-7 preserve nested entries and explanations,
+- The scenario's "This time, he must:" instructions are bullets (`babies_2_t_test.md:120-124`),
+  and D2 retains "it should say" (`:147`). Steps 3-7 preserve nested entries and explanations,
   including the degree-of-freedom introduction and its separate entry/explanation children
   (`:165-193`).
 - The p-value subsection keeps numbered parent branches and nested entries/explanations
   (`:228-252`). The right-tail branch uses the signed formula `=1 - T.DIST(E9, E10, TRUE)` and
-  retains the full explanation that it tests “the probability of observing a value as extreme or
-  more extreme in **one direction** (greater than the population mean)” (`:245-252`). Its cell
+  retains the full explanation that it tests "the probability of observing a value as extreme or
+  more extreme in **one direction** (greater than the population mean)" (`:245-252`). Its cell
   references are E9 and E10. This preserves the original teaching point while correcting the
   unsupported `T.DIST.RT` usage and the source's incorrect cell references. The decision
   instructions retain nested, emphasized test-specific formula directions (`:267-280`).
 
 ### Babies 3: two-sample t test
 
-- Section 6.2 restores the syntax introduction, syntax bullet, “Here's how you'll set up the
-  formula,” and nested Range1/Range2/Tails/Type walkthrough (`babies_3_two_sample_t_test.md:160-171`).
+- Section 6.2 restores the syntax introduction, syntax bullet, "Here's how you'll set up the
+  formula," and nested Range1/Range2/Tails/Type walkthrough (`babies_3_two_sample_t_test.md:160-171`).
   Tails retains its explanatory sentence and separate one- and two-tail child bullets (`:167-169`).
   Type explains unequal variances and Welch's test with the corrected type argument 3 (`:170-171`).
 - The two-tail branch retains nested explanation bullets for both hospital ranges, the first `2`,

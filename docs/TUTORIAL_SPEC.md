@@ -18,6 +18,25 @@ image must be embedded in its text. Editing generated documents does not update 
 The first release supports simple teaching workbooks: rectangular data, labels, blank entry cells,
 and scalar formulas. It does not promise arbitrary Excel workbook fidelity or live Google sync.
 
+## Authoring and source-text contract
+
+Authors make the spreadsheet design decisions: where data and calculation tables go, what labels
+and formulas mean, and what learners must construct. The Workbook section is the student starting
+state; Tutorial actions describe work students perform and remain blank in generated workbooks.
+The renderer may add a shared professional presentation system, including color, typography,
+borders, shading, spacing, and formula emphasis, without changing those learning activities.
+
+Active lesson files use ASCII source text. Straight keyboard punctuation is the default. Readable
+named entities such as `&alpha;` and ordinary HTML `sub` and `sup` tags are allowed. Unicode source
+characters and numeric character references are source errors when linting a file; this rule keeps
+student editing simple while allowing the renderer to produce styled output. In-memory compiler
+calls retain Unicode support for parser and renderer tests.
+
+Semantic action links keep an instruction and its executable target together. In explicit action
+clauses of the form `In cell C2, enter ...`, the visible destination must agree with the link
+target. The check is intentionally narrow: it does not treat every prose cell mention or a formula
+input reference as a destination.
+
 ## Complete minimal example
 
 This example uses two illustrative observations, not the original full teaching dataset.
@@ -402,7 +421,7 @@ formulas, cell references, and menu entries. Apply PT Sans Narrow only where ren
 needs the narrower face. These fonts are available in Google Docs and must also be installed in the
 local PDF build environment. The builder does not download or install fonts. This DOCX/PDF font
 contract does not change XLSX font styling. Formula-role text uses Roboto Mono and dark green
-(`188038`); ordinary inline formulas, code spans, formula fences, and formula cells receive the same
+(`007A00`); ordinary inline formulas, code spans, formula fences, and formula cells receive the same
 formula treatment while preserving their text. Keep PT Sans, PT Sans Narrow, and Roboto Mono
 available in regular, bold, and italic variants. These font variants are independent of the six
 paragraph styles named above.

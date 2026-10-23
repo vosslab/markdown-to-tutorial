@@ -68,9 +68,9 @@ restore the original opening explanation at lines 7-8 from the corroborating DOC
 committee-issues list and scenario paragraphs under `The New Challenge` and `The New Scenario`
 (lines 11-25), numbered Steps 1-10, explanatory `Why Do We Use Degrees of Freedom?`, substeps 8.1-8.3,
 and the grouped practice/takeaways/`Joe's Redemption` story (lines 27-150). These contain much of the
-lesson's personality and statistical scaffolding. Source exact opening DOCX wording begins: “A
+lesson's personality and statistical scaffolding. Source exact opening DOCX wording begins: "A
 T-test is a statistical test used when you want to know if the average of your sample is meaningfully
-different from a known value, but you cannot assume the population standard deviation is known.”
+different from a known value, but you cannot assume the population standard deviation is known."
 
 At current [babies_2_t_test.md](../../../tutorial_data/babies_2_t_test.md):
 
@@ -79,8 +79,8 @@ At current [babies_2_t_test.md](../../../tutorial_data/babies_2_t_test.md):
   the correction that a small sample alone does not invalidate z, the explicit assumptions, and the
   prespecified right-tail claim.
 - Lines 143-168 replace the original eleven-item setup with the repeated action labels. Preserve the
-  source numbering and parent/child sequence, including the warm aside “^ this is our representative
-  mean baby weight of the population.” Adapt the old “Return to your spreadsheet” operation to
+  source numbering and parent/child sequence, including the warm aside "^ this is our representative
+  mean baby weight of the population." Adapt the old "Return to your spreadsheet" operation to
   opening this separately generated workbook; the self-contained workbook plus optional data-copy
   reset is a valid product change.
 - Lines 173-218 split the source's concise formula steps and degree-of-freedom explanation into
@@ -95,8 +95,8 @@ At current [babies_2_t_test.md](../../../tutorial_data/babies_2_t_test.md):
 - Lines 275-310 convert decision, interpretation, practice, and takeaway blocks to repetitive
   labels. Restore the source's paired numbered decision entries, narrative interpretation direction,
   three practice bullets and three takeaways. Lines 311-324 rewrite the redemption ending; preserve
-  only the data-supported conclusion that Joe does not reject the null. The original “T-test shows
-  ... significantly larger”/reinstatement is unsupported and should remain corrected.
+  only the data-supported conclusion that Joe does not reject the null. The original "T-test shows
+  ... significantly larger"/reinstatement is unsupported and should remain corrected.
 
 ### Two-sample t-test
 
@@ -124,14 +124,14 @@ At current [babies_3_two_sample_t_test.md](../../../tutorial_data/babies_3_two_s
   T.TEST uses the magnitude and does not encode Joe-greater from range order. Keep the improved
   preselection instruction before summary work; the source currently makes students inspect group
   means first, then choose a tail, which risks post-hoc choice.
-- Lines 150-160 add a “Preview” substep and convert the duplicated decision directions to a single
+- Lines 150-160 add a "Preview" substep and convert the duplicated decision directions to a single
   action. Keep that actual de-duplication: original 6.3 and 7 repeat F6/G6 and the decision formula.
   Reattach the preview naturally to the original Step 6 instead of creating a new pseudo-step.
 - Lines 164-176 fragment interpretation/example text and append appropriate limits. Restore the
   original numbered F8/G8 action and example paragraph; retain the evidence-based explanation and
   no-causality limits.
-- The scenario at current lines 53-56 changes Joe from “feeling confident after reinstating his
-  eligibility” to hoping to reinstate it. That is required because the previous supplied-data result
+- The scenario at current lines 53-56 changes Joe from "feeling confident after reinstating his
+  eligibility" to hoping to reinstate it. That is required because the previous supplied-data result
   is not significant. Keep the story beat and voice around that factual correction.
 
 ## Change boundary

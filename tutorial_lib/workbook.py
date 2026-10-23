@@ -24,11 +24,17 @@ MAIN_NS = "{http://schemas.openxmlformats.org/spreadsheetml/2006/main}"
 MAX_IMPORT_CELLS = 250000
 
 ROLE_STYLES = {
-	"source": ("DCEAF7", "24527A", "FFFFFF"),
-	"calculation": ("DCEFEA", "176B5B", "FFFFFF"),
-	"results": ("FCE6CF", "A64B00", "FFFFFF"),
-	"interpretation": ("EAE2F5", "604080", "FFFFFF"),
+	"source": ("EEF5FC", "0067CC", "FFFFFF"),
+	"calculation": ("E6F3F0", "00775F", "FFFFFF"),
+	"results": ("F4E9FB", "A719DB", "FFFFFF"),
+	"interpretation": ("FDEAF3", "CC0066", "FFFFFF"),
 }
+
+FORMULA_ENTRY_STYLE = ("E7F4EA", "007A00")
+LABEL_ENTRY_STYLE = ("FFF3E5", "B74300")
+SOURCE_STRIPE_FILL = "EEF5FC"
+GRIDLINE_COLOR = "C9D8E8"
+INTERPRETATION_PANEL_FILL = "FFF7FB"
 
 
 #============================================
@@ -132,53 +138,76 @@ def write_workbook(document: tutorial_lib.model.Document, output_path: pathlib.P
 			length = max((len(line) for line in str(scalar.value).splitlines()), default=0)
 			widths[column] = min(48, max(widths.get(column, 12), length + 2))
 
-		# Infer source and calculation meaning from the authored table and answer geometry.
+		# Style only the usable part of each authored area.  A role range can reserve
+		# space for learners, but it must not become a mysterious colored rectangle.
 		role_cells = {}
+		region_bounds = []
 		for region in source.regions:
-			for row in range(region.start_row, region.end_row + 1):
-				for column in range(region.start_column, region.end_column + 1):
+			bounds = _content_bounds(source, region.start_row, region.start_column,
+				region.end_row, region.end_column, include_entries=False)
+			if bounds is None:
+				continue
+			region_bounds.append((bounds, "source", region.start_row))
+			for row in range(bounds[0], bounds[2] + 1):
+				for column in range(bounds[1], bounds[3] + 1):
 					role_cells[(row, column)] = "source"
 		for row, column in source.entry_cells:
 			role_cells[(row, column)] = "calculation"
 		for region in source.role_regions:
-			for row in range(region.reference.start_row, region.reference.end_row + 1):
-				for column in range(region.reference.start_column,
-					region.reference.end_column + 1):
+			bounds = _content_bounds(source, region.reference.start_row,
+				region.reference.start_column, region.reference.end_row,
+				region.reference.end_column, include_entries=True)
+			# A response panel can intentionally be empty in the starter workbook.
+			# It is still a real authored space, unlike unused padding in a data table.
+			if region.role == "interpretation":
+				bounds = (region.reference.start_row, region.reference.start_column,
+					region.reference.end_row, region.reference.end_column)
+			if bounds is None:
+				continue
+			region_bounds.append((bounds, region.role, region.reference.start_row))
+			for row in range(bounds[0], bounds[2] + 1):
+				for column in range(bounds[1], bounds[3] + 1):
 					role_cells[(row, column)] = region.role
+		future_headers = _future_headers(document, source, region_bounds)
 		for (row, column), role in role_cells.items():
 			if role not in ROLE_STYLES:
 				raise ValueError(f"Unknown workbook role {role!r} in {source.name}")
 			background, header_color, header_text = ROLE_STYLES[role]
 			cell = sheet.cell(row, column)
-			cell.fill = openpyxl.styles.PatternFill("solid", fgColor=background)
-			cell.border = openpyxl.styles.Border(
-				bottom=openpyxl.styles.Side(style="thin", color=header_color))
+			if role == "source" and _source_stripe(source, row, column):
+				cell.fill = openpyxl.styles.PatternFill("solid", fgColor=SOURCE_STRIPE_FILL)
+			elif role == "interpretation":
+				cell.fill = openpyxl.styles.PatternFill("solid", fgColor=INTERPRETATION_PANEL_FILL)
+			elif (row, column) in source.entry_cells:
+				cell.fill = openpyxl.styles.PatternFill("solid", fgColor=background)
+			if role == "source":
+				cell.border = openpyxl.styles.Border(
+					bottom=openpyxl.styles.Side(style="thin", color=GRIDLINE_COLOR))
 			cell.font = openpyxl.styles.Font(name="PT Sans", size=10, color="202124")
 			cell.alignment = openpyxl.styles.Alignment(vertical="top", wrap_text=True)
-			if (row, column) in source.entry_cells and cell.value in (None, ""):
-				cell.border = openpyxl.styles.Border(
-					bottom=openpyxl.styles.Side(style="medium", color=header_color))
-		for region in source.regions:
-			_apply_region_outline(sheet, region.start_row, region.start_column,
-				region.end_row, region.end_column, ROLE_STYLES["source"][1])
-		for region in source.role_regions:
-			_apply_region_outline(sheet, region.reference.start_row,
-				region.reference.start_column, region.reference.end_row,
-				region.reference.end_column, ROLE_STYLES[region.role][1])
+		for bounds, role, _ in region_bounds:
+			_apply_region_outline(sheet, bounds[0], bounds[1], bounds[2], bounds[3],
+				ROLE_STYLES[role][1])
 
-		# Emphasize authored table headers and declared role headers that contain text.
-		header_ranges = [(region.start_row, region.start_column, region.end_column)
-			for region in source.regions]
-		for region in source.role_regions:
-			if region.reference.start_row == region.reference.end_row:
+		# Emphasize supplied headers and planned headers.  A planned header is a
+		# genuine learner label task in the first row of an authored area.  Its
+		# format prepares the completed table without supplying the label itself.
+		header_ranges = [(bounds[0], bounds[1], bounds[3])
+			for bounds, role, header_row in region_bounds
+			if role == "source" and bounds[0] == header_row]
+		for bounds, role, header_row in region_bounds:
+			if role == "source" or bounds[0] == bounds[2]:
 				continue
-			row = region.reference.start_row
-			columns = range(region.reference.start_column, region.reference.end_column + 1)
+			row = bounds[0]
+			columns = range(bounds[1], bounds[3] + 1)
 			if any(isinstance(sheet.cell(row, column).value, str)
 				and sheet.cell(row, column).value.strip() for column in columns):
-				header_ranges.append((row, region.reference.start_column,
-					region.reference.end_column))
-		for row, start_column, end_column in header_ranges:
+				header_ranges.append((row, bounds[1], bounds[3]))
+		for row, start_column, end_column in future_headers:
+			header_ranges.append((row, start_column, end_column))
+		future_header_cells = {(row, column) for row, start_column, end_column in future_headers
+			for column in range(start_column, end_column + 1)}
+		for row, start_column, end_column in _unique_header_ranges(header_ranges):
 			for column in range(start_column, end_column + 1):
 				cell = sheet.cell(row, column)
 				role = role_cells.get((row, column))
@@ -209,16 +238,18 @@ def write_workbook(document: tutorial_lib.model.Document, output_path: pathlib.P
 			# Empty answer columns have no seed from which to infer a useful width.
 			widths[column] = max(widths.get(column, 12), 12)
 			seed = source.cells.get((row, column))
+			if (row, column) in future_header_cells:
+				continue
 			if (seed is None or seed.scalar.kind == "blank"
 				or seed.scalar.kind == "text" and seed.scalar.value == ""):
 				cell = sheet.cell(row, column)
 				cell.alignment = openpyxl.styles.Alignment(vertical="top", wrap_text=True)
-				role = role_cells.get((row, column), "calculation")
-				background, header_color, _ = ROLE_STYLES[role]
+				background, header_color = _entry_style(document, source.name, row, column,
+					role_cells.get((row, column), "calculation"))
 				cell.fill = openpyxl.styles.PatternFill("solid", fgColor=background)
 				cell.border = openpyxl.styles.Border(
 					left=cell.border.left, right=cell.border.right, top=cell.border.top,
-					bottom=openpyxl.styles.Side(style="medium", color=header_color))
+					bottom=openpyxl.styles.Side(style="thin", color=header_color))
 		for column, width in widths.items():
 			sheet.column_dimensions[openpyxl.utils.get_column_letter(column)].width = width
 		# Explicit heights survive typing beside an occupied result cell without auto-fit.
@@ -231,6 +262,102 @@ def write_workbook(document: tutorial_lib.model.Document, output_path: pathlib.P
 	book.save(output_path)
 	book.close()
 	_preserve_numbers(document, pathlib.Path(output_path))
+
+
+#============================================
+def _content_bounds(source: tutorial_lib.model.Worksheet, start_row: int, start_column: int,
+	end_row: int, end_column: int, include_entries: bool) -> tuple[int, int, int, int] | None:
+	"""Find the real visual footprint of supplied content and student targets."""
+	cells = []
+	for row in range(start_row, end_row + 1):
+		for column in range(start_column, end_column + 1):
+			seed = source.cells.get((row, column))
+			if ((seed is not None and seed.scalar.value not in (None, ""))
+				or include_entries and (row, column) in source.entry_cells):
+				cells.append((row, column))
+	if not cells:
+		return None
+	rows = [item[0] for item in cells]
+	columns = [item[1] for item in cells]
+	return min(rows), min(columns), max(rows), max(columns)
+
+
+#============================================
+def _future_headers(document: tutorial_lib.model.Document, source: tutorial_lib.model.Worksheet,
+		region_bounds: list[tuple[tuple[int, int, int, int], str, int]]) -> list[tuple[int, int, int]]:
+	"""Find authored learner label targets that form table headers."""
+	labels = set()
+	for action in document.actions:
+		if action.kind != "label" or action.target is None or action.target.sheet != source.name:
+			continue
+		labels.add((action.target.start_row, action.target.start_column))
+	header_ranges = []
+	eligible = set()
+	for bounds, role, _ in region_bounds:
+		if role == "source":
+			continue
+		row, start_column, _, end_column = bounds
+		for candidate_row in range(bounds[0], bounds[2] + 1):
+			for candidate_column in range(bounds[1], bounds[3] + 1):
+				eligible.add((candidate_row, candidate_column))
+		columns = [column for column in range(start_column, end_column + 1)
+			if (row, column) in labels]
+		while columns:
+			first = columns.pop(0)
+			last = first
+			while columns and columns[0] == last + 1:
+				last = columns.pop(0)
+			header_ranges.append((row, first, last))
+	# A contiguous run of two or more requested labels is a conventional header
+	# even when it starts below the first row of its declared calculation area.
+	# This recognizes authored ANOVA subtable headings without a special case.
+	for row in sorted({item[0] for item in labels}):
+		columns = sorted(column for label_row, column in labels
+			if label_row == row and (label_row, column) in eligible)
+		while columns:
+			first = columns.pop(0)
+			last = first
+			while columns and columns[0] == last + 1:
+				last = columns.pop(0)
+			if last > first:
+				header_ranges.append((row, first, last))
+	return header_ranges
+
+
+#============================================
+def _unique_header_ranges(ranges: list[tuple[int, int, int]]) -> list[tuple[int, int, int]]:
+	"""Keep overlapping source and planned headers from being styled twice."""
+	result = []
+	for item in ranges:
+		if item not in result:
+			result.append(item)
+	return result
+
+
+#============================================
+def _source_stripe(source: tutorial_lib.model.Worksheet, row: int, column: int) -> bool:
+	"""Tint alternate supplied-data rows without pretending empty padding is data."""
+	for region in source.regions:
+		if (region.start_row < row <= region.end_row
+			and region.start_column <= column <= region.end_column):
+			return (row - region.start_row) % 2 == 0
+	return False
+
+
+#============================================
+def _entry_style(document: tutorial_lib.model.Document, sheet_name: str, row: int, column: int,
+	role: str) -> tuple[str, str]:
+	"""Make formula entry and label construction visible without revealing answers."""
+	for action in document.actions:
+		if (action.target is None or action.target.sheet != sheet_name
+			or (action.target.start_row, action.target.start_column) != (row, column)):
+			continue
+		if action.kind == "label":
+			return LABEL_ENTRY_STYLE
+		if action.scalar is not None and action.scalar.kind == "formula":
+			return FORMULA_ENTRY_STYLE
+	background, accent, _ = ROLE_STYLES[role]
+	return background, accent
 
 
 #============================================

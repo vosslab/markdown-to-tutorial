@@ -8,7 +8,7 @@ current work. The final integration review records repository checks and fingerp
 
 The sources now restore original narrative, headings, humor, and numbered action groups while
 keeping spreadsheet actions attached to authored words. For example, the original Caffeine 3
-instruction, “To let our regression model curve, we need to square our predictor variable (x).”
+instruction, "To let our regression model curve, we need to square our predictor variable (x)."
 This again leads into the squared-column task and its four compact actions. The visible lesson no longer
 turns that sequence into repeated `Label` and `Enter` entries. The original-source maps and
 corrections are in the [Babies](voice_babies_original_comparison.md),
@@ -16,10 +16,10 @@ corrections are in the [Babies](voice_babies_original_comparison.md),
 [Microbes and PETase](voice_microbes_petase_original_comparison.md) comparisons.
 
 Babies restores its playful committee stories and nested numbered instructions; for instance,
-Babies 2 again includes “^ this is our representative mean baby weight of the population.” The
+Babies 2 again includes "^ this is our representative mean baby weight of the population." The
 technical correction remains: a small sample alone does not invalidate a z-test, and the t-test
 right-tail calculation handles a negative statistic. Microbes restores the advisor conversations,
-method-specific “Why Use ... Now?” explanations, and the 30-year transition. It retains the needed
+method-specific "Why Use ... Now?" explanations, and the 30-year transition. It retains the needed
 limits: repeated sites do not establish independent samples, variance does not establish community
 homogenization, and a test does not establish cause or trend. PETase restores its startup and
 plastic-waste narrative while keeping the data synthetic and the Bradford measurement limited to

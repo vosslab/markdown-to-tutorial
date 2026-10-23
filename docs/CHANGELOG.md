@@ -2,6 +2,36 @@
 
 ## 2026-10-22
 
+### Additions and New Features
+
+- Add student-oriented calculated-column, statistical-summary, and ANOVA Markdown templates.
+  Templates keep spreadsheet coordinates and ordinary Excel formulas visible while separating
+  supplied Workbook content from learner-entered Tutorial actions.
+
+### Behavior or Interface Changes
+
+- Lint Markdown tutorial files as ASCII source, allow readable named scientific entities, and
+  reject numeric character references with source-located corrections. Preserve Unicode handling
+  for in-memory parser and renderer callers.
+- Diagnose an explicit `In cell C2, enter ...` instruction when its visible destination conflicts
+  with the semantic action target.
+
+### Fixes and Maintenance
+
+- Normalize active lesson punctuation and scientific notation to ASCII, named entities, and
+  ordinary `sub`/`sup` markup without changing lesson wording or archived originals.
+- Repair worksheet editing for column insertion, data growth and shrinkage, and ANOVA column moves;
+  real previews, writes, and exports pass while preserving learner prose and formulas. Accepted
+  presentation updates cover workbook future headers, rules, and response panels, plus DOCX step
+  headings with zero left indent, native indents, long-prose justification, and left-aligned hard
+  breaks. All 12 bundles and 36 outputs pass manifest and source/output SHA-256 verification; the
+  94-page PDF review and final two-page correction review are accepted. The full suite passes 1,828
+  tests and Calc passes 13 scenarios / 254 comparisons. Final editor specification-quality and
+  integration reviews are accepted; see the
+  [student publishing integration review](active_plans/reports/student_publishing_integration.md).
+  Google import and student outcomes remain unverified; ambiguous unmarked references still receive
+  author review, and line counts are estimates.
+
 ### README showcase refresh
 
 - Put three reviewed output screenshots immediately after the opening, followed by the verified
@@ -215,6 +245,9 @@
 
 ### Implementation Documentation
 
+- Start the [student publishing implementation ledger](active_plans/student_publishing_implementation.md)
+  for worksheet edits, DOCX/XLSX presentation, and ASCII/template authoring with mismatch validation.
+  Reviews, the full build, formula calculation, and visual verification remain pending.
 - Add [INSTALL.md](INSTALL.md), [USAGE.md](USAGE.md), and [AUTHORING_GUIDE.md](AUTHORING_GUIDE.md)
   for the current install and CLI workflow, plus a concise README description. Update
   [TUTORIAL_SPEC.md](TUTORIAL_SPEC.md) to reflect the available CLI and autonomous local completion

@@ -9,6 +9,7 @@ import tutorial_lib.model as model
 import tutorial_lib.parser
 import tutorial_lib.references as references
 import tutorial_lib.semantic_bindings as bindings
+import tutorial_lib.source_text
 import markdown_it.token
 
 NUMBER = re.compile(r"[+-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][+-]?[0-9]+)?\Z")
@@ -176,7 +177,9 @@ def _opening(inline: object) -> tuple[str | None, str]:
 
 def compile_document(path: str | pathlib.Path) -> model.Document:
 	path = pathlib.Path(path).resolve()
-	return compile_source(path.read_text(encoding="utf-8"), path)
+	document = compile_source(path.read_text(encoding="utf-8"), path)
+	document.diagnostics.extend(tutorial_lib.source_text.source_diagnostics(document))
+	return document
 
 
 def compile_source(source: str, path: str | pathlib.Path = "tutorial.md") -> model.Document:
@@ -597,6 +600,9 @@ def _compile_bindings(document: model.Document, inline: object, index: int,
 		if kind is None:
 			continue
 		location = span(document, inline)
+		binding_index = sum(1 for previous in children[:position]
+			if previous.type == "link_open" and bindings.binding_kind(
+				urllib.parse.unquote(previous.attrGet("href"))) is not None)
 		raw = child.meta["binding_payload"]
 		value = raw
 		default_sheet = scope if scope else (
@@ -605,6 +611,7 @@ def _compile_bindings(document: model.Document, inline: object, index: int,
 		target = references.parse_reference(target_text, default_sheet)
 		action = model.Action(kind, location, index, "Down" if kind == "fill" else raw,
 			target=target, worksheet=default_sheet)
+		_visible_destination(document, inline, action, location, binding_index)
 		alternatives = [item["alternative"] for item in item_stack if item["alternative"] is not None]
 		if alternatives:
 			action.alternative_group, action.alternative_branch = alternatives[-1]
@@ -657,6 +664,40 @@ def _compile_bindings(document: model.Document, inline: object, index: int,
 			literal.meta["binding_action"] = action
 			children[first:last] = [literal]
 		document.actions.append(action)
+
+
+def _visible_destination(document: model.Document, inline: object, action: model.Action,
+	location: model.SourceSpan, binding_index: int) -> None:
+	"""Reject an explicit `cell C2` phrase that contradicts its binding target."""
+	if action.kind not in ("label", "enter", "replace") or action.target is None:
+		return
+	if action.target.start_row != action.target.end_row or action.target.start_column != action.target.end_column:
+		return
+	binding_links = []
+	for match in re.finditer(r"\[([^]]*)\]\(([^)]*)\)", inline.content):
+		if bindings.binding_kind(urllib.parse.unquote(match[2])) is not None:
+			binding_links.append(match)
+	if binding_index >= len(binding_links):
+		return
+	# Look only at the clause before this action link. Earlier actions in the
+	# same paragraph may name different destinations.
+	visible = inline.content[:binding_links[binding_index].start()]
+	visible = visible.replace("**", "").replace("`", "")
+	matches = list(re.finditer(
+		r"(?:^|[.;:*][\s\"']*|,\s*(?:and\s+)?|\b(?:and|then)\s+)In\s+"
+		r"(?:cell\s+)?(\$?[A-Za-z]{1,3}\$?[1-9][0-9]*)\s*,?\s+"
+		r"(?:type|enter|calculate|use|replace|label)\b", visible, re.IGNORECASE))
+	if not matches:
+		return
+	match = matches[-1]
+	mentioned = references.parse_reference(match[1], action.worksheet or "")
+	if mentioned is None or (mentioned.start_row == action.target.start_row
+		and mentioned.start_column == action.target.start_column
+		and mentioned.sheet.casefold() == action.target.sheet.casefold()):
+		return
+	diagnostic(document, "action-visible-target", location,
+		f"Visible cell {match[1]} disagrees with {action.kind} target {action.target.address}",
+		f"Use cell {action.target.address} in the instruction or change the binding target")
 
 
 def _scalar_action(document: model.Document, action: model.Action, index: int,

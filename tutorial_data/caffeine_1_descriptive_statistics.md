@@ -44,23 +44,23 @@ This is tutorial 1 of 3. No previous tutorial is required. The workbook contains
 
 ### Part: **Warm up - Tania + Roohana**
 
-Welcome to **All-Nighter Academy Orientation**! Before we investigate whether sleep can predict exam performance, let&#8217;s warm up with some basic statistics using Google Sheets! In this section, you'll learn how to enter data and calculate the average amount of sleep students get using mean, median, and sample standard deviation using our dataset, and summarize their exam scores too. These calculations will help us understand the data before moving on to the rest of the analysis.
+Welcome to **All-Nighter Academy Orientation**! Before we investigate whether sleep can predict exam performance, let's warm up with some basic statistics using Google Sheets! In this section, you'll learn how to enter data and calculate the average amount of sleep students get using mean, median, and sample standard deviation using our dataset, and summarize their exam scores too. These calculations will help us understand the data before moving on to the rest of the analysis.
 
 #### Step: **Set Up Your Google Sheet**
 
 Before we begin calculating statistics, we need to create a personal workspace where we can organize, analyze and interpret our data. Throughout this tutorial, you will be using Google Sheets to perform calculations and create visualizations.
 
 1. Open this tutorial's generated XLSX workbook in Google Sheets, containing the template data created by your favorite grad students.\
-2. Make a personal copy of the Google Sheet by going under **File** and &#8220;**Make a Copy**&#8221;\
+2. Make a personal copy of the Google Sheet by going under **File** and "**Make a Copy**"\
 3. Rename your spreadsheet with your name and the date. For example: **Name_AllNighterAcademy_102126**\
 4. Take a moment to familiarize yourself with the Google Sheet layout. Use the **Sleep and scores** tab throughout this activity; the data are in A1:B26, and each row is one student.\
 5. Make sure you can view the column containing the **Hours of Sleep** and **Exam Score** data. These variables will be the focus of our analysis through this tutorial.
 
-Once your Google Sheet is set up, you&#8217;re ready to begin exploring the data.
+Once your Google Sheet is set up, you're ready to begin exploring the data.
 
 #### Step: **Calculate the Basics**
 
-Before we examine whether sleep is related to exam performance, let&#8217;s summarize the data using descriptive statistics. Descriptive statistics helps us understand the typical values in a dataset and how much those values vary from one student to another
+Before we examine whether sleep is related to exam performance, let's summarize the data using descriptive statistics. Descriptive statistics helps us understand the typical values in a dataset and how much those values vary from one student to another
 
 For this activity, we will calculate the average amount of sleep students get, as well as summarize exam performance using the **mean**, **median**, and **standard deviation**.
 
@@ -97,4 +97,4 @@ A small standard deviation indicates that the sleep durations are clustered clos
 
 Write two sentences for Dr. Caffeine: one about typical sleep and its variability, and one about typical exam performance and its variability. Include the six calculated values and their units. Keep the formulas in your workbook for submission.
 
-Congratulations! You are now ready for your first day at All-Nighter Academy. You have successfully used Google Sheets to calculate descriptive statistics. Next, we&#8217;ll use a set of data to investigate whether hours of sleep can predict final exam scores.
+Congratulations! You are now ready for your first day at All-Nighter Academy. You have successfully used Google Sheets to calculate descriptive statistics. Next, we'll use a set of data to investigate whether hours of sleep can predict final exam scores.

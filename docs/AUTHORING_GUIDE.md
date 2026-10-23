@@ -42,6 +42,25 @@ A table directly under a sheet declaration begins at A1. Put `#### At: <cell>` d
 each additional table to set its top-left address. Table headers are workbook cells. A table's
 assigned range cannot overlap another table.
 
+## Start from a teaching template
+
+Copy the closest file from `templates/` before writing a new lesson. The calculated-column,
+statistical-summary, and ANOVA templates show ordinary spreadsheet coordinates and Excel formulas;
+they are examples to adapt, not required worksheet layouts. Choose the labels, locations, tables,
+formulas, and student tasks that make sense for your lesson. The compiler applies typography,
+spacing, borders, shading, and color after you have made those teaching decisions.
+
+The Workbook section contains only material present when students open the workbook. Put source
+data there. Put labels, formulas, chart creation, and written responses students must construct in
+the Tutorial instructions. A calculated value can be known to the compiler for validation without
+being supplied as an answer in the starting workbook.
+
+Write source using keyboard ASCII: straight quotes (`'` and `"`), ordinary hyphens, and `->` for a
+menu path. Use readable named entities such as `&alpha;`, `&beta;`, `&le;`, and `&ge;` when a
+scientific symbol matters. Do not paste curly punctuation, Unicode subscripts, or numeric character
+references such as `&#945;`. The compiler diagnoses those source characters; its rendered output may
+apply typographic styling without changing what students need to type.
+
 ## Write instructions
 
 Use `### Part:`, `#### Step:`, and `##### Substep:` headings. The converter generates numbering;
@@ -64,6 +83,9 @@ Name each destination cell or range in the visible instruction or its parent ite
 target does not tell the student where to type. Label links decode ordinary Markdown emphasis and
 entities as label text; quoted labels retain their visible quotes. Enter/Replace quoted scalars
 follow JSON rules and retain their copy text until scalar decoding.
+When an action sentence explicitly says `In cell C2, enter ...`, the visible cell must match the
+semantic action target. This catches a common copy-and-paste error while leaving ordinary mentions
+of input cells and formula references alone.
 
 Legacy `**Label D2:**`, `**Enter E2:**`, `**Replace E2:**`, `**Select:**`, and `**Fill C2:C26:**`
 openings remain supported. `Label`, `Enter`, and `Replace` record assignments for validation but
@@ -91,7 +113,7 @@ text unless it is the target of a recognized action.
 
 Formula roles are recognized in action payloads, code spans, formula fences, and workbook tables.
 The renderer preserves the authored formula text and formats formulas in Roboto Mono with dark green
-(`#188038`). No author color markup is needed. In GFM tables, escape a literal pipe as `\|` as
+(`#007A00`). No author color markup is needed. In GFM tables, escape a literal pipe as `\|` as
 required by the table syntax.
 
 After entering a formula in the first row, use `- **Fill C2:C26:** Down` to teach copying it

@@ -54,8 +54,8 @@ The primary goal of this exercise is to determine whether microbial diversity (m
 
 In this tutorial, you will use **Google Sheets** to conduct a **Z-test** using the sample data to investigate whether microbial diversity at **Busse Woods** is lower than the benchmark.
 
-* **Null Hypothesis H&#x2080;**: The population mean microbial diversity in the forest preserve is at least the benchmark (Shannon Index >= 4.0).
-* **Alternative Hypothesis H&#x2081;**: The population mean microbial diversity in the forest preserve is lower than the benchmark (Shannon Index < 4.0).
+* **Null Hypothesis H<sub>0</sub>**: The population mean microbial diversity in the forest preserve is at least the benchmark (Shannon Index >= 4.0).
+* **Alternative Hypothesis H<sub>1</sub>**: The population mean microbial diversity in the forest preserve is lower than the benchmark (Shannon Index < 4.0).
 
 #### Step: Find Your Copy of the Spreadsheet
 
@@ -110,9 +110,9 @@ This is used when you want to test if there is any **significant difference** in
 
 * **Example Hypothesis**:
 
-  * **Null Hypothesis (H&#x2080;)**: The average microbial diversity in the forest preserve is equal to the benchmark (Shannon Index \= 4.0).
+  * **Null Hypothesis (H<sub>0</sub>)**: The average microbial diversity in the forest preserve is equal to the benchmark (Shannon Index \= 4.0).
 
-  * **Alternative Hypothesis (H&#x2081;)**: The average microbial diversity in the forest preserve is different from the benchmark (either higher or lower).
+  * **Alternative Hypothesis (H<sub>1</sub>)**: The average microbial diversity in the forest preserve is different from the benchmark (either higher or lower).
 
 Use a **two-tailed test** if you do not have a specific expectation about whether the microbial diversity is **higher or lower** than the benchmark. You're testing for any difference.
 
@@ -122,9 +122,9 @@ This is used when you have a **specific direction** in mind. For example, if you
 
 * **Example Hypothesis**:
 
-  * **Null Hypothesis (H&#x2080;)**: The microbial diversity in the forest preserve is less than or equal to the benchmark (Shannon Index <= 4.0).
+  * **Null Hypothesis (H<sub>0</sub>)**: The microbial diversity in the forest preserve is less than or equal to the benchmark (Shannon Index <= 4.0).
 
-  * **Alternative Hypothesis (H&#x2081;)**: The microbial diversity in the forest preserve is **greater** than the benchmark (Shannon Index \> 4.0).
+  * **Alternative Hypothesis (H<sub>1</sub>)**: The microbial diversity in the forest preserve is **greater** than the benchmark (Shannon Index \> 4.0).
 
 Use a **one-tailed test** if you have a specific hypothesis about whether the microbial diversity is **higher** (or lower, if reversed) than the benchmark. This allows you to test for a **directional** difference.
 

@@ -75,3 +75,17 @@ origin belongs there too. Rules: [REPO_STYLE.md](REPO_STYLE.md).
 - Restore the original wording, descriptive headings, humor, and compact numbered groups across all
   tutorials. Change prose only for technical references, formulas, data, or genuine science errors;
   complete missing Caffeine content while preserving its good prose.
+
+## Student publishing
+
+- BIOL318 tutorial authors should learn spreadsheet formulas, layout, and design; readers should
+  learn statistics and how to construct spreadsheets.
+- Keep source characters ASCII. Straight quotes and named entities are acceptable; numeric character
+  references are unwanted.
+- Preserve authored prose. Following a template is acceptable.
+- Update references automatically when authors move columns or ranges or change data size.
+- Give the compiler considerable visual freedom, including color and flair. My favorite palette
+  includes dark reds, oranges, lime, green, teal, cyan, blue, purple, magenta, and pink; select
+  colors purposefully.
+- Give headings varied left indentation, with Step headings farther left than body paragraphs.
+- Fully justify paragraphs that run longer than two lines.

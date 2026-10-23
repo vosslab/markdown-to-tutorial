@@ -71,17 +71,49 @@ def test_semantic_workbook_roles_style_regions_without_changing_content(
 	tutorial_lib.workbook.verify_workbook(document, path)
 	book = openpyxl.load_workbook(path, data_only=False)
 	output = book["Data"]
-	assert output["A1"].fill.fgColor.rgb.endswith("24527A")
-	assert output["A2"].fill.fgColor.rgb.endswith("DCEAF7")
-	assert output["D1"].fill.fgColor.rgb.endswith("A64B00")
-	assert output["E2"].fill.fgColor.rgb.endswith("FCE6CF")
-	assert output["D3"].fill.fgColor.rgb.endswith("EAE2F5")
-	assert output["E3"].fill.fgColor.rgb.endswith("EAE2F5")
+	assert output["A1"].fill.fgColor.rgb.endswith("0067CC")
+	assert output["A2"].fill.fill_type is None
+	assert output["D1"].fill.fgColor.rgb.endswith("A719DB")
+	assert output["E2"].fill.fgColor.rgb.endswith("F4E9FB")
+	assert output["D3"].fill.fgColor.rgb.endswith("FFF7FB")
+	assert output["E3"].fill.fgColor.rgb.endswith("FFF7FB")
 	assert output["E2"].value is None
-	assert output["E2"].border.bottom.style == "medium"
+	assert output["E2"].border.bottom.style == "thin"
 	assert output["C1"].fill.fill_type is None
 	assert output["A1"].font.name == "PT Sans"
 	assert output["A1"].font.color.rgb.endswith("FFFFFF")
+	book.close()
+
+
+#============================================
+def test_future_headers_and_empty_interpretation_space_preserve_student_work(
+		tmp_path: pathlib.Path,
+) -> None:
+	"""Learner-built headers and response panels receive style without supplied content."""
+	source = "# Analysis\n\n## Workbook\n\n### Sheet: Data\n\n"
+	source += "| Observation |\n| --- |\n| 1 |\n\n"
+	source += "- **Region A1:A2:** source\n- **Region C1:D3:** results\n"
+	source += "- **Region C5:E8:** interpretation\n- **Region H3:I5:** calculation\n\n## Tutorial\n\n"
+	source += "### Part: Summarize\n\n- **Worksheet:** Data\n\n#### Step: Calculate\n\n"
+	source += "- **Label C1:** Statistic\n- **Label D1:** Value\n- **Enter D2:** `=A2`\n"
+	source += "- **Label H4:** Group A\n- **Label I4:** Group B\n"
+	document = tutorial_lib.compiler.compile_source(source)
+	assert not document.has_errors
+	path = tmp_path / "future_headers.xlsx"
+	tutorial_lib.workbook.write_workbook(document, path)
+	tutorial_lib.workbook.verify_workbook(document, path)
+	book = openpyxl.load_workbook(path)
+	sheet = book["Data"]
+	assert sheet["C1"].value is None and sheet["D1"].value is None
+	assert sheet["C1"].fill.fgColor.rgb.endswith("A719DB")
+	assert sheet["C1"].font.bold and sheet["C1"].font.color.rgb.endswith("FFFFFF")
+	assert sheet["D2"].border.bottom.style == "thin"
+	assert sheet["C5"].fill.fgColor.rgb.endswith("FFF7FB")
+	assert sheet["E8"].fill.fgColor.rgb.endswith("FFF7FB")
+	assert sheet["C5"].border.top.style == "medium"
+	assert sheet["E8"].border.bottom.style == "medium"
+	assert sheet["H4"].fill.fgColor.rgb.endswith("00775F")
+	assert sheet["I4"].font.bold
 	book.close()
 
 
@@ -136,6 +168,28 @@ def test_row_one_table_freezes_header(tmp_path: pathlib.Path) -> None:
 	book = openpyxl.load_workbook(path)
 	assert book["Data"].freeze_panes == "A2"
 	assert book["Data"].column_dimensions["C"].width == 12
+	book.close()
+
+
+#============================================
+def test_source_table_style_does_not_color_distant_student_workspace(tmp_path: pathlib.Path) -> None:
+	"""Padded source regions retain blank student workspace instead of colored rectangles."""
+	model = tutorial_lib.model
+	span = model.SourceSpan('source.md', 1, 1)
+	sheet = model.Worksheet('Data', span)
+	sheet.regions.append(model.TableRegion(1, 1, 30, 14, span))
+	sheet.cells[(1, 1)] = model.CellSeed(1, 1, model.Scalar('text', 'Observation'), span)
+	sheet.cells[(2, 1)] = model.CellSeed(2, 1, model.Scalar('number', 2), span)
+	sheet.entry_cells.add((12, 12))
+	document = model.Document(pathlib.Path('source.md'), '', worksheets=[sheet])
+	path = tmp_path / 'workspace.xlsx'
+	tutorial_lib.workbook.write_workbook(document, path)
+	book = openpyxl.load_workbook(path)
+	output = book['Data']
+	assert output['A1'].fill.fgColor.rgb.endswith('0067CC')
+	assert output['L12'].fill.fgColor.rgb.endswith('E6F3F0')
+	assert output['N30'].fill.fill_type is None
+	assert output['A3'].border.bottom.style is None
 	book.close()
 
 

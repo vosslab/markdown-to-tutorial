@@ -10,6 +10,7 @@ import argparse
 import tutorial_lib.build
 import tutorial_lib.compiler
 import tutorial_lib.workbook
+import tutorial_lib.worksheet_edit
 
 
 #============================================
@@ -26,6 +27,29 @@ def main(argv: list[str] | None = None) -> int:
 	importer = commands.add_parser("import-xlsx", help="Create a Markdown draft from an XLSX")
 	importer.add_argument("source", type=pathlib.Path)
 	importer.add_argument("--output", "-o", type=pathlib.Path, required=True)
+	editor = commands.add_parser("worksheet-edit",
+		help="Preview a coordinated worksheet-coordinate maintenance edit")
+	editor.add_argument("source", type=pathlib.Path)
+	editor.add_argument("--sheet", required=True, help="Declared worksheet name")
+	editor.add_argument("--write", action="store_true", help="Atomically write the compiled preview")
+	edit_commands = editor.add_subparsers(dest="worksheet_edit", required=True)
+	insert_rows = edit_commands.add_parser("insert-rows", help="Insert worksheet rows")
+	insert_rows.add_argument("--at", type=int, required=True)
+	insert_rows.add_argument("--count", type=int, required=True)
+	insert_columns = edit_commands.add_parser("insert-columns", help="Insert worksheet columns")
+	insert_columns.add_argument("--at", required=True, help="Column letter or number")
+	insert_columns.add_argument("--count", type=int, required=True)
+	move_range = edit_commands.add_parser("move-range", help="Move a worksheet rectangle")
+	move_range.add_argument("--range", dest="source_range", required=True)
+	move_range.add_argument("--destination", required=True)
+	resize = edit_commands.add_parser("resize-observations", help="Resize a supplied data table")
+	resize.add_argument("--data-range", required=True)
+	resize.add_argument("--rows", type=int, required=True)
+	# Authors naturally append the confirmation flag after the operation.  Keep
+	# the parent spelling too, so both command orders are accepted.
+	for command in (insert_rows, insert_columns, move_range, resize):
+		command.add_argument("--write", action="store_true", default=argparse.SUPPRESS,
+			help=argparse.SUPPRESS)
 	args = parser.parse_args(argv)
 	if args.command == "import-xlsx":
 		if args.output.exists() or args.output.is_symlink():
@@ -34,6 +58,29 @@ def main(argv: list[str] | None = None) -> int:
 		with args.output.open("x", encoding="utf-8") as handle:
 			handle.write(draft)
 		print(f"Wrote draft {args.output}; author the Tutorial scaffold before building.")
+		return 0
+	if args.command == "worksheet-edit":
+		try:
+			at = getattr(args, "at", None)
+			if args.worksheet_edit == "insert-columns":
+				at = tutorial_lib.worksheet_edit.column_number(args.at)
+			request = tutorial_lib.worksheet_edit.WorksheetEdit(args.worksheet_edit, args.sheet,
+				at=at, count=getattr(args, "count", None),
+				source_range=getattr(args, "source_range", None),
+				destination=getattr(args, "destination", None),
+				data_range=getattr(args, "data_range", None), rows=getattr(args, "rows", None))
+			result = tutorial_lib.worksheet_edit.prepare_edit(args.source, request)
+		except tutorial_lib.worksheet_edit.WorksheetEditError as error:
+			print(f"worksheet-edit: {error}", file=sys.stderr)
+			return 1
+		print(result.diff, end="")
+		for notice in result.notices:
+			print(f"Review: {notice}", file=sys.stderr)
+		if args.write:
+			tutorial_lib.worksheet_edit.write_edit(args.source, result)
+			print(f"Updated {args.source}")
+		else:
+			print("Preview only; rerun with --write to replace the source.", file=sys.stderr)
 		return 0
 	document = tutorial_lib.compiler.compile_document(args.source)
 	for item in document.diagnostics:

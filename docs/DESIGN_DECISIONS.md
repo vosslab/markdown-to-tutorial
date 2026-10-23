@@ -71,6 +71,21 @@ as a missing input, while formula dependencies remain validated in action order.
 **Owner.** [TUTORIAL_SPEC.md](TUTORIAL_SPEC.md), [semantic_bindings.py](../tutorial_lib/semantic_bindings.py),
 and [compiler.py](../tutorial_lib/compiler.py).
 
+### ASCII source with rendered scientific typography
+
+**Decision.** Lint authored Markdown files as ASCII and reject numeric character references while
+allowing readable named scientific entities and ordinary `sub` and `sup` markup.
+
+**Why.** BIOL 318 authors should be able to write source with an ordinary keyboard and read it
+without memorizing numeric encodings. Renderers can still present scientific notation cleanly.
+
+**Consequence.** File compilation reports source locations for pasted Unicode and numeric entities.
+The parser and renderers continue accepting Unicode in in-memory callers, which keeps output and
+test internals independent from the authoring-file contract.
+
+**Owner.** [source_text.py](../tutorial_lib/source_text.py) and
+[TUTORIAL_SPEC.md](TUTORIAL_SPEC.md).
+
 ### Restore authored Markdown boundaries
 
 **Decision.** Preserve literal scalar payloads, authored emphasis, paragraph-terminal Markdown hard
@@ -361,3 +376,38 @@ Docs/Sheets validation and student-study limits explicitly.
 
 **Owner.** [instructional voice restoration plan](active_plans/instructional_voice_restoration.md)
 and its [review ledger](active_plans/reports/voice_restoration_summary.md).
+
+### Student publishing edit contract
+
+**Decision.** Use native Excel A1 references and the existing action formats. Keep the starting
+workbook separate from the ordered learner activities. Worksheet edits make explicit structural
+changes through preview and write modes while preserving authored words; the compiler does not
+write tutorial prose.
+
+**Why.** Authors need to revise workbook structure and data size without losing lesson text or
+repairing dependent references by hand. A distinct starting workbook and activity sequence clarifies
+what readers receive and what they do.
+
+**Consequence.** Preview structural worksheet edits before writing them, and maintain references
+automatically after columns, ranges, or data size change. Keep native A1 notation and existing
+actions as the source contract.
+
+**Owner.** [student publishing implementation ledger](active_plans/student_publishing_implementation.md)
+and the existing tutorial source and compiler contracts.
+
+### Native DOCX alignment and indentation
+
+**Decision.** Use native DOCX paragraph styles for heading indentation and paragraph alignment,
+including step headings with zero left indent and a 0.2-inch body indent. Estimate natural wrapped line counts from
+font metrics and usable paragraph width; justify prose estimated to exceed two lines. Keep headings,
+formula displays, hard-break paragraphs, and table entries left aligned, except the corrected formula
+introduction, which remains justified.
+
+**Why.** Native paragraph formatting survives Google Docs import and supports both relative heading
+placement and full justification without relying on fixed spaces or direct-run alignment.
+
+**Consequence.** Step headings sit left of body paragraphs, with varied heading indentation. Exact
+wrapping can change after import, so the estimate is not a claim of live Google Docs verification.
+
+**Owner.** [DOCX styles](../tutorial_lib/docx_styles.py), [DOCX renderer](../tutorial_lib/docx_renderer.py),
+and the [student publishing implementation ledger](active_plans/student_publishing_implementation.md).

@@ -69,6 +69,43 @@ The destination must not already exist. The draft contains workbook data and a T
 author the instructions before building. See [AUTHORING_GUIDE.md](AUTHORING_GUIDE.md) and the
 [tutorial specification](TUTORIAL_SPEC.md) for supported content and limits.
 
+## Maintain a worksheet after a layout decision
+
+Students write ordinary Markdown and ordinary Excel formulas. They do not need this command for
+normal tutorial authoring. Use it only when an author has deliberately changed an existing layout
+and wants the compiler to update the associated workbook coordinates, formula operands, action
+links, and explicit cell instructions together.
+
+The command prints a preview and leaves the source unchanged by default:
+
+```bash
+python3 make_tutorial.py worksheet-edit tutorial_data/caffeine_3_quadratic_regression.md \
+  --sheet "Sleep and scores" insert-columns --at A --count 1
+```
+
+Review the diff, then rerun the same command with `--write` to atomically replace an unchanged
+source file. `--write` may appear before or after the edit operation. The command recompiles its
+candidate before it can write. It supports familiar
+worksheet maintenance operations:
+
+```bash
+python3 make_tutorial.py worksheet-edit lesson.md --sheet Data insert-rows --at 2 --count 1
+python3 make_tutorial.py worksheet-edit lesson.md --sheet Data move-range \
+  --range H1:M26 --destination J1
+python3 make_tutorial.py worksheet-edit lesson.md --sheet Data resize-observations \
+  --data-range A1:B26 --rows 50
+```
+
+The editor changes only declared worksheet geometry, semantic action targets, explicit cell/range
+instructions, and formulas marked as spreadsheet formulas. It intentionally leaves scientific
+prose, worked numerical conclusions, URLs, and unmarked mathematical notation alone. An ambiguous
+bare coordinate in otherwise instructional prose is retained and reported for review instead of
+being guessed at; use an explicit `cell`, `range`, action link, or code-formatted spreadsheet
+formula when it must be maintained. A resize prints review notices for nearby numerical
+explanations; authors remain responsible for checking whether those examples and interpretations
+still make sense. If a reference only partly overlaps a moved range, or the resulting source does
+not compile, the command stops without writing anything.
+
 ## Check numerical expectations
 
 Generate independent SciPy/NumPy expectations for all 12 lessons, then prepare the optional

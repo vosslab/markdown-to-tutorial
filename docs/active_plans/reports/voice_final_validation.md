@@ -18,4 +18,4 @@ source source_me.sh && python3 devel/validate_libreoffice.py tutorial_data/*.md 
 
 The expectation-generation script was deliberately not used because it rewrites the expectation file. LibreOffice suite/build/calculation commands ran outside the sandbox as required by the repository instructions.
 
-Build diagnostics remain scoped to authored practice ranges that extend beyond the supplied data, optional Google worksheet mappings that are absent, and offline coverage limits for `INDEX`, `LINEST`, and `SUMPRODUCT`; per-line records are in each bundle’s `validation.json`. Fresh independent review of the rebuilt student materials is a separate acceptance step; this receipt does not claim material-quality acceptance.
+Build diagnostics remain scoped to authored practice ranges that extend beyond the supplied data, optional Google worksheet mappings that are absent, and offline coverage limits for `INDEX`, `LINEST`, and `SUMPRODUCT`; per-line records are in each bundle's `validation.json`. Fresh independent review of the rebuilt student materials is a separate acceptance step; this receipt does not claim material-quality acceptance.

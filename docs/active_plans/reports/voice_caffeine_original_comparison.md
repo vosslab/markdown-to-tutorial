@@ -14,20 +14,20 @@ were shortened or rewritten. The source's voice can return alongside the newer a
 
 | Original source anchor | Current destination | Recommendation |
 | --- | --- | --- |
-| L86-L92: “where the coffee is strong, the students are exhausted” and “too much caffeine” | `caffeine_2_linear_regression.md`, opening L3-L5 | Restore the original scenario paragraph verbatim. Keep the current standalone regression definition and the notice that students become points on the plot. |
+| L86-L92: "where the coffee is strong, the students are exhausted" and "too much caffeine" | `caffeine_2_linear_regression.md`, opening L3-L5 | Restore the original scenario paragraph verbatim. Keep the current standalone regression definition and the notice that students become points on the plot. |
 | L100-L108: research question and explicit H0/H1 for a nonzero slope | `caffeine_2_linear_regression.md`, L61 and L165-L170 | Restore the question and hypotheses near the opening scenario, where students first learn what they are investigating. Keep the current explicit two-tailed direction and model-assumption note at the test. |
-| L179-L197: equation symbols explained in plain language; “Don’t let the symbols scare you.” | `caffeine_2_linear_regression.md`, L115-L118 | Restore the source's brief symbol-by-symbol explanation and warm lead-in. Preserve the current equation and percentage-point units. |
-| L223-L229: hypothetical “45 + (5 x hours of sleep)” with explicit warning that values are hypothetical | `caffeine_2_linear_regression.md`, L143-L146 | The current text already preserves this material accurately; retain it. |
-| L313-L327: “plot twist,” upside-down-U story, line “not connecting the dots,” and the pivot to a curve | `caffeine_3_quadratic_regression.md`, L3-L6 and L76-L84 | Restore the original transition and joke structure. Replace only the unsupported 2-hour/14-hour examples with language tied to the observed range. Keep the important point that a significant positive linear slope can coexist with a poor description of curvature. |
-| L340: “Create a SQUARED Sleep-Hours Column” | `caffeine_3_quadratic_regression.md`, L88 | Restore the exact numbered-step heading and emphasis. |
-| L342 and L347: “To let our regression model curve, we need to square our predictor variable (x).” and “Don’t worry, they didn’t sleep for 36 hours!” | `caffeine_3_quadratic_regression.md`, L90-L109 | Restore both original sentences verbatim around the learner's formula/fill action. The current PDF keeps a changed version of the 36-hour joke; the source wording is more conversational. |
-| L351-L367: quadratic equation, symbol meanings, and “That extra x^2 term is what gives the model its curve.” | `caffeine_3_quadratic_regression.md`, L115-L122 | Restore the original explanatory rhythm and direct link between the squared term and curvature. Keep the current accurate note that the model remains linear in its coefficients. |
-| L393-L402: “Did quadratic regression actually improve our model, or did we just make the equation more complicated for fun?” | `caffeine_3_quadratic_regression.md`, L181-L196 | Restore the opening question verbatim. Keep the current training-R-squared caveat and residual/new-data follow-up. |
-| L404-L410: “your reward is hopefully a better understanding ... and maybe a snack (no coffee)” and closing water/browser-tabs joke | `caffeine_3_quadratic_regression.md`, L200-L218 | Restore the source's celebratory wording and “PLEASE get some sleep!” ending. Retain the current range and causation qualifications. |
+| L179-L197: equation symbols explained in plain language; "Don't let the symbols scare you." | `caffeine_2_linear_regression.md`, L115-L118 | Restore the source's brief symbol-by-symbol explanation and warm lead-in. Preserve the current equation and percentage-point units. |
+| L223-L229: hypothetical "45 + (5 x hours of sleep)" with explicit warning that values are hypothetical | `caffeine_2_linear_regression.md`, L143-L146 | The current text already preserves this material accurately; retain it. |
+| L313-L327: "plot twist," upside-down-U story, line "not connecting the dots," and the pivot to a curve | `caffeine_3_quadratic_regression.md`, L3-L6 and L76-L84 | Restore the original transition and joke structure. Replace only the unsupported 2-hour/14-hour examples with language tied to the observed range. Keep the important point that a significant positive linear slope can coexist with a poor description of curvature. |
+| L340: "Create a SQUARED Sleep-Hours Column" | `caffeine_3_quadratic_regression.md`, L88 | Restore the exact numbered-step heading and emphasis. |
+| L342 and L347: "To let our regression model curve, we need to square our predictor variable (x)." and "Don't worry, they didn't sleep for 36 hours!" | `caffeine_3_quadratic_regression.md`, L90-L109 | Restore both original sentences verbatim around the learner's formula/fill action. The current PDF keeps a changed version of the 36-hour joke; the source wording is more conversational. |
+| L351-L367: quadratic equation, symbol meanings, and "That extra x^2 term is what gives the model its curve." | `caffeine_3_quadratic_regression.md`, L115-L122 | Restore the original explanatory rhythm and direct link between the squared term and curvature. Keep the current accurate note that the model remains linear in its coefficients. |
+| L393-L402: "Did quadratic regression actually improve our model, or did we just make the equation more complicated for fun?" | `caffeine_3_quadratic_regression.md`, L181-L196 | Restore the opening question verbatim. Keep the current training-R-squared caveat and residual/new-data follow-up. |
+| L404-L410: "your reward is hopefully a better understanding ... and maybe a snack (no coffee)" and closing water/browser-tabs joke | `caffeine_3_quadratic_regression.md`, L200-L218 | Restore the source's celebratory wording and "PLEASE get some sleep!" ending. Retain the current range and causation qualifications. |
 
 The descriptive-stats introduction already preserves the source's academy-warmup premise and credits
 Tania and Roohana. Keep its corrected promise to calculate both variables. Restore the source heading
-“Part 0: Warm up - Tania + Roohana” (original L32) if the author wants the original contributor
+"Part 0: Warm up - Tania + Roohana" (original L32) if the author wants the original contributor
 credit visible as a section heading as well as in the current introduction.
 
 ## Keep the useful corrections
@@ -39,7 +39,7 @@ These changes repair errors in the source and should remain while its voice retu
   median exam score after using the sleep range. The current paired-column formulas and `STDEV.S`
   are right; make the explanations lively without restoring those mismatches.
 - Describe the linear result as statistically significant but incomplete for the observed curve.
-  The source's “data is giving absolutely NOTHING linear” (L315) conflicts with the recovered data:
+  The source's "data is giving absolutely NOTHING linear" (L315) conflicts with the recovered data:
   the positive slope is about 3.18 percentage points per hour and the two-tailed p-value is about
   0.00196. The current distinction between evidence of a nonzero slope and model shape is correct.
 - Keep references within the observed 3-to-11.5-hour range when describing the data. Original L315

@@ -44,7 +44,7 @@ def test_authored_backslash_breaks_keep_formula_and_literal_bytes() -> None:
 	formula_runs = [run for paragraph in output.paragraphs for run in paragraph.runs
 		if run.text == formula]
 	assert len(formula_runs) == 2
-	assert all(run.font.color.rgb == docx.shared.RGBColor.from_string('188038')
+	assert all(run.font.color.rgb == docx.shared.RGBColor.from_string('007A00')
 		for run in formula_runs)
 	assert len(output._element.findall('.//w:br', NAMESPACES)) == 2
 
@@ -75,7 +75,7 @@ def test_automatic_formula_color_and_compact_list_paragraphs() -> None:
 		if ''.join(node.text or '' for node in run.findall('w:t', NAMESPACES)) == formula]
 	assert len(formula_runs) == 8
 	for run in formula_runs:
-		assert run.find('w:rPr/w:color', NAMESPACES).get(docx.oxml.ns.qn('w:val')) == '188038'
+		assert run.find('w:rPr/w:color', NAMESPACES).get(docx.oxml.ns.qn('w:val')) == '007A00'
 		assert run.find('w:rPr/w:rFonts', NAMESPACES).get(
 			docx.oxml.ns.qn('w:ascii')) == 'Roboto Mono'
 	linked = output._element.find('.//w:hyperlink/w:r', NAMESPACES)
@@ -92,6 +92,79 @@ def test_automatic_formula_color_and_compact_list_paragraphs() -> None:
 	assert body.paragraph_format.space_after is None
 	assert body.style.paragraph_format.space_after.pt == 6
 	assert round(body.style.paragraph_format.line_spacing, 2) == 1.08
+
+
+#============================================
+def test_justification_keeps_deliberate_definition_lines_left_aligned() -> None:
+	"""Hard-break definition lines must not acquire stretched justification spacing."""
+	source = '# Definitions\n\n'
+	source += 'This naturally wrapping paragraph explains a calculation in enough detail that it '
+	source += 'will clearly occupy more than two ordinary body lines in the rendered document. '
+	source += 'It should remain comfortable to read as a justified narrative paragraph.\n\n'
+	source += "**Here's the breakdown:**\\\n"
+	source += 'y-hat = predicted exam score\\\n'
+	source += 'b0 = intercept\\\n'
+	source += 'b1 x = linear term\\\n'
+	source += 'x = hours of sleep\n'
+	document = tutorial_lib.parser.parse_source(source, 'definitions.md')
+	document.content_token_indices = list(range(len(document.tokens)))
+	output = docx.Document()
+	tutorial_lib.docx_styles.configure(output)
+	tutorial_lib.docx_renderer.render_tokens(output, document)
+	narrative = next(paragraph for paragraph in output.paragraphs
+		if paragraph.text.startswith('This naturally wrapping'))
+	definitions = next(paragraph for paragraph in output.paragraphs
+		if paragraph.text.startswith("Here's the breakdown:"))
+	assert narrative.alignment == docx.enum.text.WD_ALIGN_PARAGRAPH.JUSTIFY
+	assert definitions.alignment is None
+	assert definitions.text.count('\n') == 4
+
+
+#============================================
+def test_formula_continuation_becomes_a_copyable_display_without_rewriting_prose() -> None:
+	"""An intentional formula line survives Markdown soft-break normalization."""
+	source = '# Formula display\n\n## Workbook\n\n### Sheet: Data\n\n| A | B |\n| --- | --- |\n| 1 | 2 |\n\n'
+	source += '## Tutorial\n\n### Part: Analysis\n\n#### Step: Calculate\n\n'
+	source += '* In **E11**, calculate the result using this formula:\n  [`=E6^2 / E5^2`](enter:E11)\n'
+	document = tutorial_lib.compiler.compile_source(source)
+	assert not document.has_errors
+	output = docx.Document()
+	tutorial_lib.docx_styles.configure(output)
+	tutorial_lib.docx_renderer.render_tokens(output, document)
+	intro = next(paragraph for paragraph in output.paragraphs
+		if paragraph.text.startswith('In E11,'))
+	display = next(paragraph for paragraph in output.paragraphs if paragraph.text == '=E6^2 / E5^2')
+	assert intro.text == 'In E11, calculate the result using this formula:'
+	assert display._p.find('w:pPr/w:shd', NAMESPACES) is not None
+	assert display._p.find('w:pPr/w:pBdr', NAMESPACES) is not None
+	assert display.runs[0].font.color.rgb == docx.shared.RGBColor.from_string('007A00')
+
+
+#============================================
+def test_formula_display_keeps_its_justified_introduction_without_trapping_following_prose() -> None:
+	"""A displayed formula stays with its long explanation, not the next paragraph."""
+	source = '# Formula display\n\n## Workbook\n\n### Sheet: Data\n\n'
+	source += '| A | B |\n| --- | --- |\n| 1 | 2 |\n\n'
+	source += '## Tutorial\n\n### Part: Analysis\n\n#### Step: Calculate\n\n'
+	source += '* In **E11**, carefully calculate the result using this formula after reviewing '
+	source += 'the evidence from every measurement and comparing the numerator with the denominator. '
+	source += 'This explanation is deliberately long enough to wrap naturally across several lines '\
+		'in the rendered document:\n  [`=E6^2 / E5^2`](enter:E11)\n\n'
+	source += 'Then explain what the result means in the context of the experiment.\n'
+	document = tutorial_lib.compiler.compile_source(source)
+	assert not document.has_errors
+	output = docx.Document()
+	tutorial_lib.docx_styles.configure(output)
+	tutorial_lib.docx_renderer.render_tokens(output, document)
+	intro = next(paragraph for paragraph in output.paragraphs
+		if paragraph.text.startswith('In E11, carefully calculate'))
+	display = next(paragraph for paragraph in output.paragraphs if paragraph.text == '=E6^2 / E5^2')
+	following = next(paragraph for paragraph in output.paragraphs
+		if paragraph.text.startswith('Then explain'))
+	assert intro.alignment == docx.enum.text.WD_ALIGN_PARAGRAPH.JUSTIFY
+	assert intro.paragraph_format.keep_with_next is True
+	assert not display.paragraph_format.keep_with_next
+	assert not following.paragraph_format.keep_with_next
 
 
 #============================================
@@ -126,7 +199,7 @@ def test_literal_action_payloads_keep_copy_text_without_formula_style() -> None:
 		expected_text = payload[1:-1] if code else payload
 		assert paragraph.text == f'{kind} C2: ' + expected_text
 		for run in paragraph.runs:
-			assert str(run.font.color.rgb) != '188038'
+			assert str(run.font.color.rgb) != '007A00'
 		payload_run = paragraph.runs[-1]
 		assert payload_run.font.name == ('Roboto Mono' if code else None)
 
@@ -155,6 +228,10 @@ def test_standard_styles_and_direct_fonts() -> None:
 	]
 	assert all(p.style.name in standard for p in output.paragraphs)
 	assert all(run.font.name is None for p in output.paragraphs[:5] for run in p.runs)
+	step_heading = output.paragraphs[2]
+	body_paragraph = output.paragraphs[5]
+	assert step_heading.style.name == "Heading 2"
+	assert step_heading.style.paragraph_format.left_indent < body_paragraph.style.paragraph_format.left_indent
 	assert output.paragraphs[5].runs[0].font.name is None
 	assert output.sections[0].footer.paragraphs[0].style.name == "Normal"
 	table_link = output.tables[0].cell(1, 0)._tc.find(".//w:hyperlink/w:r", NAMESPACES)
@@ -268,7 +345,7 @@ def test_semantic_bindings_preserve_numbered_caffeine_instruction_text() -> None
 	assert any(run.text == "Square" and run.bold for run in output.paragraphs[2].runs)
 	assert output.paragraphs[4].runs[1].font.color.rgb is None
 	formula_run = next(run for run in output.paragraphs[5].runs if run.text == "=A2^2")
-	assert str(formula_run.font.color.rgb) == "188038"
+	assert str(formula_run.font.color.rgb) == "007A00"
 	assert [paragraph.style.name for paragraph in output.paragraphs[3:7]] == [
 		"Normal", "Normal", "Normal", "Normal",
 	]

@@ -58,7 +58,7 @@ buffer and broken in a bead beater, and the crude lysate is clarified by high sp
 centrifugation to obtain a clear soluble fraction. Solid ammonium sulfate is then added to this
 fraction to precipitate protein, the mixture is centrifuged again, and the resulting protein
 pellet is resuspended in a smaller volume of Ni NTA binding buffer. The enriched solution is
-loaded onto a small gravity flow column packed with Ni&sup2;&#8314; charged resin, washed, and
+loaded onto a small gravity flow column packed with Ni&sup2;<sup>+</sup> charged resin, washed, and
 PETase is eluted with an imidazole containing buffer, followed by SDS PAGE to identify and pool
 the best fractions. The pooled Ni eluate is concentrated using a centrifugal concentrator and run
 over a size exclusion chromatography column to remove remaining aggregates and contaminants. The

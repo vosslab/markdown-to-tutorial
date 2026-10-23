@@ -45,25 +45,25 @@ This is tutorial 3 of 3. Complete the linear regression tutorial first or bring 
 
 ### Part: **Why Straight Lines Fail, The Plot Twist! - QUADRATIC Regression!**
 
-Now that we&#8217;ve officially run our linear regression, Dr. Caffeine is staring at the results like he just failed his own exam. The line exists, sure, and its positive slope is statistically significant, but it misses the curve in these data. Looking at our scatterplot, the points form an upside-down U, almost like students&#8217; brains function perfectly until they sleep near the low or high end of the observed 3-to-11.5-hour range. Apparently, there IS a curve in this dataset! Students in this dataset who get a moderate amount of sleep tend to score the highest, while those near either end of the observed range tend to score lower. Unfortunately, a straight line cannot capture this academic roller coaster. Dr. Caffeine needs a new plan, another cup of coffee, and possibly a nap himself?
+Now that we've officially run our linear regression, Dr. Caffeine is staring at the results like he just failed his own exam. The line exists, sure, and its positive slope is statistically significant, but it misses the curve in these data. Looking at our scatterplot, the points form an upside-down U, almost like students' brains function perfectly until they sleep near the low or high end of the observed 3-to-11.5-hour range. Apparently, there IS a curve in this dataset! Students in this dataset who get a moderate amount of sleep tend to score the highest, while those near either end of the observed range tend to score lower. Unfortunately, a straight line cannot capture this academic roller coaster. Dr. Caffeine needs a new plan, another cup of coffee, and possibly a nap himself?
 
 ![All-Nighter Academy illustration](assets/caffeine_09.png)
 
 #### Step: Set Up Your Google Sheet
 
 1. Open the generated XLSX workbook in Google Sheets and make a personal copy under **File** and **Make a Copy**. Rename it with your name and date. Use **Sleep and scores**, where A1:B26 contains the same 25 paired observations. Keep each student's pair together; record written responses in L7:N16 or in accompanying notes.
-2. [Select A1:B26](select:A1:B26), choose **Insert &#8594; Chart**, and choose **Scatter chart**. Label the x-axis Hours of Sleep and the y-axis Final Exam Score (%), and add an informative title.
+2. [Select A1:B26](select:A1:B26), choose **Insert -> Chart**, and choose **Scatter chart**. Label the x-axis Hours of Sleep and the y-axis Final Exam Score (%), and add an informative title.
 3. Recreate the linear comparison: label L1 [Linear comparison](label:L1), L2 [Slope](label:L2), L3 [Intercept](label:L3), and L4 [Linear R-squared](label:L4). Enter [=SLOPE(B2:B26,A2:A26)](enter:M2) in M2, [=INTERCEPT(B2:B26,A2:A26)](enter:M3) in M3, and [=RSQ(B2:B26,A2:A26)](enter:M4) in M4.
 
-**Let&#8217;s see why our linear regression is not giving what it needs to give.**
+**Let's see why our linear regression is not giving what it needs to give.**
 
 #### Step: **Straight Linear Regression**
 
-1. **Add the Linear Trendline First:** On your scatterplot, open the Chart Editor and select **Customize &#8594; Series**. Turn on the **Trendline** and select **Linear**. Make sure to display the equation and (R^2) value. We need receipts because Dr. Caffeine is NOT about to trust a line just because it looks official.\
-2. **Observe the Disconnect:** Look at that straight line running through the middle of the scatterplot. Like&#8230; respectfully, what is going on here? Our data is forming a whole upside-down U, and this line is acting like everything is perfectly linear. Students who get a moderate amount of sleep tend to score higher, while those who barely sleep or sleep like they&#8217;re in a three-day coma tend to score lower. The pattern is an academic roller coaster.\
+1. **Add the Linear Trendline First:** On your scatterplot, open the Chart Editor and select **Customize -> Series**. Turn on the **Trendline** and select **Linear**. Make sure to display the equation and (R^2) value. We need receipts because Dr. Caffeine is NOT about to trust a line just because it looks official.\
+2. **Observe the Disconnect:** Look at that straight line running through the middle of the scatterplot. Like... respectfully, what is going on here? Our data is forming a whole upside-down U, and this line is acting like everything is perfectly linear. Students who get a moderate amount of sleep tend to score higher, while those who barely sleep or sleep like they're in a three-day coma tend to score lower. The pattern is an academic roller coaster.\
 3. **Check your linear receipts:** Use the linear R2 value in M4; if you completed the previous tutorial, it should agree with that result. Does it capture the rise and fall in the data? Dr. Caffeine has his coffee, we have our calculations, and yet this line is still not connecting the dots. R2 describes the variation accounted for by the linear fit; its value alone cannot show whether a straight line captures this pattern. At this point, we need to regroup.
 
-**Time for QUADRATIC REGRESSION!** Since exam scores appear to peak at a moderate amount of sleep and decrease when students get either too little or too much, a curved model may better represent the relationship. Because apparently, sleep has a sweet spot, and statistics refuse to let us have a simple answer. Let&#8217;s see if quadratic regression can save this project before Dr. Caffeine has a full academic crisis!
+**Time for QUADRATIC REGRESSION!** Since exam scores appear to peak at a moderate amount of sleep and decrease when students get either too little or too much, a curved model may better represent the relationship. Because apparently, sleep has a sweet spot, and statistics refuse to let us have a simple answer. Let's see if quadratic regression can save this project before Dr. Caffeine has a full academic crisis!
 
 ![All-Nighter Academy illustration](assets/caffeine_10.png)
 
@@ -71,12 +71,12 @@ Now that we&#8217;ve officially run our linear regression, Dr. Caffeine is stari
 
 ![All-Nighter Academy illustration](assets/caffeine_11.png)
 
-**Hypotheses for Quadratic Term:** This time, we&#8217;re looking at whether adding a squared sleep-hours term provides evidence of curvature
+**Hypotheses for Quadratic Term:** This time, we're looking at whether adding a squared sleep-hours term provides evidence of curvature
 
-* **H&#8320;: &#946;&#8322; = 0** &#8212; There is no quadratic term in the population model.\
-* **H&#8321;: &#946;&#8322; &#8800; 0** &#8212; There is evidence of a quadratic term in the population model
+* **H<sub>0</sub>: &beta;<sub>2</sub> = 0** -- There is no quadratic term in the population model.\
+* **H<sub>1</sub>: &beta;<sub>2</sub> &ne; 0** -- There is evidence of a quadratic term in the population model
 
-**Basically, we&#8217;re asking whether the relationship needs a curve instead of a straight line.**
+**Basically, we're asking whether the relationship needs a curve instead of a straight line.**
 
 #### Step: **Create a SQUARED Sleep-Hours Column**
 
@@ -85,7 +85,7 @@ To let our regression model curve, we need to square our predictor variable (x).
 1. Use blank column C in your spreadsheet.\
 2. Label it [Sleep Hours Squared (x^2)](label:C1)\
 3. If the sleep hours are in cell A2, enter: [=A2^2](enter:C2)\
-4. Press Enter, then [drag the little blue square all the way down to the bottom](fill:C2:C26) to make sure it applies to all students! Basically, we&#8217;re taking each student&#8217;s hours of sleep and multiplying that number by itself. If someone slept 6 hours, their squared sleep value is 36! Don&#8217;t worry, they didn&#8217;t sleep for 36 hours!
+4. Press Enter, then [drag the little blue square all the way down to the bottom](fill:C2:C26) to make sure it applies to all students! Basically, we're taking each student's hours of sleep and multiplying that number by itself. If someone slept 6 hours, their squared sleep value is 36! Don't worry, they didn't sleep for 36 hours!
 
 #### Step: **Calculate Quadratic Regression**
 
@@ -97,14 +97,14 @@ Now we are moving beyond the straight line!\
 Our Equation is:\
 y-hat = b0 + b1 x + b2 x<sup>2</sup>
 
-**Here&#8217;s the breakdown:**\
+**Here's the breakdown:**\
 y-hat = Predicted exam score\
 b0 = intercept\
 b1 x = linear term\
 b2 x<sup>2</sup> = quadratic term, which lets the relationship curve\
 x = hours of sleep
 
-*That extra x^2 term is what gives the model its curve.  Now that we know what all these symbols mean, let&#8217;s get into Google Sheets and see whether or not your data actually is giving us a curve.*
+*That extra x^2 term is what gives the model its curve.  Now that we know what all these symbols mean, let's get into Google Sheets and see whether or not your data actually is giving us a curve.*
 
 This remains linear regression in its coefficients; the squared predictor lets the relationship curve with respect to sleep hours.
 
@@ -156,7 +156,7 @@ Remember:
 
 A higher R2 means the model explains a larger proportion of the variation in the exam scores of this dataset. If your quadratic model has a higher R2, that will suggest that the curve fits these data better. HOWEVER! Adding another term will generally make R2 stay the same or even increase, so a higher value alone does not necessarily prove that quadratic regression is the better choice. Look at the actual pattern in the data, too. Does exam performance seem to increase with sleep and then level off? Do you see any curved pattern, or are we just trying to make the data tell us what we want to hear?
 
-1. Open your scatterplot's **Chart Editor &#8594; Customize &#8594; Series &#8594; Trendline**, change **Linear** to **Polynomial**, and set **Degree** to 2. Display the equation and R-squared. Compare the chart against your fitted coefficients, allowing for display rounding.
+1. Open your scatterplot's **Chart Editor -> Customize -> Series -> Trendline**, change **Linear** to **Polynomial**, and set **Degree** to 2. Display the equation and R-squared. Compare the chart against your fitted coefficients, allowing for display rounding.
 2. Combine the visual pattern, both R-squared values, and the exploratory quadratic-term test. What supports curvature? What residual checks or new-data performance would you examine before relying on the model?
 
 #### Step: **Our final TAKEAWAY!**

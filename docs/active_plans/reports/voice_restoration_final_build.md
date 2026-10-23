@@ -32,13 +32,13 @@ source source_me.sh && python3 devel/validate_libreoffice.py tutorial_data/*.md 
 
 ## Build diagnostics
 
-Across the 12 `validation.json` files, the compiler recorded 14 `google-unmapped` notes, 70 `unavailable-input` warnings, 67 `range-overshoot` warnings, and 20 `formula-coverage` warnings. The Google notes reflect absent optional worksheet mappings. Range warnings come from authored practice formulas that reserve rows past the supplied seed data. Formula coverage warnings concern functions whose compatibility the offline checker does not assess: `INDEX`, `LINEST`, and `SUMPRODUCT`. Specific unavailable-reference diagnostics include Microbes 3 `E17`/`E18` and PETase `J13`; their Calc scenarios nevertheless passed. These diagnostics remain visible in each bundle’s `validation.json` and in the generated manifest.
+Across the 12 `validation.json` files, the compiler recorded 14 `google-unmapped` notes, 70 `unavailable-input` warnings, 67 `range-overshoot` warnings, and 20 `formula-coverage` warnings. The Google notes reflect absent optional worksheet mappings. Range warnings come from authored practice formulas that reserve rows past the supplied seed data. Formula coverage warnings concern functions whose compatibility the offline checker does not assess: `INDEX`, `LINEST`, and `SUMPRODUCT`. Specific unavailable-reference diagnostics include Microbes 3 `E17`/`E18` and PETase `J13`; their Calc scenarios nevertheless passed. These diagnostics remain visible in each bundle's `validation.json` and in the generated manifest.
 
 ## Page counts and SHA-256 manifest
 
 For each tutorial below, hashes are ordered source, DOCX, PDF, XLSX, and `validation.json`. Paths are relative to the repository root.
 
-### `babies_1_z_test` — 6 PDF pages
+### `babies_1_z_test` - 6 PDF pages
 
 ```text
 source     da64c65d64e160d9b7dc311b73afc7e28fefb38efdb45d9a34d9ed2704c1d5c1
@@ -48,7 +48,7 @@ xlsx       ace84c1ced9984fa92094ef7601cd7ea965c0e0e976052d5ebd146989857d757
 validation a867f5c3219444867f8cb5ce2b88c72780f6e08b9d476b2509032912cff277d9
 ```
 
-### `babies_2_t_test` — 6 PDF pages
+### `babies_2_t_test` - 6 PDF pages
 
 ```text
 source     446256332bb144cc1ecbd2d0202043dc980a484ceee4ed28db4d624a6f76e96d
@@ -58,7 +58,7 @@ xlsx       3545c1caeac072021853a41eec2f2c747c57afefc5ddb554c74ebfd60476c89c
 validation ed4170bc37f013f0371665114a57c1e9471eece8bb8952ed57a12a8de0e91812
 ```
 
-### `babies_3_two_sample_t_test` — 5 PDF pages
+### `babies_3_two_sample_t_test` - 5 PDF pages
 
 ```text
 source     c58d36f92c826a7625f5e371c65bad5ab5dca25148301117d69ac1504217db5f
@@ -68,7 +68,7 @@ xlsx       891357795e23d5255c36c6c44cf39afeef8ee9a5aa34d11f010564c9bb805682
 validation 0ad8f4fb581efd29eae0ac7b1ca8f32a74d8acec9785eebb0330e7e664837ff0
 ```
 
-### `caffeine_1_descriptive_statistics` — 3 PDF pages
+### `caffeine_1_descriptive_statistics` - 3 PDF pages
 
 ```text
 source     744577401bf95d03521e45a3b32b606af3258301281b328824d09293f7c18cb2
@@ -78,7 +78,7 @@ xlsx       f1b0baaf4ab5085e3de0e186eae00b31e44b1970745feb580e58f4ce26dfffc3
 validation 06e8d2d8bc2f96eae421a9071b3ec1525f87bc433315800d1af5d9578f2bbe8c
 ```
 
-### `caffeine_2_linear_regression` — 10 PDF pages
+### `caffeine_2_linear_regression` - 10 PDF pages
 
 ```text
 source     c523d926ccca192f42317977b3e2888a4f188fbf25bdf338f9671adab413980a
@@ -88,7 +88,7 @@ xlsx       7d435fb156bc8b9dc95932a7d86a97355629dc53e671c1b36a8e86e80054ead5
 validation 63532032125ee49a9fd8527c0812d5b1af86049478a9897bf07e3b3c7ec157ef
 ```
 
-### `caffeine_3_quadratic_regression` — 7 PDF pages
+### `caffeine_3_quadratic_regression` - 7 PDF pages
 
 ```text
 source     a8736df780e128fa08cb78b8590611b2256221ab67c043aad1ebcc93bf818983
@@ -98,7 +98,7 @@ xlsx       80dfe167a82526de0278d8a70e15599bf5872dca4aafce550d60f7ab40f5d599
 validation a4c374a96c4eb648ab73fd1a70284e7d2b273e1dcfb598d3f3836814f870d390
 ```
 
-### `microbes_1_z_test` — 9 PDF pages
+### `microbes_1_z_test` - 9 PDF pages
 
 ```text
 source     f11f071cae9b664383f4e83bdaa5838004b9e48ffd61ad758c31c7fc41f150c0
@@ -108,7 +108,7 @@ xlsx       d24844d274c0ce3ca4a9b634f9e862b8e8ffa9b46abddb25e91e8987ebb31467
 validation b7fa949160643a8740ff38951e238b1638f1c2a8a89776b48d9355c28bff5129
 ```
 
-### `microbes_2_t_test` — 9 PDF pages
+### `microbes_2_t_test` - 9 PDF pages
 
 ```text
 source     7e75603806f07ce2762833e1778774ea94fcd5775d02caee7fd504e7160b3d3f
@@ -118,7 +118,7 @@ xlsx       7d4e357b664d1cf08250095c216850a5c931340ef09b732915975f56abbe4722
 validation 7e4a5aa0c4695dd50cdaa6a0513c6d72c094e943398a76e09a3bbc8111102f61
 ```
 
-### `microbes_3_two_sample_t_test` — 12 PDF pages
+### `microbes_3_two_sample_t_test` - 12 PDF pages
 
 ```text
 source     86ca0cce468641ada1dce58f22239b728e46921d96b75a753be46bcbf41e49a8
@@ -128,7 +128,7 @@ xlsx       8701f9eed299642af87a4d085e6946986a0c77dac406eeff4282748b6b064218
 validation 18ffa71ba2cc7899a9e606efd0d57db68abe5aaba9b37b56132d23aae2f0a07c
 ```
 
-### `microbes_4_f_test` — 10 PDF pages
+### `microbes_4_f_test` - 10 PDF pages
 
 ```text
 source     34c3a6e2e8d608b0dd84dd78b903cdbaac68f07f1bfcd1b94cd6ddf60bf89269
@@ -138,7 +138,7 @@ xlsx       b2912e4f4200d1a1a6f03fc586a474dc9c75985450da84ffa410a9bd059f81d4
 validation 64ab2f79ea03ecfd25ebb0572ae66a61f385520c982738d0ce59c7175071178c
 ```
 
-### `microbes_5_anova` — 9 PDF pages
+### `microbes_5_anova` - 9 PDF pages
 
 ```text
 source     9e5004a388494c8e7e28e4e9e6d2557466df9de1b90f4338caa2d4eb300fa512
@@ -148,7 +148,7 @@ xlsx       3d39b05270116ecf27aa2dc4fe4a53d29256d64c0014d8c1766f1566f95080e3
 validation 74a74135f0633cf24a7c73720fc85be53b9b9fd8f9d4ec57ff400ad2645093b6
 ```
 
-### `petase_1_linear_regression` — 6 PDF pages
+### `petase_1_linear_regression` - 6 PDF pages
 
 ```text
 source     1831e9d7961f770884bb9debc83d24f33ab9f33bc0d218cb5a60eabce6825469

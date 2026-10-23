@@ -141,6 +141,51 @@ def trim_terminal_hardbreak(children: list) -> list:
 
 
 #============================================
+def display_formula_break(children: list) -> tuple[list, list, tutorial_lib.model.Action | None]:
+	"""Split an authored formula continuation into a compact, editable formula display.
+
+	A soft break normally remains ordinary prose.  This narrow pattern preserves the
+	author's intentional separate formula line when its final content is one semantic
+	formula binding, as in a list item ending with ``[=A2^2](enter:C2)``.
+	"""
+	for position, child in enumerate(children):
+		if child.type != "softbreak":
+			continue
+		suffix = children[position + 1:]
+		action = next((item.meta.get("binding_action") for item in suffix
+			if item.meta.get("binding_action") is not None), None)
+		if action is None or action.scalar is None or action.scalar.kind != "formula":
+			continue
+		meaningful = [item for item in suffix if item.type not in (
+			"link_open", "link_close", "strong_open", "strong_close", "em_open", "em_close")
+			and not (item.type == "text" and not item.content.strip())]
+		if len(meaningful) == 1 and meaningful[0].content == action.scalar.value:
+			return children[:position], suffix, action
+	return children, [], None
+
+
+#============================================
+def add_formula_display(output: object, children: list, document: tutorial_lib.model.Document,
+	lists: list, items: list) -> None:
+	"""Render a standalone instruction formula without turning ordinary prose into cards."""
+	paragraph = output.add_paragraph(style="Normal")
+	tutorial_lib.docx_styles.format_formula(paragraph)
+	if items:
+		paragraph.paragraph_format.left_indent = docx.shared.Inches(
+			tutorial_lib.docx_styles.LIST_INDENT_INCHES * len(lists))
+	tutorial_lib.docx_inline.render(paragraph, children, document)
+
+
+#============================================
+def formula_only(children: list) -> bool:
+	"""Keep a dedicated one-line formula left aligned, even outside a fence."""
+	meaningful = [child for child in children if child.type not in (
+		"link_open", "link_close", "strong_open", "strong_close", "em_open", "em_close")
+		and not (child.type == "text" and not child.content.strip())]
+	return len(meaningful) == 1 and meaningful[0].meta.get("role") == "formula"
+
+
+#============================================
 def render_tokens(output: object, document: tutorial_lib.model.Document) -> None:
 	"""Walk selected block tokens while retaining list and table structure."""
 	lists = []
@@ -182,9 +227,24 @@ def render_tokens(output: object, document: tutorial_lib.model.Document) -> None
 			children = token.children or []
 			if items:
 				children = trim_terminal_hardbreak(children)
+			first_children, formula_children, formula_action = display_formula_break(children)
 			tutorial_lib.docx_inline.render(
-				paragraph, children, document, action, font_name=font_name,
+				paragraph, first_children, document, action, font_name=font_name,
 			)
+			if cell is None and not formula_only(first_children):
+				indent = tutorial_lib.docx_styles.BODY_INDENT_INCHES
+				if quote_depth:
+					indent += 0.25
+				if items:
+					indent += tutorial_lib.docx_styles.LIST_INDENT_INCHES * len(lists)
+				width = tutorial_lib.docx_styles.USABLE_PAGE_WIDTH_INCHES - indent
+				tutorial_lib.docx_styles.justify_narrative(paragraph, width)
+			if formula_action is not None:
+				# The narrative introduces this display; keep that relationship on the
+				# introductory paragraph so the formula can still flow with its own
+				# following prose.
+				paragraph.paragraph_format.keep_with_next = True
+				add_formula_display(output, formula_children, document, lists, items)
 			if cell is None:
 				keep_label_with_entry(paragraph, document, position, pagination_action, actions)
 		elif kind in ("bullet_list_open", "ordered_list_open"):
@@ -254,16 +314,21 @@ def render_tokens(output: object, document: tutorial_lib.model.Document) -> None
 			properties.append(docx.oxml.OxmlElement("w:cantSplit"))
 			if len(table.rows) == 1:
 				properties.append(docx.oxml.OxmlElement("w:tblHeader"))
+			elif len(table.rows) % 2 == 1:
+				tutorial_lib.docx_styles.format_table_stripe(row)
 			column = 0
 		elif kind in ("th_open", "td_open"):
 			cell = row.cells[column]
 			paragraph = cell.paragraphs[0]
 			paragraph.style = "Normal"
+			paragraph.paragraph_format.left_indent = docx.shared.Inches(0)
 			if kind == "th_open":
 				tutorial_lib.docx_styles.shade(
 					cell._tc.get_or_add_tcPr(), tutorial_lib.docx_styles.TABLE_HEADER_FILL,
 				)
 		elif kind in ("th_close", "td_close"):
+			if kind == "th_close":
+				tutorial_lib.docx_styles.format_table_header(cell)
 			cell = None
 			paragraph = None
 			column += 1
@@ -277,7 +342,12 @@ def render_tokens(output: object, document: tutorial_lib.model.Document) -> None
 	if (len(body_blocks) > 1 and body_blocks[-1].tag == docx.oxml.ns.qn("w:p")
 		and body_blocks[-2].tag == docx.oxml.ns.qn("w:p")):
 		# Keep a short closing paragraph from becoming a page by itself.
-		output.paragraphs[-2].paragraph_format.keep_with_next = True
+		penultimate = output.paragraphs[-2]
+		properties = penultimate._p.find(docx.oxml.ns.qn("w:pPr"))
+		is_formula_display = (properties is not None
+			and properties.find(docx.oxml.ns.qn("w:shd")) is not None)
+		if not is_formula_display:
+			penultimate.paragraph_format.keep_with_next = True
 
 
 #============================================

@@ -2,4 +2,5 @@ markdown-it-py
 python-docx
 openpyxl
 pypdf
+Pillow
 defusedxml  # hardened XML parsing for imported and generated Office packages

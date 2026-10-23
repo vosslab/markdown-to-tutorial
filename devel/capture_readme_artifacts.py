@@ -87,7 +87,7 @@ def main() -> None:
 	protected += sorted(output.glob("*/*.pdf"))
 	protected += sorted(output.glob("*/*.xlsx"))
 	before = {str(path.relative_to(root)): digest(path) for path in protected}
-	temporary = pathlib.Path(tempfile.mkdtemp(prefix="readme_capture_", dir="/tmp"))
+	temporary = pathlib.Path(tempfile.mkdtemp(prefix="readme_capture_"))
 	# Clips are PDF page coordinates doubled for the 144-dpi raster.
 	capture_pdf(pdf, 1, (100, 98, 1028, 1230),
 		"caffeine_3_illustrated_opening", temporary, destination)
