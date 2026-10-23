@@ -2,6 +2,22 @@
 
 ## 2026-10-22
 
+### README capability showcase
+
+- Refresh the landing page around student authors, preserved prose, professional document styling,
+  blank learner workbooks, three starter templates, and preview-first worksheet maintenance.
+- Replace stale numeric entities in the authoring excerpt. Verify the template quick start in
+  DOCX/XLSX and PDF, the complete runnable example, and the worksheet-edit preview. Explain the
+  preview's actual fill-wording review notice rather than implying complete prose synchronization.
+- Refresh five native output captures, with four featured in the README. Add the prominent
+  F-statistic formula and a focused completed ANOVA demonstration. The latter uses a disposable
+  styled workbook populated from authored actions and recalculated in Calc; student starters stay
+  blank. All 48 canonical source/product fingerprints remain unchanged.
+- Extend the existing capture harness and record reproducible provenance in the
+  [screenshot receipt](screenshots/README.md). See the
+  [README verification report](active_plans/reports/readme_capabilities_showcase.md) for checks and
+  the editorial before/after score.
+
 ### Additions and New Features
 
 - Add student-oriented calculated-column, statistical-summary, and ANOVA Markdown templates.

@@ -1,40 +1,61 @@
 # markdown-to-tutorial
 
-Write science lessons in Markdown, then build editable Word instructions, student workbooks, and
-review PDFs from the same source.
+Turn student-authored Markdown into polished science tutorials, editable Word documents, and Excel
+workbooks. Keep the author's words and students' calculations; let the compiler handle presentation
+and reference maintenance.
 
 ## Screenshots
 
+Actual output from the Microbes and Dr. Caffeine lessons: prominent formulas, varied heading
+indents, justified explanations, and scientific worksheets with purposeful color.
+
 <!-- screenshots:begin (managed by screenshot-docs) -->
-![Caffeine 3 illustrated lesson opening with its sleep-and-exam-score research story](docs/screenshots/caffeine_3_illustrated_opening.webp)
-![Caffeine 3 squared-column instructions with formula, fill-down action, and original teaching aside](docs/screenshots/caffeine_3_fill_down_instructions.webp)
-![Complete Caffeine 3 workbook with blue source data, teal calculations, orange results, and purple interpretation spaces](docs/screenshots/caffeine_3_blank_predictor_workspace.webp)
+![Microbes F-test instructions with a prominent green formula display and justified explanation](docs/screenshots/microbes_4_formula_instruction.webp)
+![Caffeine squared-column step with inset body text, Excel formula, and the author's 36-hours aside](docs/screenshots/caffeine_3_fill_down_instructions.webp)
+![Caffeine student workbook with supplied data and styled blank learner headers, calculations, and response area](docs/screenshots/caffeine_3_blank_predictor_workspace.webp)
+![Completed ANOVA demonstration showing styled table headers, summary calculations, and a decision; not the student starter](docs/screenshots/microbes_5_completed_anova.webp)
 <!-- screenshots:end -->
 
-The opening shows the Caffeine 3 lesson's sleep-and-exam-score story, followed by a compact formula
-and fill-down instruction. The workbook view shows the full student workbook: blue source data,
-teal calculations, orange results, and purple interpretation areas. Student working areas are
-intentionally blank. The repository includes 12 lessons; PETase uses an explicitly synthetic
-dataset.
+The Caffeine workbook is the **student starting state**: data are supplied, while learner labels,
+formulas, and responses remain blank. The ANOVA image is a **completed demonstration**, populated
+from the lesson's instructions in a disposable copy to show how the styled worksheet develops.
+The compiler does not give those answers to students.
 
-Google Docs and Sheets import and execution have not been verified. The quick start below builds
-editable DOCX instructions and an XLSX workbook locally.
+The illustrated lesson opening and capture details are in
+[docs/screenshots/README.md](docs/screenshots/README.md).
+
+Built for BIOL 318 students writing tutorials for classmates. Authors choose the layout, write
+ordinary Excel formulas, and decide what learners construct. The compiler preserves their prose
+and adds the formatting. The collection includes 12 lessons; PETase uses explicitly synthetic data.
+
+DOCX, XLSX, and PDF output is verified locally. Google Docs and Sheets import and execution remain
+unverified; Google may also wrap text differently.
 
 ## Quick start
 
-Install the Python requirements as described in [docs/INSTALL.md](docs/INSTALL.md), then lint and build a lesson:
+Install the Python requirements in [docs/INSTALL.md](docs/INSTALL.md), then build a small template:
 
 ```bash
 source source_me.sh
-python3 make_tutorial.py lint tutorial_data/caffeine_3_quadratic_regression.md
-python3 make_tutorial.py build tutorial_data/caffeine_3_quadratic_regression.md --format docx,xlsx
+python3 make_tutorial.py lint templates/calculated_column.md
+python3 make_tutorial.py build templates/calculated_column.md --format docx,xlsx
 ```
 
-The files appear in `tutorial_output/caffeine_3_quadratic_regression/`. PDF output requires
-LibreOffice and the fonts listed in [docs/INSTALL.md](docs/INSTALL.md); to build all three formats,
-run `python3 make_tutorial.py build tutorial_data/caffeine_3_quadratic_regression.md --format all`.
-Lint checks source structure and workbook references; it does not run spreadsheet formulas. Local
-formula checks and student outcomes are separate evidence questions.
+Open `tutorial_output/calculated_column/calculated_column.docx` and
+`tutorial_output/calculated_column/calculated_column.xlsx`. You get formatted instructions and
+three supplied observations, with column C ready for students to label and calculate.
+
+For PDF output, install LibreOffice and the fonts listed in [docs/INSTALL.md](docs/INSTALL.md), then
+run `python3 make_tutorial.py build templates/calculated_column.md --format all`.
+
+Copy a template to start your own lesson:
+
+- [templates/calculated_column.md](templates/calculated_column.md) - Data, a new formula, and fill-down.
+- [templates/statistical_summary.md](templates/statistical_summary.md) - A compact summary calculation.
+- [templates/anova_worksheet.md](templates/anova_worksheet.md) - An ANOVA worksheet construction activity.
+
+Use plain ASCII Markdown, straight quotes, and ordinary Excel formulas. Readable named entities
+such as `&alpha;` are supported. No programming or replacement formula language is required.
 
 ## Write instructions in context
 
@@ -51,9 +72,9 @@ To let our regression model curve, we need to square our predictor variable (x).
 2. Label it [Sleep Hours Squared (x^2)](label:C1)\
 3. If the sleep hours are in cell A2, enter: [=A2^2](enter:C2)\
 4. Press Enter, then [drag the little blue square all the way down to the bottom](fill:C2:C26) to
-   make sure it applies to all students! Basically, we&#8217;re taking each student&#8217;s hours of sleep
+   make sure it applies to all students! Basically, we're taking each student's hours of sleep
    and multiplying that number by itself. If someone slept 6 hours, their squared sleep value is
-   36! Don&#8217;t worry, they didn&#8217;t sleep for 36 hours!
+   36! Don't worry, they didn't sleep for 36 hours!
 ```
 
 Workbook region roles identify starting data, calculations, results, and interpretation. A clearly
@@ -113,17 +134,41 @@ In F2, enter [=AVERAGE(C2:C3)](enter:F2). Then explain what a curved pattern cou
 
 ## What the project provides
 
-- One editable Markdown source for lesson prose, workbook data, and cell actions.
-- DOCX instructions, XLSX student workbooks with blank answer cells, and PDF review copies.
-- Workbook regions marked as source data, calculations, results, or interpretation.
-- Offline checks for source structure, workbook labels, and cell references.
-- A draft importer that creates a Markdown scaffold from a simple XLSX workbook.
+- **Your words, professionally presented.** Editable headings, prominent green formula displays,
+  styled tables, and long-paragraph justification, without LLM rewriting.
+- **Workbooks that teach by doing.** Styled data, blank learner headers and calculations, and
+  dedicated response areas follow the author's worksheet layout.
+- **One source, three outputs.** Markdown supplies DOCX instructions, XLSX workbooks, and PDF copies.
+- **Less coordinate bookkeeping.** Preview column/row insertions, range moves, and data resizing
+  across the worksheet specification and explicit instructional references.
+- **Approachable starting points.** Three student templates, 12 complete lessons, and a simple
+  XLSX-to-Markdown draft importer.
+- **Checks with clear limits.** Lint checks source structure and references; a separate Calc
+  validation checks numerical results.
+
+## Move cells, keep instructions coordinated
+
+After choosing a new layout, preview a column insertion using ordinary spreadsheet coordinates:
+
+```bash
+python3 make_tutorial.py worksheet-edit templates/calculated_column.md \
+  --sheet Data insert-columns --at A --count 1
+```
+
+This prints a diff and leaves the source unchanged. In this template, inserting column A moves
+the data to B:C, the learner's first formula cell from C2 to D2, and its formula from `=A2^2` to
+`=B2^2`. The fill action's target moves to D2:D4; the preview flags its displayed
+`Fill C2:C4` wording for author review.
+
+Explicit worksheet references stay coordinated. Ambiguous bare references and worked numerical
+explanations are flagged for author review rather than guessed at or rewritten. See
+[docs/USAGE.md](docs/USAGE.md#maintain-a-worksheet-after-a-layout-decision) for applying a reviewed edit.
 
 ## Documentation
 
 - [docs/INSTALL.md](docs/INSTALL.md) - Install Python requirements, LibreOffice, and the required fonts.
-- [docs/USAGE.md](docs/USAGE.md) - Run lint, build outputs, import workbooks, and validate calculations.
-- [docs/AUTHORING_GUIDE.md](docs/AUTHORING_GUIDE.md) - Write lesson prose, semantic actions, and workbook tables.
+- [docs/AUTHORING_GUIDE.md](docs/AUTHORING_GUIDE.md) - Fill in templates, write instructions, and design worksheets.
+- [docs/USAGE.md](docs/USAGE.md) - Build, preview coordinated worksheet edits, import, and validate calculations.
 - [docs/TUTORIAL_CATALOG.md](docs/TUTORIAL_CATALOG.md) - Browse all 12 lesson sources and data notes.
 - [docs/TUTORIAL_SPEC.md](docs/TUTORIAL_SPEC.md) - Read the complete source and output contract.
 - [docs/GOOGLE_SHEETS_VALIDATION.md](docs/GOOGLE_SHEETS_VALIDATION.md) - Review the separate Google validation scope and evidence.

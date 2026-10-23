@@ -1,36 +1,51 @@
 # Screenshot capture receipt
 
-Captured 2026-10-22 at 23:36 UTC from the finished canonical Caffeine 3 PDF and XLSX.
-The three managed README images show an illustrated lesson opening, a compact instructional
-excerpt, and the complete student worksheet. These are actual rendered outputs, with no
-compositing or substituted answers. The opening contains a narrative illustration, not a
-computed regression chart.
+Captured 2026-10-23 from the current canonical tutorial outputs. These five views demonstrate
+the publishing pipeline's illustrated document opening, scannable spreadsheet actions, blank
+student workspace, formula treatment, and a completed calculation example. The rendered
+instruction excerpts preserve the source writing while the renderer supplies the hierarchy,
+indentation, justification, and formula styling.
+
+## Gallery
+
+![Caffeine 3 illustrated lesson opening with sleep-and-exam-score story](caffeine_3_illustrated_opening.webp)
+
+![Caffeine 3 complete squared-column step with formula and justified teaching aside](caffeine_3_fill_down_instructions.webp)
+
+![Caffeine 3 blank student workbook with source data, calculation workspace, results, and interpretation space](caffeine_3_blank_predictor_workspace.webp)
+
+![Microbes 4 F-statistic action with a standalone formula and explanation](microbes_4_formula_instruction.webp)
+
+![Completed Microbes 5 ANOVA demonstration with calculated values in a styled worksheet](microbes_5_completed_anova.webp)
 
 | Asset | Actual view | Dimensions | Bytes |
-| --- | --- | --- | --- |
-| `caffeine_3_illustrated_opening.webp` | PDF page 1, title, research story, and embedded illustration; PDF clip (50, 49, 564, 664) | 1028 x 1230 | 269574 |
-| `caffeine_3_fill_down_instructions.webp` | PDF page 4, complete Step 3 including all four actions, green formula, and 36-hours aside; PDF clip (50, 49, 564, 214) | 1028 x 330 | 45268 |
-| `caffeine_3_blank_predictor_workspace.webp` | Actual XLSX, complete A1:N26 with blue source data, teal calculations, orange results, and purple written-response spaces | 1920 x 649 | 36348 |
+| --- | --- | --- | ---: |
+| `caffeine_3_illustrated_opening.webp` | PDF page 1: title, research story, and embedded illustration | 1028 x 1230 | 279774 |
+| `caffeine_3_fill_down_instructions.webp` | PDF page 4: complete Step 3, formula, and justified teaching aside | 1064 x 350 | 45832 |
+| `caffeine_3_blank_predictor_workspace.webp` | Canonical Caffeine 3 student XLSX, A1:N26; intentionally blank learner cells | 1920 x 649 | 35830 |
+| `microbes_4_formula_instruction.webp` | PDF page 3: F-statistic spreadsheet action, standalone formula, and explanation | 1064 x 620 | 85526 |
+| `microbes_5_completed_anova.webp` | Disposable completed demonstration of the styled Microbes 5 ANOVA worksheet, H1:M16 | 1507 x 686 | 71726 |
 
-PDF clips were rendered at 144 dpi with Poppler. The workbook was rendered through the
-screenshot-docs skill's `render_artifact_libreoffice.sh`, with LibreOffice outside the sandbox.
-A disposable copy changed only its print area, A3 landscape fit-to-page settings, margins,
-printed grid, and row/column headings. Values, formulas, styles, and column widths were retained.
-Blank workspaces are intentional: students enter their own calculations and interpretations.
-The workbook asset retains its established filename even though its view now includes all columns.
+The completed ANOVA image is a demonstration, not the student starter workbook. It starts with
+the canonical styled starter, applies only the authored baseline label and formula actions in a
+disposable copy, and has LibreOffice Calc calculate it before rendering. The canonical starter
+remains unchanged and leaves its learner tasks blank.
 
-All three WebPs were encoded with `cwebp -q 90` under `/tmp` and visually inspected after encoding.
-They are under the 1920 px edge and 1 MB limits. The portrait opening preserves genuinely vertical
-document content; the other two views are compact excerpts. All three README embeds resolve.
-These are the complete managed image set: no stale unreferenced assets, removals, retained
-reference images, or capture gaps.
+The capture harness fingerprinted all 12 Markdown sources and their 36 canonical DOCX, PDF, and
+XLSX outputs before and after capture. All 48 protected files were unchanged. The machine-readable
+[capture receipt](capture_receipt.json) records the current SHA-256 fingerprints, each image hash,
+and the completed-demo provenance.
+
+All WebPs were encoded with `cwebp -q 90` under `/tmp`, visually inspected after encoding, and are
+within the 1920-pixel edge and 1 MB limits. These five images are the complete managed set: no
+stale images, retained reference images, removals, or capture gaps exist.
 
 ## Reproduce the capture
 
 Use [../../devel/capture_readme_artifacts.py](../../devel/capture_readme_artifacts.py) after
 building the canonical outputs. This optional documentation workflow requires the existing
-application environment, Poppler (`pdftoppm`), ImageMagick (`magick`), WebP (`cwebp`), LibreOffice,
-and the screenshot-docs skill renderer. These capture tools are not application runtime dependencies.
+application environment, Poppler (`pdftoppm`), WebP (`cwebp`), LibreOffice, and the
+screenshot-docs skill renderer. These capture tools are not application runtime dependencies.
 Run the entire command outside the macOS sandbox because it invokes LibreOffice:
 
 ```bash
@@ -38,19 +53,6 @@ source source_me.sh && python3 devel/capture_readme_artifacts.py \
   --artifact-renderer /Users/vosslab/nsh/vosslab-skills/skills/documentation/screenshot-docs/scripts/render_artifact_libreoffice.sh
 ```
 
-The script uses a fresh `/tmp/readme_capture_*/` workspace, refreshes the same three asset names,
-and emits a JSON receipt with capture time and SHA-256 fingerprints. It fails if any of the
-12 teaching sources or 36 canonical DOCX/PDF/XLSX files change during capture.
-This run's JSON receipt is `/tmp/readme_capture_kzzvx56w/receipt.json`; all 48 protected files
-were unchanged. Canonical PDF and XLSX hashes also match the final build manifest.
-
-## Current fingerprints
-
-| File | SHA-256 |
-| --- | --- |
-| `tutorial_data/caffeine_3_quadratic_regression.md` | `a8736df780e128fa08cb78b8590611b2256221ab67c043aad1ebcc93bf818983` |
-| `tutorial_output/caffeine_3_quadratic_regression/caffeine_3_quadratic_regression.pdf` | `2e076c3743bec887f16278322a5079b38a6c1bfb1bc312ef5cb817abda6d3fab` |
-| `tutorial_output/caffeine_3_quadratic_regression/caffeine_3_quadratic_regression.xlsx` | `80dfe167a82526de0278d8a70e15599bf5872dca4aafce550d60f7ab40f5d599` |
-| `caffeine_3_illustrated_opening.webp` | `8ea9ca2555c8afca179981c94e0fbe46cf725dadcfc26cef1d49684ff9a0109e` |
-| `caffeine_3_fill_down_instructions.webp` | `efc2267c45b638d15b28772ea93d2ae59d7d67aaaed5258bd4435104cd2c64d1` |
-| `caffeine_3_blank_predictor_workspace.webp` | `a4021f6906339f475a8e0c476495628b595370ffafae23576dfc616126fee882` |
+The script uses a fresh `/tmp/readme_capture_*/` workspace, refreshes the same five asset names,
+writes [capture_receipt.json](capture_receipt.json), and fails if a canonical source or built
+artifact changes during capture.

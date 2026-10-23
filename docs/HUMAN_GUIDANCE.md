@@ -89,3 +89,4 @@ origin belongs there too. Rules: [REPO_STYLE.md](REPO_STYLE.md).
   colors purposefully.
 - Give headings varied left indentation, with Step headings farther left than body paragraphs.
 - Fully justify paragraphs that run longer than two lines.
+- Use the README and current output screenshots to show off the pipeline's capabilities.
