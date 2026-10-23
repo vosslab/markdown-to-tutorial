@@ -4,10 +4,16 @@
 
 ### Additions and New Features
 
+- Rebuild all three authoring-guide Parts around document formatting, Excel workbook construction,
+  and building/refining files. Add a visual feature index and one runnable Roots formatting source
+  with actual Word/Excel crops, including an unchanged instructor z-test excerpt.
+- Define BIOL 318 student authorship and the open-pedagogy/Student-Generated Content purpose in the
+  landing page, authoring guide, and specification. Use labeled placeholders for original content.
+
 - Add the three-part Roots authoring course: one student project source, eight comparison
   checkpoints, six Markdown topic references, a student hub, and a published Markdown/DOCX/PDF/XLSX
   capstone. The starter supplies labels and leaves calculation cells blank.
-- Add the [student guide](STUDENT_GUIDE.md) as the primary course hub and route the README's first
+- Add the [student guide](AUTHORING_GUIDE.md) as the primary course hub and route the README's first
   tutorial path through it.
 - Document the one-command documentation screenshot refresh workflow and its separate course capture
   receipt.
@@ -17,6 +23,27 @@
   supplied headers, blank calculation cells, and matching Enter/Fill instructions.
 
 ### Fixes and Maintenance
+
+- Fix worksheet-editor source corruption found by the independent authoring walkthrough:
+  distinguish uppercase column notation from ordinary prose and synchronize visible Fill ranges
+  with their semantic targets. Add two focused regressions and retain preview/write validation.
+  Remove the temporary limitation text after reproducing the corrected preview, write, and build.
+
+- Add a seven-dimension authoring-guide rubric and commission an independent documentation-only
+  walkthrough, separating expert inspection from evidence of actual student learning.
+- Correct the optional worksheet editor's prose-preservation promise after the independent
+  walkthrough reproduced unintended capitalization and a stale visible fill range in a resize
+  preview. Initially document manual revision as an alternative; the subsequent narrow editor
+  repair above resolves these defects.
+- Clarify dependent Fill diagnostics and the DOCX/XLSX-only build option in Part 3 following the
+  independent review. Preserve the reviewer's original scores and document corrections separately.
+
+- Make the README welcoming to first-time Markdown authors and explain how original student
+  tutorials contribute to open pedagogy and a shared resource for classmates and future students.
+
+- Consolidate the student hub into the authoring guide, revise the six topic references, and keep
+  advanced worksheet editing optional. Separate technical validation from advisory quality review.
+  Refresh the existing capture workflow for the feature source and preserve literal fenced snippets.
 
 - Show literal student source in fenced examples and refresh the illustrated course by composing
   practice source from the existing Roots checkpoints before the normal compiler runs. Correct
@@ -45,6 +72,21 @@
   the one-page published capstone are refreshed. Final PDF visual and fresh teaching-quality reviews
   accept the course; fresh SPEC, QUALITY, and integration reviews accept the final course state.
   The full suite passes 2,036 tests; Google behavior and student outcomes remain unverified.
+
+### Decisions and Failures
+
+- Retire the required Roots checkpoint course: it taught introductory spreadsheet/statistics work
+  instead of the authoring system. Keep Roots as a formatting example without a prescribed scenario.
+  Earlier checkpoint artifacts and their review history remain available.
+
+### Developer Tests and Notes
+
+- Verify 31 student-facing pages through GitHub's Markdown API and local desktop/narrow browser
+  inspection. Match 26 source excerpts to their demonstrated inputs; inspect all 13 native guide
+  PDF pages and current screenshot/workbook output. A separate content-transfer and error-repair
+  walkthrough passes. The repository suite passes 2,105 tests. See the
+  [authoring review](active_plans/reports/authoring_visual_reference_review.md) for evidence and
+  limits; Google import and student learning remain untested.
 
 ## 2026-10-22
 

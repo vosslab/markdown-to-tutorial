@@ -1,111 +1,111 @@
 # Connect instructions to cells
 
-Use this page when a student needs to enter, fill, select, or replace spreadsheet content.
-An action joins visible instructions to a specific cell or range on the current worksheet.
+Use an action link when an instruction asks a reader to affect a known cell or range. It keeps the
+visible wording and machine-readable target in one place.
 
-Start the course at [../STUDENT_GUIDE.md](../STUDENT_GUIDE.md), or use the topic index in
+Return to [../AUTHORING_GUIDE.md](../AUTHORING_GUIDE.md) or
 [../FORMATTING_GUIDE.md](../FORMATTING_GUIDE.md).
 
-## Read both parts
+## Select a range
+
+Type this Markdown:
 
 ```markdown
-1. In cell E3, enter:
-   [`=AVERAGE(A2:A6)`](enter:E3)
+#### Step: Select a range
+
+1. [Select A1:B6](select:A1:B6).
+2. Choose **Insert > Chart** in your spreadsheet application.
+
+The instruction appears in the document; the reader creates the chart.
 ```
-
-| Source part | Purpose |
-| --- | --- |
-| `In cell E3` | Tells the student where to work |
-| `` `=AVERAGE(A2:A6)` `` | Shows exactly what to enter |
-| `enter:E3` | Records the destination for compiler checks |
-
-The formula's input range is A2:A6. Its destination is E3. These addresses have different jobs.
-A heading such as Mean does not connect them automatically.
 
 <!-- screenshots:begin (managed by screenshot-docs) -->
-![Mean formula presented beneath an instruction naming E3](../screenshots/course_mean_action.webp)
+![Generated instruction to select A1:B6 and choose Insert then Chart](../screenshots/authoring_select.webp)
 <!-- screenshots:end -->
 
-Notice that the printed instruction includes E3, while the hidden action destination does not
-appear as a separate link address. Keep visible wording and the hidden destination consistent.
+The linked words appear in the document. The target tells the compiler which range the words mean.
+Selection does not change the starter workbook.
 
-## Set the worksheet
+## Enter, fill, label, and replace
 
-Put actions inside a Step in a Part that selects the worksheet:
-
-```markdown
-### Part: Summarize root lengths
-
-- **Worksheet:** Roots
-
-#### Step: Calculate the mean
-
-1. In cell E3, enter:
-   [`=AVERAGE(A2:A6)`](enter:E3)
-```
-
-`Roots` must match the Workbook heading `### Sheet: Roots`. The action's address is interpreted
-on that worksheet. A different sheet can have an E3 with different content.
-
-## Choose an action
-
-| Task | Example source | Starting workbook |
+| Task | Markdown destination | Starting cell |
 | --- | --- | --- |
-| Enter into a blank cell | ``[`=COUNT(A2:A6)`](enter:E2)`` | E2 stays blank |
-| Fill a formula down | `[Fill B2:B7](fill:B2:B7)` | Work cells stay blank |
-| Select cells | `[Select A1:A6](select:A1:A6)` | No values change |
-| Replace existing content | ``[`=AVERAGE(A2:A7)`](replace:E3)`` | Initial value stays supplied |
+| Reader enters a value or formula | `enter:E2` | Blank |
+| Reader copies a first-row formula | `fill:B2:B6` | Blank work cells |
+| Reader creates a label | `label:B1` | Blank |
+| Reader changes supplied content | `replace:A2` | Already populated |
+| Reader selects cells | `select:A1:B6` | Unchanged |
 
-These examples are patterns, not a complete sequence to paste together. In particular, Replace
-needs a value already supplied in Workbook or established by an earlier action.
+Visible prose must name the destination or make it unmistakable. Keep the visible address and
+action target identical in an explicit clause such as `In cell E2, enter ...`.
 
-## Enter a value
+## Replace supplied content
 
-Use `enter:` for a blank destination. The linked value can be a formula or a single value such as
-a number. Keep the formula's explanation outside the link:
-
-```markdown
-1. In cell E4, enter:
-   [`=STDEV.S(A2:A6)`](enter:E4)
-   - This describes variation among the five synthetic measurements.
-```
-
-A Workbook formula is supplied in advance. An Enter formula is work the student performs.
-Do not seed the same destination and then ask the student to Enter there.
-
-## Fill from the first row
+Type this Markdown:
 
 ```markdown
-1. In cell B2, enter:
-   [`=A2-$E$3`](enter:B2)
-2. [Fill B2:B7](fill:B2:B7) down to calculate the remaining deviations.
-```
+#### Step: Replace a supplied value
 
-The first row of a fill range must already have a formula in the instruction sequence.
-Include that first row and the last desired row in the range. A fill ending at B6 misses B7.
-The compiler translates relative references while preserving the fixed mean reference.
-In the spreadsheet, press Enter to confirm the formula in B2. Select `B2:B7`, including B2,
-then use the spreadsheet's **Fill Down** command. B3 should contain `=A3-$E$3`:
-the measurement changes to A3 while the mean stays fixed at E3.
+1. In cell A2, replace the supplied value with [14](replace:A2).
+```
 
 <!-- screenshots:begin (managed by screenshot-docs) -->
-![Deviation formula entry followed by an expanded fill-down instruction](../screenshots/course_fixed_formula.webp)
+![Generated instruction to replace supplied value A2 with 14](../screenshots/authoring_replace.webp)
 <!-- screenshots:end -->
 
-The crop shows one entry followed by one fill instruction. The generated starter still leaves
-the calculation cells blank, ready for the student's work.
+Use `replace:` only when changing a prior value is part of the lesson. Use `enter:` for an empty
+cell. The compiler reports an error if `enter:` or `label:` writes over supplied content.
 
-## Select and replace deliberately
+## Offer alternatives
 
-Select records which cells students highlight, for example before creating a chart.
-It does not insert data. Replace records an intentional change to content already present.
-Use it when revising a value during the tutorial, rather than repairing an authoring conflict.
+Type this Markdown:
 
-Use `label:` only when typing a label is itself an explicit exercise. For example,
-`[Deviation (mm)](label:B1)` requires a blank B1. In the Roots course, headings and summary labels
-are already supplied in Workbook, so no Label action is needed.
+```markdown
+#### Step: Provide a choice
 
-Practice in [../learn/PART_2_STATISTICS.md](../learn/PART_2_STATISTICS.md#step-find-the-mean), using
-[../examples/authoring_course/root_04_calculate.md](../examples/authoring_course/root_04_calculate.md).
-See [MISTAKES.md](MISTAKES.md) when a destination or range is wrong.
-For every supported action, see [../TUTORIAL_SPEC.md](../TUTORIAL_SPEC.md#list-authored-instructions).
+Choose one of these demonstration formulas for E3.
+
+- **Alternative: Minimum**
+  - In cell E3, enter [`=MIN(A2:A6)`](enter:E3).
+- **Alternative: Maximum**
+  - In cell E3, enter [`=MAX(A2:A6)`](enter:E3).
+```
+
+<!-- screenshots:begin (managed by screenshot-docs) -->
+![Generated alternatives showing minimum and maximum formulas for the same destination](../screenshots/authoring_alternatives.webp)
+<!-- screenshots:end -->
+
+Contiguous sibling Alternative items create one instructional choice. They are not executable
+conditional logic. A later instruction can safely use only values available after every choice.
+
+Actions belong inside a Step. For legacy bold action syntax, cross-sheet references, and validation
+rules, see [../TUTORIAL_SPEC.md](../TUTORIAL_SPEC.md).
+
+## Supply labels or teach label entry
+
+Normally, supply labels in Workbook tables. If entering a label is itself a learner task, use a
+Label action with an initially blank destination. For example, F1 is blank in the feature demo:
+
+```markdown
+1. In cell F1, type [Result](label:F1).
+```
+
+The linked words become the label. F1 remains blank in the generated starter. Do not seed the same
+label in Workbook and ask the learner to enter it again.
+
+## Recognize older action syntax
+
+Some instructor sources use a bold action opening. These two fragments express the same entry;
+use one, not both, in a tutorial:
+
+```markdown
+1. In cell E2, enter [`=AVERAGE(A2:A6)`](enter:E2).
+```
+
+```markdown
+1. **Enter E2:** `=AVERAGE(A2:A6)`
+```
+
+Ordinary instructions do not need bold action labels. The link form lets you keep your wording.
+A legacy menu instruction such as `- **Choose:** Insert > Chart` receives menu-path styling;
+it describes what the reader clicks rather than creating the chart.

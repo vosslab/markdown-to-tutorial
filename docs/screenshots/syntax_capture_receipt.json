@@ -1,8 +1,13 @@
 {
-  "captured_utc": "2026-10-23T15:28:00.988045+00:00",
+  "captured_utc": "2026-10-23T16:49:38.187108+00:00",
   "source": "docs/examples/formatting_demo.md",
+  "authoring_sources_sha256": {
+    "docs/examples/authoring_features.md": "fbdda1137428a4848d2535c76e22f134844778e6f81fc855c7f268a8aa150f48",
+    "tutorial_data/microbes_1_z_test.md": "f8e007e4308e23492a644bb33b75a4f63a35634d7a5ba8446cd656399b574075"
+  },
   "protected_sha256": {
     "docs/examples/formatting_demo.md": "5fa7142bd045f4cdc8f8179174003d9ce7dd049a478d88dd4086e975be788949",
+    "docs/examples/authoring_features.md": "fbdda1137428a4848d2535c76e22f134844778e6f81fc855c7f268a8aa150f48",
     "tutorial_data/babies_1_z_test.md": "da64c65d64e160d9b7dc311b73afc7e28fefb38efdb45d9a34d9ed2704c1d5c1",
     "tutorial_data/babies_2_t_test.md": "446256332bb144cc1ecbd2d0202043dc980a484ceee4ed28db4d624a6f76e96d",
     "tutorial_data/babies_3_two_sample_t_test.md": "c58d36f92c826a7625f5e371c65bad5ab5dca25148301117d69ac1504217db5f",
@@ -21,13 +26,29 @@
     "syntax_text.webp": "bbbb93bf181b289cccb4603012634d6c84481bd4fc5570899fd1d5a5374a082f",
     "syntax_actions.webp": "311d966e06115bf86ab55b2dad440df288c500c2d691f6cec22f460e418102e4",
     "syntax_table.webp": "953d5215d9928746f9119463e55055ff73b3030d9664db11b66553bf7323254f",
-    "syntax_workbook.webp": "65e7a1c48b1a9cdf108292ad616e3ed66a387e4ed57c3765234c9c90bdbfc408"
+    "syntax_workbook.webp": "65e7a1c48b1a9cdf108292ad616e3ed66a387e4ed57c3765234c9c90bdbfc408",
+    "authoring_title.webp": "f7835a48908aba5cb0e41a72ed3368a6c8baebd02dc16e6364d8640b35abec04",
+    "authoring_headings.webp": "130a9fe97bbad173f75acc2620e12e8e43261c91e4321e66b672ee0c216a385f",
+    "authoring_text.webp": "321d1dc59e565c0680b6ab93cca0ccc619580badc582ec904b597c994d4c7cef",
+    "authoring_table.webp": "476f1000ead7f4c704c464d3a1e5f43d318956a2540e0a83b351be2128be1896",
+    "authoring_image.webp": "644773bd4b77fd2231c6202535ac96760eecd13fc828f6fadc13512bffaf39f4",
+    "authoring_links.webp": "eddaa2295524feec6181cb0c2233ba21c6141fd6c1980d3ba4a3d9c9ff6a1b24",
+    "authoring_enter.webp": "d687d8b1b1f0892d6cb462309f268baaf3763c27f43ba3c0ea7a90f6f90d27bb",
+    "authoring_fill.webp": "7c7e073e0d6136a1fe73d6e387e4ccb209edba81e2e57b78ee0ace73686619a3",
+    "authoring_select.webp": "443001143bab178cdefdd8a9b831f26c92fe77fcde85674ef0c02bbd667ab3a6",
+    "authoring_replace.webp": "ec4df7cd9001fbbe1b19c09a4593ea90c3872d87915412fd6560d8de411ab0c1",
+    "authoring_alternatives.webp": "7c2d2d581e97fd0fae278674d984b2139f291d1a792f4a8ea5a1d66f9b1b389f",
+    "authoring_workbook.webp": "0f6ab651bfe7bb82bf4fb48213281ac471132c6f3ed655facf2251d22f8859fe",
+    "authoring_results.webp": "ea111ec62dfcf2ed7675665cd03b170e7411cd9f96b6d44a4422f4831c5892a8",
+    "authoring_response.webp": "3b00fab72253b8cbc344a429674e68178e8b96071443bdb5302c43f069f16898",
+    "authoring_comparison.webp": "844ec78e15b92f35e5ad914bc7d29e97c999e70bef48c03c54cb600bfadbe202",
+    "authoring_instructor.webp": "90440b4e74484d64dd1542c722e466beffedb2af5c5becc34a14f827a75fb858"
   },
   "renderer": "repository-owned LibreOffice and Poppler",
   "captures": [
     {
       "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/syntax_headings.webp",
-      "source": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_8c1iude1/build/formatting_demo.pdf",
+      "source": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_mrxk_h7u/build/formatting_demo.pdf",
       "start_anchor": "Part 1: Explore a curved relationship",
       "end_anchor": "Explanation: Why square a value?",
       "segments": [
@@ -55,7 +76,7 @@
     },
     {
       "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/syntax_text.webp",
-      "source": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_8c1iude1/build/formatting_demo.pdf",
+      "source": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_mrxk_h7u/build/formatting_demo.pdf",
       "start_anchor": "Explanation: Why square a value?",
       "end_anchor": "Step 2: Calculate squared sleep hours",
       "segments": [
@@ -83,7 +104,7 @@
     },
     {
       "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/syntax_actions.webp",
-      "source": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_8c1iude1/build/formatting_demo.pdf",
+      "source": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_mrxk_h7u/build/formatting_demo.pdf",
       "start_anchor": "Step 2: Calculate squared sleep hours",
       "end_anchor": "Explanation: Read a formula before copying it",
       "segments": [
@@ -111,7 +132,7 @@
     },
     {
       "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/syntax_table.webp",
-      "source": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_8c1iude1/build/formatting_demo.pdf",
+      "source": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_mrxk_h7u/build/formatting_demo.pdf",
       "start_anchor": "Step 3: Compare the model features",
       "end_anchor": null,
       "segments": [
@@ -139,7 +160,7 @@
     },
     {
       "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/syntax_workbook.webp",
-      "source": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_8c1iude1/build/formatting_demo.xlsx",
+      "source": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_mrxk_h7u/build/formatting_demo.xlsx",
       "print_area": "A1:F4",
       "renderer": "LibreOffice Calc PDF export and Poppler",
       "page": 1,
@@ -151,7 +172,7 @@
       ],
       "dpi": 144,
       "webp_quality": 90,
-      "native_pdf": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_8c1iude1/workbook_flvdufc8/syntax_workbook.pdf",
+      "native_pdf": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_mrxk_h7u/workbook_l4c5dhmg/syntax_workbook.pdf",
       "scale": 1.0,
       "original_dimensions": [
         1233,
@@ -160,6 +181,424 @@
       "dimensions": [
         1233,
         201
+      ]
+    },
+    {
+      "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/authoring_title.webp",
+      "source": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_mrxk_h7u/authoring_features/authoring_features.pdf",
+      "start_anchor": "Roots formatting examples",
+      "end_anchor": "Part 1: Format the document",
+      "segments": [
+        {
+          "page": 1,
+          "bbox_points": [
+            51.5,
+            56.0,
+            560.5,
+            142.5
+          ]
+        }
+      ],
+      "dpi": 144,
+      "webp_quality": 90,
+      "page_separator_pixels": 0,
+      "original_dimensions": [
+        1018,
+        173
+      ],
+      "dimensions": [
+        1018,
+        173
+      ]
+    },
+    {
+      "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/authoring_headings.webp",
+      "source": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_mrxk_h7u/authoring_features/authoring_features.pdf",
+      "start_anchor": "Part 1: Format the document",
+      "end_anchor": "Explanation: Mark up scientific text",
+      "segments": [
+        {
+          "page": 1,
+          "bbox_points": [
+            52.0,
+            150.5,
+            348.0,
+            358.0
+          ]
+        }
+      ],
+      "dpi": 144,
+      "webp_quality": 90,
+      "page_separator_pixels": 0,
+      "original_dimensions": [
+        592,
+        415
+      ],
+      "dimensions": [
+        592,
+        415
+      ]
+    },
+    {
+      "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/authoring_text.webp",
+      "source": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_mrxk_h7u/authoring_features/authoring_features.pdf",
+      "start_anchor": "Explanation: Mark up scientific text",
+      "end_anchor": "Step 2: Show a document table",
+      "segments": [
+        {
+          "page": 1,
+          "bbox_points": [
+            61.0,
+            365.5,
+            530.0,
+            447.0
+          ]
+        }
+      ],
+      "dpi": 144,
+      "webp_quality": 90,
+      "page_separator_pixels": 0,
+      "original_dimensions": [
+        938,
+        163
+      ],
+      "dimensions": [
+        938,
+        163
+      ]
+    },
+    {
+      "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/authoring_table.webp",
+      "source": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_mrxk_h7u/authoring_features/authoring_features.pdf",
+      "start_anchor": "Step 2: Show a document table",
+      "end_anchor": "Step 3: Include an image",
+      "segments": [
+        {
+          "page": 1,
+          "bbox_points": [
+            45.5,
+            454.5,
+            555.5,
+            553.0
+          ]
+        }
+      ],
+      "dpi": 144,
+      "webp_quality": 90,
+      "page_separator_pixels": 0,
+      "original_dimensions": [
+        1020,
+        197
+      ],
+      "dimensions": [
+        1020,
+        197
+      ]
+    },
+    {
+      "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/authoring_image.webp",
+      "source": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_mrxk_h7u/authoring_features/authoring_features.pdf",
+      "start_anchor": "Step 3: Include an image",
+      "end_anchor": "Step 4: Link to a section",
+      "segments": [
+        {
+          "page": 2,
+          "bbox_points": [
+            52.0,
+            54.0,
+            468.5,
+            341.0
+          ]
+        }
+      ],
+      "dpi": 144,
+      "webp_quality": 90,
+      "page_separator_pixels": 0,
+      "original_dimensions": [
+        833,
+        574
+      ],
+      "dimensions": [
+        833,
+        574
+      ]
+    },
+    {
+      "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/authoring_links.webp",
+      "source": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_mrxk_h7u/authoring_features/authoring_features.pdf",
+      "start_anchor": "Step 4: Link to a section",
+      "end_anchor": "Part 2: Connect a workbook",
+      "segments": [
+        {
+          "page": 2,
+          "bbox_points": [
+            52.0,
+            348.5,
+            239.5,
+            397.0
+          ]
+        }
+      ],
+      "dpi": 144,
+      "webp_quality": 90,
+      "page_separator_pixels": 0,
+      "original_dimensions": [
+        375,
+        97
+      ],
+      "dimensions": [
+        375,
+        97
+      ]
+    },
+    {
+      "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/authoring_enter.webp",
+      "source": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_mrxk_h7u/authoring_features/authoring_features.pdf",
+      "start_anchor": "Step 1: Enter a formula",
+      "end_anchor": "Step 2: Fill a column",
+      "segments": [
+        {
+          "page": 2,
+          "bbox_points": [
+            52.0,
+            464.0,
+            241.5,
+            513.0
+          ]
+        }
+      ],
+      "dpi": 144,
+      "webp_quality": 90,
+      "page_separator_pixels": 0,
+      "original_dimensions": [
+        379,
+        98
+      ],
+      "dimensions": [
+        379,
+        98
+      ]
+    },
+    {
+      "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/authoring_fill.webp",
+      "source": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_mrxk_h7u/authoring_features/authoring_features.pdf",
+      "start_anchor": "Step 2: Fill a column",
+      "end_anchor": "Step 3: Select a range",
+      "segments": [
+        {
+          "page": 2,
+          "bbox_points": [
+            52.0,
+            519.5,
+            195.5,
+            582.5
+          ]
+        }
+      ],
+      "dpi": 144,
+      "webp_quality": 90,
+      "page_separator_pixels": 0,
+      "original_dimensions": [
+        287,
+        126
+      ],
+      "dimensions": [
+        287,
+        126
+      ]
+    },
+    {
+      "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/authoring_select.webp",
+      "source": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_mrxk_h7u/authoring_features/authoring_features.pdf",
+      "start_anchor": "Step 3: Select a range",
+      "end_anchor": "Step 4: Replace a supplied value",
+      "segments": [
+        {
+          "page": 2,
+          "bbox_points": [
+            52.0,
+            591.0,
+            406.5,
+            672.0
+          ]
+        }
+      ],
+      "dpi": 144,
+      "webp_quality": 90,
+      "page_separator_pixels": 0,
+      "original_dimensions": [
+        709,
+        162
+      ],
+      "dimensions": [
+        709,
+        162
+      ]
+    },
+    {
+      "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/authoring_replace.webp",
+      "source": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_mrxk_h7u/authoring_features/authoring_features.pdf",
+      "start_anchor": "Step 4: Replace a supplied value",
+      "end_anchor": "Part 3: Offer alternatives",
+      "segments": [
+        {
+          "page": 2,
+          "bbox_points": [
+            52.0,
+            679.5,
+            296.0,
+            724.5
+          ]
+        }
+      ],
+      "dpi": 144,
+      "webp_quality": 90,
+      "page_separator_pixels": 0,
+      "original_dimensions": [
+        488,
+        90
+      ],
+      "dimensions": [
+        488,
+        90
+      ]
+    },
+    {
+      "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/authoring_alternatives.webp",
+      "source": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_mrxk_h7u/authoring_features/authoring_features.pdf",
+      "start_anchor": "Step 1: Provide a choice",
+      "end_anchor": null,
+      "segments": [
+        {
+          "page": 3,
+          "bbox_points": [
+            52.0,
+            113.5,
+            322.0,
+            232.5
+          ]
+        }
+      ],
+      "dpi": 144,
+      "webp_quality": 90,
+      "page_separator_pixels": 0,
+      "original_dimensions": [
+        540,
+        238
+      ],
+      "dimensions": [
+        540,
+        238
+      ]
+    },
+    {
+      "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/authoring_workbook.webp",
+      "source": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_mrxk_h7u/authoring_features/authoring_features.xlsx",
+      "print_area": "A1:E6",
+      "renderer": "LibreOffice Calc PDF export and Poppler",
+      "page": 1,
+      "bbox_pixels": [
+        24,
+        24,
+        991,
+        285
+      ],
+      "dpi": 144,
+      "webp_quality": 90,
+      "native_pdf": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_mrxk_h7u/workbook_iaw86jeh/authoring_workbook.pdf",
+      "scale": 1.0,
+      "original_dimensions": [
+        967,
+        261
+      ],
+      "dimensions": [
+        967,
+        261
+      ]
+    },
+    {
+      "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/authoring_results.webp",
+      "source": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_mrxk_h7u/authoring_features/authoring_features.xlsx",
+      "print_area": "D1:E3",
+      "renderer": "LibreOffice Calc PDF export and Poppler",
+      "page": 1,
+      "bbox_pixels": [
+        24,
+        24,
+        439,
+        195
+      ],
+      "dpi": 144,
+      "webp_quality": 90,
+      "native_pdf": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_mrxk_h7u/workbook_e0nnnqs3/authoring_results.pdf",
+      "scale": 1.0,
+      "original_dimensions": [
+        415,
+        171
+      ],
+      "dimensions": [
+        415,
+        171
+      ]
+    },
+    {
+      "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/authoring_response.webp",
+      "source": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_mrxk_h7u/authoring_features/authoring_features.xlsx",
+      "print_area": "D8:E9",
+      "renderer": "LibreOffice Calc PDF export and Poppler",
+      "page": 1,
+      "bbox_pixels": [
+        24,
+        24,
+        439,
+        321
+      ],
+      "dpi": 144,
+      "webp_quality": 90,
+      "native_pdf": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_mrxk_h7u/workbook_sc_5bve2/authoring_response.pdf",
+      "scale": 1.0,
+      "original_dimensions": [
+        415,
+        297
+      ],
+      "dimensions": [
+        415,
+        297
+      ]
+    },
+    {
+      "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/authoring_comparison.webp",
+      "source": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/examples/authoring_features.md",
+      "source_excerpt": "#### Step: Enter a formula\n\n1. In cell E2, enter [`=AVERAGE(A2:A6)`](enter:E2).",
+      "native_crop": "authoring_enter.webp",
+      "description": "Literal source beside the actual DOCX-to-PDF crop"
+    },
+    {
+      "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/authoring_instructor.webp",
+      "source": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_mrxk_h7u/instructor_example/microbes_1_z_test.pdf",
+      "start_anchor": "Step 4: Calculate the Z-Statistic",
+      "end_anchor": "Explanation:",
+      "segments": [
+        {
+          "page": 3,
+          "bbox_points": [
+            52.0,
+            112.5,
+            559.0,
+            239.0
+          ]
+        }
+      ],
+      "dpi": 144,
+      "webp_quality": 90,
+      "page_separator_pixels": 0,
+      "original_dimensions": [
+        1014,
+        253
+      ],
+      "dimensions": [
+        1014,
+        253
       ]
     }
   ],

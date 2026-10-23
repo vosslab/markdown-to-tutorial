@@ -1,118 +1,133 @@
-# Write readable Markdown
+# Format the document
 
-Use this page when you want to turn plain notes into readable tutorial instructions.
-Markdown is text with a few punctuation marks that describe structure. Write the content;
-the compiler supplies the document's fonts, colors, spacing, and numbering.
+Use this page when you want to control the document your classmates read. The compiler formats
+the structure. You write the scenario, explanations, questions, and instructions.
 
-Start the guided lesson at [../STUDENT_GUIDE.md](../STUDENT_GUIDE.md).
-Return to the task index at [../FORMATTING_GUIDE.md](../FORMATTING_GUIDE.md).
+Return to [../AUTHORING_GUIDE.md](../AUTHORING_GUIDE.md) for the authoring path or
+[../FORMATTING_GUIDE.md](../FORMATTING_GUIDE.md) for the visual index.
 
-## Start with short paragraphs
+## Create Parts, Steps, and Substeps
 
-Separate paragraphs with a blank line. A line break in your editor is useful for keeping
-source readable, but does not by itself begin a new paragraph in the document.
+Type this Markdown:
 
 ```markdown
-The five root lengths are synthetic practice data, measured in millimeters.
-
-Compare the individual measurements before calculating a summary.
-```
-
-Use ordinary sentences to explain why a calculation matters. A formula alone does not tell
-another student what to look for or how to interpret the result.
-
-## Organize a tutorial
-
-A complete source has a Workbook section for supplied cells and a Tutorial section for
-student instructions. Inside Tutorial, use Part and Step headings:
-
-```markdown
-## Tutorial
-
-### Part: Describe root lengths
+### Part: Format the document
 
 - **Worksheet:** Roots
 
-#### Step: Inspect the measurements
+#### Step: Organize instructions
 
-1. Read the root lengths in cells A2:A6.
-2. Notice that the measurement unit is millimeters.
-   - Row 1 contains the heading.
-   - Rows 2 through 6 contain five measurements.
+1. Read the supplied column headings.
+   - The measurements are in column A.
+   - Column B is reserved for your calculations.
+2. Keep your explanation beside the instruction it supports.
+
+##### Substep: Add a detail
+
+This paragraph belongs to the substep.
 ```
 
-The compiler numbers Parts and Steps. You supply their names. Keep action instructions inside
-a Step, and use indentation to place supporting details under the instruction they explain.
+It becomes numbered Parts, Steps, and Substeps in the document. The `Worksheet` line tells the
+compiler which sheet later actions use. The Roots values are only formatting data.
 
 <!-- screenshots:begin (managed by screenshot-docs) -->
-![A rendered Part and Step with numbered instructions and nested details](../screenshots/syntax_headings.webp)
+![Generated document showing a Part, a numbered Step, nested details, and a numbered Substep](../screenshots/authoring_headings.webp)
 <!-- screenshots:end -->
 
-The crop uses the older Sleep-and-scores example to show the same heading structure.
-Notice how the heading levels remain distinct even though the source contains no font settings.
-A bullet such as `- **Worksheet:** Roots` binds the Part to the worksheet named Roots.
+Use `### Part:`, `#### Step:`, and `##### Substep:` exactly. The compiler supplies numbers.
+Use ordinary paragraphs and lists for the rest of the instruction.
 
-## Emphasize a distinction
+## Format scientific text
+
+Type this Markdown:
 
 ```markdown
-Read the **root length** heading before calculating the *sample* standard deviation.
-Use `A2:A6` for the five observations. The symbol &alpha; can appear in an explanation.
+##### Explanation: Mark up scientific text
+
+Use **bold** for emphasis, *italics* for a distinction, and `A2` for a literal cell address.
+Scientific text can include &alpha;, H<sub>0</sub>, and mm<sup>2</sup>.
+
+> A short note appears as a separate block.
 ```
 
-- `**bold**` emphasizes a phrase.
-- `*italics*` marks a distinction.
-- Backticks display literal text such as a cell address or formula.
-- Named HTML entities such as `&alpha;` provide scientific symbols in ASCII source.
+It keeps the distinction between prose, literal spreadsheet text, scientific notation, and a note.
 
 <!-- screenshots:begin (managed by screenshot-docs) -->
-![Rendered emphasis, literal exponent notation, and a Greek alpha in explanatory prose](../screenshots/syntax_text.webp)
+![Generated explanation with bold and italic text, a cell address, scientific notation, and a note block](../screenshots/authoring_text.webp)
 <!-- screenshots:end -->
 
-The crop uses the older sleep example to show the same punctuation. Notice the different
-appearance of literal spreadsheet text and ordinary prose. Keep straight quotation marks and
-ordinary hyphens in source. Use named entities rather than pasting non-ASCII scientific symbols.
+Use ASCII source: straight quotes and ordinary hyphens. Named entities such as `&alpha;` and
+inline `sub`, `sup`, and `br` are supported. The compiler reports other raw HTML and numeric
+character references.
 
-## Link to another resource
+## Add a document table
 
-Ordinary links show clickable text and point to a file or web address:
-
-```markdown
-Read [WORKSHEETS.md](WORKSHEETS.md) to map a table to cells.
-```
-
-The link destination is relative to the file containing it. From this reference folder,
-`WORKSHEETS.md` is a neighbor, while `../STUDENT_GUIDE.md` goes up one folder.
-
-A local image uses the same pattern with an exclamation mark:
+A table under `## Tutorial` belongs in the document, not in the workbook.
 
 ```markdown
-![A tutorial table with a header row](../screenshots/syntax_table.webp)
+#### Step: Show a document table
+
+| Item | Location |
+| --- | --- |
+| Measurements | A2:A6 |
+| Mean | E2 |
 ```
 
 <!-- screenshots:begin (managed by screenshot-docs) -->
-![A tutorial table with a header row](../screenshots/syntax_table.webp)
+![Generated document table with Item and Location columns](../screenshots/authoring_table.webp)
 <!-- screenshots:end -->
 
-Write alternative text that explains what the reader should learn from the image. Use an
-existing image file at the stated path; an image link does not create the image.
+Use a Tutorial table for a comparison, decision aid, or written prompt. Use a Workbook table only
+when the cells should appear in the student spreadsheet.
 
-## Recognize special action links
+## Include images and links
+
+Type this Markdown:
 
 ```markdown
-1. In cell E2, enter:
-   [`=COUNT(A2:A6)`](enter:E2)
+#### Step: Include an image
+
+![A normal curve with the area left of minus one shaded.](../../tutorial_data/assets/microbes_1_z_test_image2.png)
+
+This image comes from the instructor's Microbes z-test tutorial.
+
+#### Step: Link to a section
+
+Return to the [instruction example](#step-organize-instructions).
 ```
 
-This looks like a link in source, but `enter:E2` records a spreadsheet action. The printed
-instruction shows the formula. See [ACTIONS.md](ACTIONS.md) for the visible wording and hidden target.
+The image appears in the document and its alternative text remains available. The section link
+stays clickable in GitHub Markdown and generated output.
 
-## Avoid a common mix-up
+<!-- screenshots:begin (managed by screenshot-docs) -->
+![Generated document with a normal-curve image and its surrounding instruction](../screenshots/authoring_image.webp)
+![Generated document with a linked phrase referring to an earlier Step](../screenshots/authoring_links.webp)
+<!-- screenshots:end -->
 
-A table under Tutorial explains information in the document. A table under Workbook supplies
-starting spreadsheet cells. Moving a table between those sections changes its purpose.
-See [WORKSHEETS.md](WORKSHEETS.md) before designing the starting sheet.
+The image path above is relative to `docs/examples/authoring_features.md`; adjust it for your own
+file location. Use a real relative image path in the source. Write alternative text that states what the image
+shows. Ordinary links use relative paths inside this repository; use a heading fragment for a
+section in the same file.
 
-Practice writing instructions in [../learn/PART_1_CREATE.md](../learn/PART_1_CREATE.md#step-write-plain-markdown).
-Compare the working source in
-[../examples/authoring_course/root_02_write.md](../examples/authoring_course/root_02_write.md).
-For the complete grammar, see [../TUTORIAL_SPEC.md](../TUTORIAL_SPEC.md#document-structure).
+## Plan your own content
+
+The following is an authoring outline, not runnable compiler syntax. Replace every angle-bracket
+placeholder with your own content before building.
+
+```text
+### Part: <your Part title>
+
+#### Step: <what the reader does>
+
+<setup paragraph>
+
+1. <student instruction>
+
+##### Explanation: <why this matters>
+
+<interpretation>
+```
+
+The compiler standardizes the formatting. It cannot decide whether a scenario, explanation, or
+question is scientifically appropriate. See [../TUTORIAL_SPEC.md](../TUTORIAL_SPEC.md) for the
+complete supported source contract.

@@ -1,119 +1,163 @@
-# Map tables to worksheets
+# Build the workbook
 
-Use this page when you need to supply measurements, labels, and space for student calculations.
-The Workbook section defines the starting sheet; Tutorial actions describe what students do next.
+Use this page when you decide what the reader receives in the spreadsheet before following the
+tutorial. Tables under `## Workbook` supply cells; Tutorial actions describe student work.
 
-Start the course at [../STUDENT_GUIDE.md](../STUDENT_GUIDE.md), or find another topic in
-[../FORMATTING_GUIDE.md](../FORMATTING_GUIDE.md).
+Return to [../AUTHORING_GUIDE.md](../AUTHORING_GUIDE.md) or the
+[../FORMATTING_GUIDE.md](../FORMATTING_GUIDE.md) visual index.
 
-## Supply the observations
+## Supply a starting table
 
-This source supplies five synthetic root lengths in millimeters:
+Type this Markdown:
 
 ```markdown
 ## Workbook
 
 ### Sheet: Roots
 
-| Root length (mm) |
-| --- |
-| 12 |
-| 15 |
-| 18 |
-| 20 |
-| 25 |
+| Root length (mm) | Squared length (mm^2) |
+| --- | --- |
+| 12 | |
+| 15 | |
+| 18 | |
+| 20 | |
+| 25 | |
 
 - **Region A1:A6:** source
+- **Region B1:B6:** calculation
 ```
 
-The first table under a Sheet heading starts at A1. The heading is real spreadsheet content.
-The separator line tells Markdown where the header ends; it does not become a spreadsheet row.
+The full workbook crop includes the result table defined in the next section.
+The table begins at A1. The header row is real spreadsheet content; the `---` row is not.
+Blank table cells are blank cells, not zeroes. The regions describe presentation roles.
 
-| Source line | Spreadsheet cell | Supplied value |
-| --- | --- | --- |
-| Header | A1 | Root length (mm) |
-| Separator | None | None |
-| First observation | A2 | 12 |
-| Last observation | A6 | 25 |
+<!-- screenshots:begin (managed by screenshot-docs) -->
+![Generated Roots workbook with a supplied root-length column and blank calculation column](../screenshots/authoring_workbook.webp)
+<!-- screenshots:end -->
 
-A sheet name connects source tables to actions. Use the same spelling in the Tutorial Part's
-`- **Worksheet:** Roots` declaration.
+Choose meaningful headers before styling. The four supported region roles are `source`,
+`calculation`, `results`, and `interpretation`; regions must not overlap.
 
-## Place a summary table
+## Place another table
 
-An `At:` heading sets the upper-left cell of the next table. This table starts at D1:
+Type this Markdown before the next table:
 
 ```markdown
 #### At: D1
 
 | Statistic | Value |
 | --- | --- |
-| Sample size | |
 | Mean (mm) | |
-| Sample standard deviation (mm) | |
+| Example choice | |
 
-- **Region D1:E4:** results
+- **Region D1:E3:** results
 ```
 
-The summary labels occupy D2:D4. Their calculation cells E2:E4 are blank. The blank entries are
-intentional work areas; `0` would supply a number instead.
+`At: D1` places the next rectangular table at D1. It does not affect later tables.
 
 <!-- screenshots:begin (managed by screenshot-docs) -->
-![Roots starter sheet with observations at A1 and a summary table at D1](../screenshots/course_layout.webp)
+![Generated workbook results table at D1 with labels and blank value cells](../screenshots/authoring_results.webp)
 <!-- screenshots:end -->
 
-Read the column letters and row numbers in the crop. The summary's Value heading is at E1,
-so the first formula belongs in E2. The empty column space separates observations from results.
+Use a separate table when it makes the worksheet easier to read. Table rows must have the same
+number of cells, and tables cannot overlap.
 
-## Give each area meaning
+## Leave room for interpretation
 
-Regions describe a worksheet area's purpose:
-
-| Role | Use |
-| --- | --- |
-| `source` | Measurements or other supplied information |
-| `calculation` | Intermediate work such as deviations |
-| `results` | Summary values such as mean and sample SD |
-| `interpretation` | Space for written explanations |
-
-Roles control presentation; they do not add labels or formulas. Supply headings in the tables.
-Keep declared regions separate: two explicit regions cannot overlap.
-
-A table supplies a rectangular block. Give every row the same number of cells, including blank
-cells. To add a blank calculation column, add its heading, separator cell, and a blank cell to
-every observation row.
-
-## Separate supplied values from work
-
-Anything written in a Workbook table is supplied to students. This includes formulas.
-If students should calculate the mean, leave E3 blank and write the action in Tutorial:
+Type this Markdown:
 
 ```markdown
-1. In cell E3, enter:
-   [`=AVERAGE(A2:A6)`](enter:E3)
+#### At: D8
+
+| Interpretation | Response |
+| --- | --- |
+| Your explanation | |
+
+- **Region D8:E9:** interpretation
 ```
 
-Do not also put `=AVERAGE(A2:A6)` in the Workbook table. That gives away the formula and conflicts
-with asking a student to enter it into an empty cell. Supplied labels need no `label:` action.
-
-## Recognize the document table
-
-The same pipe-table punctuation under Tutorial makes a table in the document. It does not put
-anything into the spreadsheet. Use that location for explanations or comparison notes.
-
 <!-- screenshots:begin (managed by screenshot-docs) -->
-![An explanatory tutorial table rendered as a document table](../screenshots/syntax_table.webp)
+![Generated workbook interpretation area at D8 with a supplied prompt and blank response cell](../screenshots/authoring_response.webp)
 <!-- screenshots:end -->
 
-The crop illustrates document styling. Compare it with the worksheet grid above before choosing
-where a new table belongs.
+The author chooses the prompt and whether students write in the workbook. The `interpretation`
+role changes presentation only; it does not create a question or validate the response.
 
-## Check the layout
+## Choose what a cell stores
 
-Before building, read the source table as cell addresses. Check its first and last observation,
-its summary's upper-left corner, and its blank targets. After building, inspect the actual XLSX.
+| Markdown table cell | Stored spreadsheet value |
+| --- | --- |
+| Empty cell | Blank cell |
+| `12` or `-1.2e3` | Number |
+| `TRUE` or `FALSE` | Boolean |
+| `=AVERAGE(A2:A6)` | Formula supplied to the reader |
+| `"001"` | Literal text, including leading zeroes |
+| Plain words | Text |
 
-Practice in [../learn/PART_1_CREATE.md](../learn/PART_1_CREATE.md#step-design-the-worksheet), using
-[../examples/authoring_course/root_03_layout.md](../examples/authoring_course/root_03_layout.md).
-Continue with [FORMULAS.md](FORMULAS.md) to calculate in the blank cells.
-For exact table rules, see [../TUTORIAL_SPEC.md](../TUTORIAL_SPEC.md#workbook-authoring).
+Use `\|` for a literal pipe in a table cell. A leading `=` is required for a formula. Numeric,
+formula, and blank work cells display three decimal places by default; that changes display, not
+stored precision.
+
+## Keep starting cells separate from work
+
+Anything in Workbook is supplied. If a reader must create a formula, leave the target cell blank
+here and describe it with an action in Tutorial. Do not supply the same formula and ask the reader
+to enter it again.
+
+Add another `### Sheet: <name>` for each worksheet. Sheet names must be unique, at most 31
+characters, and cannot contain `:`, `\\`, `/`, `?`, `*`, `[`, or `]`. See
+[ACTIONS.md](ACTIONS.md) to connect the workbook to instructions and
+[../TUTORIAL_SPEC.md](../TUTORIAL_SPEC.md) for all table rules.
+
+## Use more than one sheet
+
+Add the following under Workbook to create a Summary tab alongside the example's Roots tab:
+
+```markdown
+### Sheet: Summary
+
+| Result | Value |
+| --- | --- |
+| Example value | |
+```
+
+Then add a Tutorial Part that selects the Summary sheet. Quoted sheet names let formulas use
+cells on another worksheet:
+
+```markdown
+### Part: Work on the summary sheet
+
+- **Worksheet:** Summary
+
+#### Step: Enter a value
+
+1. In cell B2, enter [`='Roots'!A2`](enter:B2).
+```
+
+Each Part in a document with multiple worksheets needs its own Worksheet declaration. Use the
+declared sheet spelling; worksheet names are unique ignoring case. A declaration scopes the whole
+Part. It does not add a worksheet to Workbook.
+
+## Preserve literal cell text
+
+Workbook cells support plain text, named entities, `br` line breaks, and one surrounding code span.
+Use JSON double quotes to preserve text such as `"001"`, `"TRUE"`, or `"=not a formula"`.
+An empty quoted string (`""`) differs from a blank cell. For a line break in a text value, use
+`"first line\nsecond line"` in a code span; the JSON escape becomes a newline.
+
+Use decimal numbers such as `0.05` for stored values. The compiler does not infer percentages,
+dates, currency, or thousands separators. Put units in headings so measurements stay numeric.
+
+## Add Google links optionally
+
+After importing your workbook into Google Sheets, you can add a `Google Sheets` declaration
+before a sheet's first table. The following URL is a placeholder; substitute your actual URL
+and the sheet's numeric `gid`:
+
+```text
+- **Google Sheets:** https://docs.google.com/spreadsheets/d/SPREADSHEET_ID/edit#gid=TAB_ID
+```
+
+This lets generated cell links refer to that Google tab. It does not upload files, change sharing,
+or verify the destination. A personal copy can have different IDs. Leave the declaration out
+when you only need local output; the missing-mapping note does not block a build.

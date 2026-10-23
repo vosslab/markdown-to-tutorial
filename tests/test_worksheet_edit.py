@@ -81,6 +81,19 @@ def test_layout_edit_leaves_unmarked_biology_sentences_unchanged(tmp_path: pathl
 
 
 #============================================
+def test_layout_edit_updates_explicit_uppercase_column_syntax(tmp_path: pathlib.Path) -> None:
+	"""An uppercase column coordinate remains an intentional worksheet reference."""
+	path = write_lesson(tmp_path)
+	path.write_text(path.read_text(encoding="utf-8")
+		+ "The calculation column C contains reader work.\n"
+		+ "[Fill C2:C26](fill:C2:C26) down.\n", encoding="utf-8")
+	request = tutorial_lib.worksheet_edit.WorksheetEdit("insert-columns", "Data", at=1, count=1)
+	result = tutorial_lib.worksheet_edit.prepare_edit(path, request)
+	assert "The calculation column D contains reader work." in result.updated_source
+	assert "[Fill D2:D26](fill:D2:D26) down." in result.updated_source
+
+
+#============================================
 def test_layout_edit_updates_explicit_technical_range_and_notices_for_bare_cells(tmp_path: pathlib.Path) -> None:
 	"""A natural range is safe, but unmarked individual cells need author review."""
 	path = write_lesson(tmp_path)
@@ -163,6 +176,22 @@ def test_resize_observations_can_shrink_the_declared_data_table(tmp_path: pathli
 	assert "fill:C2:C11" in result.updated_source
 	assert "=AVERAGE(A2:A11)" in result.updated_source
 	assert "| 11 | 21 |" not in result.updated_source
+
+
+#============================================
+def test_resize_observations_preserves_prose_and_syncs_visible_fill_range(
+	tmp_path: pathlib.Path) -> None:
+	"""A resize changes deliberate coordinates but leaves prose untouched."""
+	path = write_lesson(tmp_path)
+	source = path.read_text(encoding="utf-8")
+	source += "The blank calculation column is where readers record their results.\n"
+	source += "[Fill C2:C26](fill:C2:C26) down.\n"
+	path.write_text(source, encoding="utf-8")
+	request = tutorial_lib.worksheet_edit.WorksheetEdit("resize-observations", "Data",
+		data_range="A1:B26", rows=50)
+	result = tutorial_lib.worksheet_edit.prepare_edit(path, request)
+	assert "The blank calculation column is where readers record their results." in result.updated_source
+	assert "[Fill C2:C51](fill:C2:C51) down." in result.updated_source
 
 
 #============================================

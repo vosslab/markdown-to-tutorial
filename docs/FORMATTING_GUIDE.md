@@ -1,305 +1,354 @@
-# From Markdown to formatting
+# Markdown to Word and Excel
 
-Copy a pattern, replace the words with your own, and build your tutorial. The compiler supplies
-fonts, colors, spacing, and numbering. You decide what the lesson says and what students do.
+Find the feature you want, copy its source pattern, and use it in your own tutorial.
+This visual reference shows actual compiler output. The three-part
+[AUTHORING_GUIDE.md](AUTHORING_GUIDE.md) explains how the pieces fit together.
 
-The formatting examples come from [examples/formatting_demo.md](examples/formatting_demo.md),
-with cropped views of the actual output. The later walkthrough connects the table and actions,
-then adds a column and a row in [examples/adding_rows_and_columns.md](examples/adding_rows_and_columns.md).
-Write plain ASCII: straight quotes, ordinary hyphens, and readable symbols such as `&alpha;`.
+## Find a feature
 
-## Find a practical pattern
-
-New to Markdown and spreadsheets? Start with [STUDENT_GUIDE.md](STUDENT_GUIDE.md) for the
-three-part BIOL 318 course. Use this index when you know the task you want to perform.
-The visual examples below remain useful for seeing how source becomes a document and workbook.
-
-| Task | Reference |
-| --- | --- |
-| Write headings, paragraphs, lists, links, and scientific symbols | [reference/MARKDOWN.md](reference/MARKDOWN.md) |
-| Place observations, supplied labels, and blank student work | [reference/WORKSHEETS.md](reference/WORKSHEETS.md) |
-| Calculate count, mean, sample SD, and fixed-reference deviations | [reference/FORMULAS.md](reference/FORMULAS.md) |
-| Connect visible instructions to Enter, Fill, Select, and Replace | [reference/ACTIONS.md](reference/ACTIONS.md) |
-| Add observations or move a worksheet layout | [reference/CHANGES.md](reference/CHANGES.md) |
-| Diagnose wrong ranges, targets, table rows, and seeded answers | [reference/MISTAKES.md](reference/MISTAKES.md) |
-
-The reference uses the course's small synthetic root-length dataset. Each page links back to a
-course exercise and working source. Copy a small pattern, then check its actual output.
-For every supported rule, use [TUTORIAL_SPEC.md](TUTORIAL_SPEC.md).
-
-## Headings and nested instructions
-
-Use `Part:` and `Step:` to organize the lesson. The compiler adds their numbering. Indent a bullet
-under a numbered item to keep related details together.
-
-```markdown
-### Part: Explore a curved relationship
-
-- **Worksheet:** Sleep and scores
-
-The data suggest that exam performance may rise and then fall as sleep changes. A squared predictor
-lets a regression model describe that curve without changing the original observations.
-
-#### Step: Inspect the observations
-
-1. Read the supplied headings before changing the worksheet.
-   - The first two columns contain the observations.
-   - The third column is blank because you will construct its calculation.
-2. Notice that the predictor is called **hours of sleep**, not *sleep quality*.
-```
-
-The Step heading sits farther left than the body text. Colors, sizes, and spacing distinguish the
-levels without author-written formatting commands.
-
-<!-- screenshots:begin (managed by screenshot-docs) -->
-![Numbered Part and Step headings with indented prose and nested instructions](screenshots/syntax_headings.webp)
-<!-- screenshots:end -->
-
-## Emphasis and scientific symbols
-
-Use `**bold**` for emphasis, `*italics*` for a distinction, and backticks for literal spreadsheet
-text. Type `&alpha;` to show the Greek letter while keeping the source ASCII.
-
-```markdown
-##### Explanation: Why square a value?
-
-If a student sleeps 6 hours, squaring the value gives 36. The `^2` tells a spreadsheet to multiply
-the value by itself. In a regression equation, the squared term can have coefficient &alpha; while
-the ordinary sleep-hours term has its own coefficient.
-```
-
-The smaller explanation heading separates the reasoning from the task. Long prose receives full
-justification automatically, using an estimated line count; no alignment syntax is needed.
-
-<!-- screenshots:begin (managed by screenshot-docs) -->
-![Explanation heading above prose with monospace exponent notation and a rendered alpha](screenshots/syntax_text.webp)
-<!-- screenshots:end -->
-
-## Formulas and spreadsheet actions
-
-Keep ordinary Excel formulas in your instructions. The text inside square brackets is visible;
-`(enter:C2)` records where the student enters it. The destination stays hidden in the document.
-
-```markdown
-#### Step: Calculate squared sleep hours
-
-1. In cell C2, enter:
-   [`=A2^2`](enter:C2)
-2. [Fill C2:C4](fill:C2:C4) down to calculate the remaining rows.
-3. Check that the value beside 9 hours of sleep is 81.
-```
-
-Put the formula on its own indented line after the introduction to give it a prominent green block.
-A formula within a sentence stays inline. The workbook leaves C2:C4 blank for
-students to calculate. These action links also let the compiler check the calculation sequence.
-Keep the destination visible in your sentence so students know where to work.
-
-<!-- screenshots:begin (managed by screenshot-docs) -->
-![Formula entry and fill-down instructions with a prominent green spreadsheet formula](screenshots/syntax_actions.webp)
-<!-- screenshots:end -->
-
-## Tables in the tutorial
-
-A table inside `## Tutorial` becomes a document table. It does not add cells to the workbook.
-
-```markdown
-| Model feature | What to record |
-| --- | --- |
-| Linear term | How the response changes in a straight-line model. |
-| Squared term | How the curve bends as sleep changes. |
-```
-
-The compiler supplies the header styling, borders, and alternating row shading.
-
-<!-- screenshots:begin (managed by screenshot-docs) -->
-![Rendered tutorial table with an emphasized header and readable row styling](screenshots/syntax_table.webp)
-<!-- screenshots:end -->
-
-## Tables in the workbook
-
-Put the labels and data students should receive under `## Workbook`. The first table starts at A1;
-`At: E1` places the next table where you choose. Empty entries stay empty.
-
-```markdown
-## Workbook
-
-### Sheet: Sleep and scores
-
-| Hours of sleep | Exam score | Sleep hours squared |
+| I want to... | Example below | More detail |
 | --- | --- | --- |
-| 5 | 72 | |
-| 7 | 88 | |
-| 9 | 81 | |
+| Organize a document and number its instructions | [Headings and lists](#headings-and-lists) | [reference/MARKDOWN.md](reference/MARKDOWN.md) |
+| Emphasize text or show scientific notation | [Text and symbols](#text-and-symbols) | [reference/MARKDOWN.md](reference/MARKDOWN.md) |
+| Add a document table, figure, or link | [Tables, images, and links](#tables-images-and-links) | [reference/MARKDOWN.md](reference/MARKDOWN.md) |
+| Supply worksheet data and blank work cells | [Workbook layout](#workbook-layout) | [reference/WORKSHEETS.md](reference/WORKSHEETS.md) |
+| Give results and responses visible work areas | [Results and responses](#results-and-responses) | [reference/WORKSHEETS.md](reference/WORKSHEETS.md) |
+| Format a formula and connect it to a cell | [Formula instructions](#formula-instructions) | [reference/FORMULAS.md](reference/FORMULAS.md) |
+| Fill a column or select a range | [Fill and select](#fill-and-select) | [reference/ACTIONS.md](reference/ACTIONS.md) |
+| Replace a value or offer alternative calculations | [Replace and alternatives](#replace-and-alternatives) | [reference/ACTIONS.md](reference/ACTIONS.md) |
+| Supply my own prose | [Content placeholders](#content-placeholders) | [learn/PART_1_CREATE.md](learn/PART_1_CREATE.md) |
+| Correct a build error | [Build and check](#build-and-check) | [reference/MISTAKES.md](reference/MISTAKES.md) |
+| Move tables, resize data, or import a workbook | [Optional tools](#optional-tools) | [reference/CHANGES.md](reference/CHANGES.md) |
 
-- **Region A1:B4:** source
-- **Region C1:C4:** calculation
+The snippets below come from one runnable file:
+[examples/authoring_features.md](examples/authoring_features.md). Roots is a small formatting
+example, not a lesson to complete. Copy a complete file from GitHub's **Raw** view; use the fenced
+snippets below when copying a specific feature. Each fragment belongs in the indicated section.
 
-#### At: E1
+## Headings and lists
 
-| Model feature | Why it matters |
+The document title and opening paragraph come directly from the beginning of the file:
+
+```markdown
+# Roots formatting examples
+
+Five invented root lengths provide small tables for demonstrating document and workbook formatting.
+```
+
+![The title and introductory paragraph formatted in the generated Word document](screenshots/authoring_title.webp)
+
+**You type in Tutorial:**
+
+```markdown
+### Part: Format the document
+
+- **Worksheet:** Roots
+
+#### Step: Organize instructions
+
+1. Read the supplied column headings.
+   - The measurements are in column A.
+   - Column B is reserved for your calculations.
+2. Keep your explanation beside the instruction it supports.
+
+##### Substep: Add a detail
+
+This paragraph belongs to the substep.
+```
+
+**Word output:**
+
+![Numbered Part, Step, and Substep headings with an ordered list and indented supporting bullets](screenshots/authoring_headings.webp)
+
+The compiler numbers Parts and Steps and gives nested instructions their own indentation.
+Use descriptive names from your own tutorial. A `#` title starts the file; `## Workbook`
+and `## Tutorial` separate spreadsheet content from document content.
+
+## Text and symbols
+
+**You type:**
+
+```markdown
+##### Explanation: Mark up scientific text
+
+Use **bold** for emphasis, *italics* for a distinction, and `A2` for a literal cell address.
+Scientific text can include &alpha;, H<sub>0</sub>, and mm<sup>2</sup>.
+
+> A short note appears as a separate block.
+```
+
+**Word output:**
+
+![Bold and italic text, a literal A2 reference, alpha, subscript zero, superscript two, and a block quote](screenshots/authoring_text.webp)
+
+Keep source characters ASCII. Named entities and the supported `sub` and `sup` tags let you
+write scientific notation. The compiler chooses the fonts and colors; you supply the emphasis.
+
+## Tables, images, and links
+
+A table inside Tutorial becomes a Word table:
+
+```markdown
+#### Step: Show a document table
+
+| Item | Location |
 | --- | --- |
-| Linear term | Describes a steady change. |
-| Squared term | Allows a curved relationship. |
+| Measurements | A2:A6 |
+| Mean | E2 |
 ```
 
-This is the starting workbook, with supplied headings and blank calculation cells. The author
-chooses the arrangement and content; the compiler adds presentation. A region description does
-not create a heading: write the heading in the table itself.
+![Word table with styled headers and two rows, under the numbered Show a document table heading](screenshots/authoring_table.webp)
 
-Numbers display three decimal places by default. The blank calculation cells use that format too,
-so student-entered results match. Stored values keep their full precision; this is display
-formatting, not rounding the data.
-
-<!-- screenshots:begin (managed by screenshot-docs) -->
-![Starting worksheet with labeled observations, blank squared values, and a model-feature reference table](screenshots/syntax_workbook.webp)
-<!-- screenshots:end -->
-
-## Connect a table to actions
-
-The connection is the **worksheet name and cell address**. A heading such as "Sleep hours squared"
-does not automatically connect to a formula. You choose its column, then use that column's address
-in the instructions.
-
-For the workbook table above, the first table starts at A1. Its header occupies row 1; the first
-observation occupies row 2. The Markdown separator line (`| --- | --- | --- |`) does not occupy a
-spreadsheet row.
-
-| Spreadsheet row | Column A | Column B | Column C |
-| --- | --- | --- | --- |
-| 1 | Hours of sleep | Exam score | Sleep hours squared |
-| 2 | 5 | 72 | Blank for the student's formula |
-| 3 | 7 | 88 | Blank for fill down |
-| 4 | 9 | 81 | Blank for fill down |
-
-Read this instruction as three connected pieces:
+An image uses a path relative to your Markdown file. This excerpt's path is relative to the
+complete example under `docs/examples/`; adjust it for your own file location.
 
 ```markdown
-1. In cell C2, enter:
-   [`=A2^2`](enter:C2)
+#### Step: Include an image
+
+![A normal curve with the area left of minus one shaded.](../../tutorial_data/assets/microbes_1_z_test_image2.png)
+
+This image comes from the instructor's Microbes z-test tutorial.
 ```
 
-- `A2` inside the Excel formula is the **input**: the first sleep-hours value, 5.
-- `C2` after `enter:` is the **destination**: the empty squared-hours cell in the same row.
-- `In cell C2` is what the reader sees, so it must name that same destination.
+![Actual embedded normal-curve illustration and its source acknowledgement in the generated Word document](screenshots/authoring_image.webp)
 
-The part's `- **Worksheet:** Sleep and scores` selects the worksheet for these actions. Its name
-must match `### Sheet: Sleep and scores` in the Workbook section.
+Keep the descriptive text inside `![...]` so the image has alternative text. Local PNG, JPEG,
+and WebP images are supported. Keep your image files with the source you share.
 
-The table creates the starting worksheet. The action creates an instruction and records what the
-student should enter; it does **not** put the answer into the starting worksheet. Putting `=A2^2`
-directly in the Workbook table would supply that formula in advance instead.
-
-## Add a calculation column
-
-Suppose you want a second calculation: sleep hours minus 7. As the tutorial author, add a fourth
-column to the Workbook table. It becomes column D. Supply its heading and leave its values blank:
+Link to a heading using its Markdown anchor:
 
 ```markdown
-| Hours of sleep | Exam score | Sleep hours squared | Hours minus 7 |
-| --- | --- | --- | --- |
-| 5 | 72 | | |
-| 7 | 88 | | |
-| 9 | 81 | | |
+#### Step: Link to a section
 
-- **Region A1:B4:** source
-- **Region C1:D4:** calculation
+Return to the [instruction example](#step-organize-instructions).
 ```
 
-Extend the calculation region through D so both calculation columns receive the same styling.
-Keep the existing column-C instructions, then add this step under the same Tutorial part:
+![Word paragraph with the instruction example link](screenshots/authoring_links.webp)
+
+Use a heading link when directing readers to another step; a typed step number can become stale.
+Ordinary web links use the same `[visible words](destination)` pattern.
+
+## Workbook layout
+
+**You type under Workbook:**
 
 ```markdown
-#### Step: Compare with 7 hours
+### Sheet: Roots
 
-1. In cell D2, enter:
-   [`=A2-7`](enter:D2)
-2. [Fill D2:D4](fill:D2:D4) down to calculate the remaining rows.
+| Root length (mm) | Squared length (mm^2) |
+| --- | --- |
+| 12 | |
+| 15 | |
+| 18 | |
+| 20 | |
+| 25 | |
+
+- **Region A1:A6:** source
+- **Region B1:B6:** calculation
 ```
 
-Both formulas read from column A, but one writes to C and the other to D. The author has added the
-column and supplied its heading; the tutorial user enters and fills its formula.
+**Excel output**, shown with the additional result table defined next:
 
-## Add another observation
+![Workbook with supplied measurements in A, blank calculated column B, results in D:E, and blank result cells](screenshots/authoring_workbook.webp)
 
-Now add a fourth observation, 6 hours and a score of 79, at the bottom of that same Workbook table:
+The first table starts at A1. Its header becomes row 1; the Markdown separator does not become
+a spreadsheet row. Empty entries supply blank cells. Region declarations apply worksheet styling
+without adding labels or answers. Numeric and blank work cells display three decimal places by
+default; the stored precision is unchanged.
+
+Use `#### At: D1` before another table to set its upper-left cell. Each additional table needs
+its own placement. See [reference/WORKSHEETS.md](reference/WORKSHEETS.md) for text-versus-number
+rules, literal quotes, multiple worksheets, and optional Google links.
+
+## Results and responses
+
+**You type under the same Sheet:**
 
 ```markdown
-| Hours of sleep | Exam score | Sleep hours squared | Hours minus 7 |
-| --- | --- | --- | --- |
-| 5 | 72 | | |
-| 7 | 88 | | |
-| 9 | 81 | | |
-| 6 | 79 | | |
+#### At: D1
 
-- **Region A1:B5:** source
-- **Region C1:D5:** calculation
+| Statistic | Value |
+| --- | --- |
+| Mean (mm) | |
+| Example choice | |
+
+- **Region D1:E3:** results
 ```
 
-The new observation is on spreadsheet row 5. The first formulas stay `=A2^2` in C2 and `=A2-7` in
-D2. Extend **both** fill instructions to row 5, including the visible wording and the link target:
+**Excel output:**
+
+![Labeled results table at D1:E3 with blank Value cells](screenshots/authoring_results.webp)
+
+A response area uses the same table syntax and an interpretation region:
 
 ```markdown
-2. [Fill C2:C5](fill:C2:C5) down to include all four observations.
+#### At: D8
+
+| Interpretation | Response |
+| --- | --- |
+| Your explanation | |
+
+- **Region D8:E9:** interpretation
 ```
+
+![Interpretation region with a supplied label and expanded blank space for a written response](screenshots/authoring_response.webp)
+
+Replace these demonstration labels with wording appropriate to your tutorial. The region gives
+a response space its presentation; it does not generate an interpretation or evaluate a response.
+
+## Formula instructions
+
+**You type inside a Tutorial Part:**
 
 ```markdown
-2. [Fill D2:D5](fill:D2:D5) down to include all four observations.
+#### Step: Enter a formula
+
+1. In cell E2, enter [`=AVERAGE(A2:A6)`](enter:E2).
 ```
 
-After the tutorial user fills down, C5 contains `=A5^2` and displays `36.000`; D5 contains `=A5-7`
-and displays `-1.000`. In the generated starting workbook, those cells are still blank.
+**Source beside actual Word output:**
 
-The complete version is [examples/adding_rows_and_columns.md](examples/adding_rows_and_columns.md).
-Build it with:
+![Comparison of the literal Markdown formula instruction and its generated Word step](screenshots/authoring_comparison.webp)
+
+The link's text is visible. Its `enter:E2` destination connects the instruction to a cell and
+stays hidden in Word. Name E2 in the visible instruction as well. The compiler styles the formula
+and checks supported references; the spreadsheet application calculates it.
+
+Put a formula in a Workbook table when you want it supplied in advance. Put it in a Tutorial
+Enter action when the reader should enter it. Leave that starter cell blank.
+
+The same action-link syntax preserves the wording of an instructor's longer instruction. This
+excerpt is from [../tutorial_data/microbes_1_z_test.md](../tutorial_data/microbes_1_z_test.md):
+
+```markdown
+#### Step: Calculate the Z-Statistic
+
+1. In **cell C8**, type **"[Z-Statistic](label:C8)"**.
+2. In **cell D8**, calculate the Z-statistic using the formula:
+   * Enter: [`=(D5 - D2) / (D3 / SQRT(D6))`](enter:D8)
+   * This formula uses the sample mean (D5), population mean (D2), population standard deviation (D3), and sample size (D6). The Z-statistic helps you determine how far the sample mean is from the population mean, accounting for sample size.
+```
+
+![Instructor-authored z-test step with a label action, formula, and nested explanation](screenshots/authoring_instructor.webp)
+
+The source's nested list and explanation survive the conversion. Your words can use the same
+formatting without adopting this scenario. This older lesson teaches label entry; normally supply
+labels in your Workbook tables.
+
+## Fill and select
+
+**You type:**
+
+```markdown
+#### Step: Fill a column
+
+1. In cell B2, enter [`=A2^2`](enter:B2).
+2. [Fill B2:B6](fill:B2:B6) down.
+```
+
+**Word output:**
+
+![One formula entry followed by a fill-down instruction for B2:B6](screenshots/authoring_fill.webp)
+
+Fill uses the first row's formula. The compiler checks the translated references while keeping
+the supplied workbook's work cells blank. See [reference/FORMULAS.md](reference/FORMULAS.md) for
+formula notation and its validation limits.
+
+```markdown
+#### Step: Select a range
+
+1. [Select A1:B6](select:A1:B6).
+2. Choose **Insert > Chart** in your spreadsheet application.
+
+The instruction appears in the document; the reader creates the chart.
+```
+
+![Select-range and chart-menu instructions in the generated document](screenshots/authoring_select.webp)
+
+Selection and menu instructions describe reader actions. They do not create a chart in the
+generated workbook.
+
+## Replace and alternatives
+
+**You type:**
+
+```markdown
+#### Step: Replace a supplied value
+
+1. In cell A2, replace the supplied value with [14](replace:A2).
+```
+
+![Word instruction to replace the supplied A2 value with 14](screenshots/authoring_replace.webp)
+
+Replace requires a value supplied in Workbook or established earlier in the instructions.
+The starting workbook still contains the original value.
+
+When readers choose between calculations for the same destination, declare the alternatives:
+
+```markdown
+#### Step: Provide a choice
+
+Choose one of these demonstration formulas for E3.
+
+- **Alternative: Minimum**
+  - In cell E3, enter [`=MIN(A2:A6)`](enter:E3).
+- **Alternative: Maximum**
+  - In cell E3, enter [`=MAX(A2:A6)`](enter:E3).
+```
+
+![Two explicitly grouped alternative instructions for the same E3 destination](screenshots/authoring_alternatives.webp)
+
+The compiler checks the branches separately. These are reader choices, not automatic conditions.
+See [reference/ACTIONS.md](reference/ACTIONS.md) for Label, legacy action openings, and sequencing.
+
+## Content placeholders
+
+Use an outline to leave room for your own writing. This is **instructional notation**, not
+runnable compiler source. Replace the placeholders before using the fragment:
+
+```text
+### Part: <your title>
+
+<biological scenario>
+
+<research question>
+
+#### Step: <your title>
+
+<setup paragraph>
+
+1. <instruction in your own words>
+
+<interpretation>
+```
+
+These placeholders suggest where prose can go; they do not require a particular narrative or
+section sequence. The compiler formats what you write.
+
+## Build and check
+
+Use [learn/PART_3_IMPROVE.md](learn/PART_3_IMPROVE.md) for the normal build-and-review workflow.
+A short check of the complete feature example, after [INSTALL.md](INSTALL.md):
 
 ```bash
 source source_me.sh
-python3 make_tutorial.py build docs/examples/adding_rows_and_columns.md --format docx,xlsx
+python3 make_tutorial.py lint docs/examples/authoring_features.md
+python3 make_tutorial.py build docs/examples/authoring_features.md --format docx,xlsx
 ```
 
-These examples show the edits explicitly so you can understand the connections. Manually changing
-a Markdown table does not automatically rewrite its Tutorial instructions. For larger layout
-changes, the worksheet-edit command can preview coordinated changes; see
-[USAGE.md](USAGE.md#maintain-a-worksheet-after-a-layout-decision). Review its notices, including any
-visible wording or worked numbers that still need updating.
+The output is in `tutorial_output/authoring_features/`. For PDF, build with `--format all`.
+Screenshots here show the actual DOCX rendered through LibreOffice and the XLSX printed through
+Calc. They do not establish identical Google Docs or Sheets rendering.
 
-## Try the complete example
+The compiler checks supported structure, references, and assignment consistency. You and your
+instructor judge the scientific content and whether the tutorial teaches well. A successful
+build does not establish either.
 
-Run from the repository root:
+## Optional tools
 
-```bash
-source source_me.sh
-python3 make_tutorial.py lint docs/examples/formatting_demo.md
-python3 make_tutorial.py build docs/examples/formatting_demo.md --format all
-```
-
-Open the DOCX, PDF, and XLSX in `tutorial_output/formatting_demo/`. PDF export requires LibreOffice
-and the fonts listed in [INSTALL.md](INSTALL.md). On this macOS host, agent commands that invoke
-LibreOffice must run outside the sandbox.
-
-The screenshots show local PDF rendering and a printed view of the XLSX. Page wrapping can differ
-in other applications; these are not Google Docs or Google Sheets screenshots.
-
-For writing a complete lesson, use [AUTHORING_GUIDE.md](AUTHORING_GUIDE.md). For all supported
-syntax and its rules, see [TUTORIAL_SPEC.md](TUTORIAL_SPEC.md).
-
-## Refresh the screenshots
-
-For maintainers, refresh all documentation artifacts and screenshots after changing renderer styles:
-
-```bash
-source source_me.sh && python3 devel/refresh_documentation.py
-```
-
-The repository-owned capture helpers locate semantic content automatically, so crops follow style
-changes without hand-adjusting coordinates. To rebuild only this guide's syntax examples, run:
-
-```bash
-source source_me.sh && python3 devel/capture_syntax_examples.py
-```
-
-See [INSTALL.md](INSTALL.md) for the optional capture dependencies. Both commands invoke
-LibreOffice; on this macOS host, agents must run them outside the sandbox with
-`sandbox_permissions="require_escalated"`. Human terminal commands use the syntax above.
-The [capture receipt](screenshots/syntax_capture_receipt.json) records the source and image hashes.
-The narrow crops keep each feature readable; they intentionally omit unrelated page content.
+- [reference/CHANGES.md](reference/CHANGES.md) covers previewing coordinated worksheet edits.
+- [USAGE.md](USAGE.md#import-a-workbook) explains importing simple XLSX data as a Markdown draft.
+- [TUTORIAL_SPEC.md](TUTORIAL_SPEC.md) defines the full syntax and limits. Task lists, footnotes,
+  raw HTML beyond the supported inline tags, and full mathematical typesetting are not supported.
+- [screenshots/README.md](screenshots/README.md) records native screenshot provenance and the
+  existing refresh command for maintainers.

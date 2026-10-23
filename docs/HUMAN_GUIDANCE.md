@@ -20,6 +20,17 @@ origin belongs there too. Rules: [REPO_STYLE.md](REPO_STYLE.md).
 
 ## Tutorial converter
 
+- Fix demonstrated data-integrity defects when discovered, including unintended prose changes and
+  mismatched visible/action-target ranges. Keep the worksheet-editor repair narrow; a documentation
+  limitation is not a substitute for correcting known source corruption.
+
+- Assess the guides with a concise quality rubric and an independent subagent review, including
+  an attempt to author a small tutorial using only the documentation. Use findings to improve
+  student authoring, not as a rigid acceptance gate.
+
+- Make the README student friendly and emphasize the importance of students' contributions to
+  open pedagogy.
+
 - Prioritize DOCX and XLSX for importing into Google Docs and Google Sheets.
 - Use LibreOffice to convert DOCX to PDF for useful output review; HTML preview is not needed.
 - On this macOS host, run every command that can invoke LibreOffice outside the sandbox through
@@ -82,6 +93,18 @@ origin belongs there too. Rules: [REPO_STYLE.md](REPO_STYLE.md).
   rather than assuming Markdown source will render correctly. I am concerned about the existing files.
 
 ## Student publishing
+
+- This repo supports open pedagogy and Student-Generated Content. Its authors are BIOL 318 students
+  who have completed several tutorials and now create original tutorials for the class.
+- Teach Markdown and the compiler through copyable source beside tightly cropped actual Word and
+  Excel output. Make the guides a practical, comprehensive visual reference.
+- Keep Roots as a simple formatting example without a deeper meaning or prescribed scenario.
+  Students supply their own scenarios, questions, explanations, and instructional approaches.
+- Use clearly identified placeholders to invite student content. The manager writes explanatory
+  documentation; preserve existing instructor educational content and student authorship.
+- Focus the three Parts on document formatting, workbook construction, and building/refining files.
+  Keep advanced maintenance optional and prioritize useful guides over documentation infrastructure.
+- Separate compiler-enforced standards from advisory scientific and instructional quality review.
 
 - Organize the student course as Parts, Steps, and Substeps. Use cropped visuals to emphasize the
   relevant part of a page, and refresh screenshots automatically after style changes.

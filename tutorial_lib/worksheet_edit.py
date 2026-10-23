@@ -26,7 +26,10 @@ CELL_OR_RANGE = re.compile(
 )
 CELL_PART = re.compile(r"(\$?)([A-Za-z]{1,3})(\$?)([1-9][0-9]*)\Z")
 ROW_WORD = re.compile(r"\brow(s?)\s+([1-9][0-9]*)\b", re.IGNORECASE)
-COLUMN_WORD = re.compile(r"\bcolumn(s?)\s+([A-Za-z]{1,3})(?:-([A-Za-z]{1,3}))?\b", re.IGNORECASE)
+# Spreadsheet columns are conventionally written in uppercase.  Matching only
+# uppercase coordinates prevents ordinary prose such as "column is" from being
+# mistaken for the valid Excel column IS during a layout edit.
+COLUMN_WORD = re.compile(r"\b(?i:column(s?))\s+([A-Z]{1,3})(?:-([A-Z]{1,3}))?\b")
 PROSE_REFERENCE = re.compile(
 	# A coordinate is prose only when an author has named a spreadsheet thing.
 	# Generic prepositions ("in B12") are common in biology and statistics;
@@ -561,13 +564,29 @@ def _transform_action_display_references(text: str, scope: str | None, sheet: st
 		updated = _transform_reference_text(match["reference"], scope, sheet, transform)
 		return updated + match["middle"]
 	text = bare_pair.sub(bare_paired, text)
+	# This common authoring form displays the complete range inside the action
+	# link itself. Keep its visible range synchronized with the semantic target
+	# before the target is rewritten below.
+	fill_range = re.compile(
+		r"\[(?P<prefix>[^\]\n]*?\b)(?P<reference>" + address
+		+ r")\]\(fill:(?P<target>[^)]*)\)", re.IGNORECASE)
+	def fill_range_text(match: re.Match) -> str:
+		visible = tutorial_lib.references.parse_reference(match["reference"], sheet)
+		target = tutorial_lib.references.parse_reference(match["target"], sheet)
+		if (visible is None or target is None or visible.address != target.address
+			or visible.sheet.casefold() != sheet.casefold() or target.sheet.casefold() != sheet.casefold()):
+			return match[0]
+		updated = _transform_reference_text(match["reference"], scope, sheet, transform)
+		return "[" + match["prefix"] + updated + "](fill:" + match["target"] + ")"
+	text = fill_range.sub(fill_range_text, text)
 	fill = re.compile(
 		r"\[(?P<prefix>[^\]\n]*\bthrough\s+)(?P<reference>" + address
 		+ r")\]\(fill:(?P<target>[^)]*)\)", re.IGNORECASE)
 	def fill_end(match: re.Match) -> str:
 		visible = tutorial_lib.references.parse_reference(match["reference"], sheet)
 		target = tutorial_lib.references.parse_reference(match["target"], sheet)
-		if visible is None or target is None:
+		if (visible is None or target is None or visible.sheet.casefold() != sheet.casefold()
+			or target.sheet.casefold() != sheet.casefold()):
 			return match[0]
 		if (visible.start_row, visible.start_column) != (target.end_row, target.end_column):
 			return match[0]

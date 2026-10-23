@@ -1,6 +1,6 @@
 # Usage
 
-For the student learning path, see the [student guide](STUDENT_GUIDE.md). This page is for building
+For the student authoring path, see [AUTHORING_GUIDE.md](AUTHORING_GUIDE.md). This page is for building
 and maintaining tutorial files.
 
 Follow [INSTALL.md](INSTALL.md) to download the project and install its requirements. In Terminal,
@@ -89,8 +89,9 @@ python3 make_tutorial.py worksheet-edit tutorial_data/caffeine_3_quadratic_regre
   --sheet "Sleep and scores" insert-columns --at A --count 1
 ```
 
-Review the diff, then rerun the same command with `--write` to atomically replace an unchanged
-source file. `--write` may appear before or after the edit operation. The command recompiles its
+Review the entire diff. If every change is intended, rerun the same command with `--write` to
+atomically replace an unchanged source file. `--write` may appear before or after the edit operation.
+The command recompiles its
 candidate before it can write. It supports familiar
 worksheet maintenance operations:
 
@@ -102,12 +103,16 @@ python3 make_tutorial.py worksheet-edit lesson.md --sheet Data resize-observatio
   --data-range A1:B26 --rows 50
 ```
 
-The editor changes only declared worksheet geometry, semantic action targets, explicit cell/range
-instructions, and formulas marked as spreadsheet formulas. It intentionally leaves scientific
-prose, worked numerical conclusions, URLs, and unmarked mathematical notation alone. An ambiguous
-bare coordinate in otherwise instructional prose is retained and reported for review instead of
-being guessed at; use an explicit `cell`, `range`, action link, or code-formatted spreadsheet
-formula when it must be maintained. A resize prints review notices for nearby numerical
+The editor coordinates declared worksheet geometry, semantic action targets, explicit cell/range
+instructions, and formulas marked as spreadsheet formulas. Observation resizing updates both the
+visible range and semantic target of a Fill link. Use uppercase letters for standalone column
+references (`column D`, `columns D-F`); ordinary words following `column` remain prose. Review the
+complete diff before applying it, then follow the rebuild checklist in
+[reference/CHANGES.md](reference/CHANGES.md).
+
+The preview also reports ambiguous coordinates for review. Use an explicit `cell`, `range`, action
+link, or code-formatted spreadsheet formula when a reference must be maintained, and verify the
+proposed result. A resize prints review notices for nearby numerical
 explanations; authors remain responsible for checking whether those examples and interpretations
 still make sense. If a reference only partly overlaps a moved range, or the resulting source does
 not compile, the command stops without writing anything.
@@ -141,9 +146,10 @@ source source_me.sh && python3 devel/refresh_documentation.py
 The refresh renders the documentation capture sets from native outputs and anchors crops to
 semantic content, so a style change can be reviewed in the affected images. It also records a
 machine-readable capture receipt. Review the refreshed images and receipt alongside the lesson
-pages that use them. For the illustrated course, the refresh assembles practice source from the
-existing `root_05` checkpoints for Parts 1 and 2 and `root_06` for Part 3, then runs the normal
-compiler. The guides remain ordinary Markdown with literal student source in fenced code blocks;
+pages that use them. For the three guide Parts, the refresh combines the guide text with the
+workbook from [examples/authoring_features.md](examples/authoring_features.md), then runs the normal
+compiler. This workbook supports native export; it is not a project students must complete.
+The guides remain ordinary Markdown with literal source in fenced code blocks;
 they are not direct build sources. Review rendered GFM documentation separately from the PDFs.
 
 This optional documentation workflow uses the existing application environment and Pillow,

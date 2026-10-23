@@ -68,15 +68,13 @@ def main() -> None:
 	# Keep canonical outputs current; the build API preserves manually edited bundles.
 	for stem in ("caffeine_3_quadratic_regression", "microbes_4_f_test", "microbes_5_anova"):
 		build(root / "tutorial_data" / f"{stem}.md", root / "tutorial_output" / stem)
-	for script in ("capture_readme_artifacts.py", "capture_syntax_examples.py",
-		"capture_authoring_course.py"):
+	for script in ("capture_readme_artifacts.py", "capture_syntax_examples.py"):
 		print(f"Capture documentation: {script}", flush=True)
 		# ASVS 1.2.5: executable and script paths remain distinct argv values.
 		subprocess.run([sys.executable, str(root / "devel" / script)], cwd=root, check=True)
-	for stem, checkpoint in (("PART_1_CREATE", "root_05_variation"),
-		("PART_2_STATISTICS", "root_05_variation"), ("PART_3_IMPROVE", "root_06_grow")):
+	for stem in ("PART_1_CREATE", "PART_2_STATISTICS", "PART_3_IMPROVE"):
 		source = compose_guide(root / "docs" / "learn" / f"{stem}.md",
-			root / "docs" / "examples" / "authoring_course" / f"{checkpoint}.md",
+			root / "docs" / "examples" / "authoring_features.md",
 			root / "tutorial_output" / "authoring_course" / "sources" / f"{stem}.md")
 		build(source,
 			root / "tutorial_output" / "authoring_course" / "parts" / stem)

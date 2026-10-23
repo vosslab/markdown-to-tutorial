@@ -435,30 +435,7 @@ wrapping can change after import, so the estimate is not a claim of live Google 
 **Owner.** [DOCX styles](../tutorial_lib/docx_styles.py), [DOCX renderer](../tutorial_lib/docx_renderer.py),
 and the [student publishing implementation ledger](active_plans/student_publishing_implementation.md).
 
-### Illustrated student course uses existing syntax
 
-**Decision.** Teach the Roots lesson with the existing Markdown workbook, tutorial Parts, Steps,
-Substeps, and semantic cell actions.
-
-**Why.** Students can learn the authoring language and spreadsheet connections through a worked
-lesson without learning a second authoring format.
-
-**Consequence.** Keep course instructions grounded in the supported syntax and link topic details
-to the reference pages.
-
-**Owner.** [Student guide](STUDENT_GUIDE.md), [course Parts](learn/PART_1_CREATE.md), and
-[tutorial specification](TUTORIAL_SPEC.md).
-
-### One source continues across the course
-
-**Decision.** Students keep editing one `my_roots_tutorial.md` source through all three Parts.
-
-**Why.** A continuous source makes each addition visible and gives students one artifact to complete.
-
-**Consequence.** Part 1 establishes the source and workbook; Part 2 completes count, mean, and sample
-standard deviation; Part 3 is an optional deviation and peer-review extension.
-
-**Owner.** [Student guide](STUDENT_GUIDE.md) and the [course Parts](learn/PART_1_CREATE.md).
 
 ### Show three instructional views
 
@@ -471,7 +448,7 @@ completed calculation looks like.
 **Consequence.** Label the starter and completed examples clearly; do not present the completed
 calculation copy as the student starter.
 
-**Owner.** [Student guide](STUDENT_GUIDE.md), [course screenshot receipt](screenshots/README.md),
+**Owner.** [Student guide](AUTHORING_GUIDE.md), [course screenshot receipt](screenshots/README.md),
 and the published course examples.
 
 ### Refresh captures with one command
@@ -490,21 +467,18 @@ a separate support namespace.
 
 ### Keep guide examples as literal Markdown
 
-**Decision.** Write the guides as ordinary readable Markdown with student source examples in fenced
-code blocks. Refreshing the course composes the practice source from the existing
-[root_05_variation.md](examples/authoring_course/root_05_variation.md) for Parts 1 and 2 and
-[root_06_grow.md](examples/authoring_course/root_06_grow.md) for Part 3, then uses the normal
-compiler.
+**Decision.** Write the guides as ordinary GitHub Markdown. Display snippets in fences and keep
+placeholders explicitly labeled as non-runnable instructional notation. Export the three Parts
+with the workbook from [authoring_features.md](examples/authoring_features.md).
 
-**Why.** Students need to see and copy the actual source they are learning, while the course can
-reuse established workbook content without adding custom Markdown syntax.
+**Why.** Authors need exact, copyable syntax alongside actual output. The guide's fences must stay
+literal even when the guide itself is compiled for native review.
 
-**Consequence.** Fences stay literal in the guides; the guides are not direct compiler inputs. Review
-rendered GFM separately from native PDF output.
+**Consequence.** The refresh command supplies the export workbook separately. The source guides are
+not direct compiler inputs. Inspect GitHub rendering separately from native PDF output.
 
-**Owner.** [Student guide](STUDENT_GUIDE.md), [course Parts](learn/PART_1_CREATE.md),
-[documentation refresh command](../devel/refresh_documentation.py), and
-[tutorial compiler](../make_tutorial.py).
+**Owner.** [AUTHORING_GUIDE.md](AUTHORING_GUIDE.md) and
+[refresh_documentation.py](../devel/refresh_documentation.py).
 
 ### Size blank response panels by role
 
@@ -533,18 +507,6 @@ paths.
 **Owner.** [Worksheet editor](../tutorial_lib/worksheet_edit.py) and
 [worksheet maintenance instructions](USAGE.md#maintain-a-worksheet-after-a-layout-decision).
 
-### Keep checkpoint copies distinct
-
-**Decision.** Use named course checkpoint sources as comparison examples while students maintain
-their own single working source.
-
-**Why.** Checkpoints make progress easy to compare without turning the course into a sequence of
-separate files students must merge.
-
-**Consequence.** Explain that checkpoint files are references; keep generated published outputs in
-their own directory.
-
-**Owner.** [Student guide](STUDENT_GUIDE.md) and `docs/examples/authoring_course/`.
 
 ### Keep DOCX table headers with their first body row
 
@@ -559,3 +521,37 @@ review confirms all five rows together and all 106 cells across six tables are p
 
 **Owner.** [DOCX renderer](../tutorial_lib/docx_renderer.py); see the
 [native visual report](active_plans/reports/pipeline_quality_followup_visual.md).
+
+### Visual reference for original student tutorials
+
+**Decision.** Make the authoring guide the entry point for BIOL 318 students who have completed
+several tutorials. Teach document formatting, workbook construction, and build/refine through
+copyable source and native output crops. Retain the six topic references and keep worksheet-edit
+utilities optional.
+
+**Why.** Students need tools to express their own scenarios and instructional approaches. The prior
+Roots checkpoint progression taught a predetermined lesson and basic spreadsheet/statistics work.
+
+**Consequence.** Roots demonstrates formatting only. One feature source supplies reusable captures.
+Instructor excerpts retain their wording. Compiler checks remain technical; scientific and teaching
+quality are author/instructor judgments. The student hub is consolidated into the authoring guide.
+Earlier checkpoints remain examples rather than a required path.
+
+**Owner.** [AUTHORING_GUIDE.md](AUTHORING_GUIDE.md),
+[FORMATTING_GUIDE.md](FORMATTING_GUIDE.md), and
+[authoring_features.md](examples/authoring_features.md).
+
+### Preserve prose during worksheet edits
+
+**Decision.** Recognize standalone prose column references by uppercase spreadsheet notation, and
+pair a Fill link's displayed range with its original semantic target before changing either.
+
+**Why.** The independent guide walkthrough exposed ordinary `column is` becoming `column IS`
+and a resized fill target diverging from its visible range. These are source-integrity defects,
+not acceptable limitations of optional tooling.
+
+**Consequence.** Preserve ordinary wording, keep coordinated references consistent, and retain the
+existing compile-before-write and unchanged-source checks. This applies ASVS 2.2.1 functional
+validation and 2.2.3 consistency of related values without introducing a new workflow.
+
+**Owner.** [worksheet_edit.py](../tutorial_lib/worksheet_edit.py).

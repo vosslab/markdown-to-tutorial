@@ -6,6 +6,12 @@ in [tutorial_readiness_plan.md](active_plans/archive/tutorial_readiness_plan.md)
 
 ## Product contract
 
+This repository supports open pedagogy and Student-Generated Content. Its primary authors are
+BIOL 318 students who have completed several tutorials and now write original tutorials for the
+class. The compiler maintains formatting and supported technical standards; authors and instructors
+judge the scientific content and instructional quality. Start with [AUTHORING_GUIDE.md](AUTHORING_GUIDE.md)
+for visual examples; this specification defines the technical contract.
+
 One authored Markdown file contains list-authored instructions and table-authored workbook data.
 One successful build produces a DOCX tutorial, an XLSX student workbook, and a PDF exported from
 that DOCX through LibreOffice. Google Docs and Google Sheets import are the primary delivery path.

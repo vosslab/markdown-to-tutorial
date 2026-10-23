@@ -1,71 +1,58 @@
-# Screenshot capture receipt
+# Screenshot sources and refresh
 
-These four views demonstrate the publishing pipeline's illustrated document opening, spreadsheet
-actions, formula treatment, and a completed calculation example. The rendered instruction excerpts
-preserve the source writing while the renderer supplies the hierarchy, indentation, justification,
-and formula styling. Workbook captures use the current three-decimal number format.
+The authoring guides pair copyable Markdown with actual Word and Excel output.
+[../examples/authoring_features.md](../examples/authoring_features.md) is the shared runnable
+source for the `authoring_*` captures. Roots supplies a few formatting values; there is no
+example lesson students must complete.
 
-## Gallery
+## Authoring reference images
 
-![Caffeine 3 illustrated lesson opening with sleep-and-exam-score story](caffeine_3_illustrated_opening.webp)
-
-![Caffeine 3 complete squared-column step with formula and justified teaching aside](caffeine_3_fill_down_instructions.webp)
-
-![Microbes 4 F-statistic action with a standalone formula and explanation](microbes_4_formula_instruction.webp)
-
-![Completed Microbes 5 ANOVA demonstration with calculated values in a styled worksheet](microbes_5_completed_anova.webp)
-
-| Asset | View |
+| Image group | Native source and view |
 | --- | --- |
-| `caffeine_3_illustrated_opening.webp` | Title, research story, and embedded illustration |
-| `caffeine_3_fill_down_instructions.webp` | Complete squared-column Step, formula, and teaching aside |
-| `microbes_4_formula_instruction.webp` | F-statistic action, standalone formula, and explanation |
-| `microbes_5_completed_anova.webp` | Disposable completed demonstration of the styled ANOVA worksheet |
+| Title, headings, text, table, image, and links | DOCX exported to PDF, cropped at the corresponding headings |
+| Enter, Fill, Select, Replace, and alternatives | DOCX instruction crops from the same feature source |
+| Workbook | Generated XLSX, A1:E6; supplied data and blank work cells |
+| Results | Generated XLSX, D1:E3; supplied labels and blank result cells |
+| Response | Generated XLSX, D8:E9; a separate response table below the data |
+| Source/output comparison | Literal source beside the unchanged Enter instruction crop |
+| Instructor excerpt | The Calculate the Z-Statistic step in [../../tutorial_data/microbes_1_z_test.md](../../tutorial_data/microbes_1_z_test.md) |
 
-The completed ANOVA image is a demonstration, not the student starter workbook. It starts with
-the canonical styled starter, applies only the authored baseline label and formula actions in a
-disposable copy, and has LibreOffice Calc calculate it before rendering. The canonical starter
-remains unchanged. This completed view does not establish that the starter has an appropriate
-instructional structure. Authors should establish labels before the compiler applies styling;
-tutorial users should normally receive those labels already present.
+The workbook images show starter files, with learner calculations left blank. The screenshot
+workflow prints disposable copies through LibreOffice Calc; it does not fill these answers.
+Word images come from the project's actual DOCX-to-PDF export, not an HTML imitation.
 
-The [capture receipt](capture_receipt.json) records the current source and artifact fingerprints,
-image dimensions and hashes, protected-file checks, and completed-demo provenance. Capture counts
-and measurements belong in that receipt rather than this gallery. Images are encoded as WebP at
-quality 90; review the refreshed images alongside the receipt.
+[syntax_capture_receipt.json](syntax_capture_receipt.json) records source and image hashes,
+crop anchors, native artifact paths, and renderer details. The source/output comparison records
+the exact displayed source and the native crop used. Final images use WebP at quality 90.
 
-The separate syntax examples appear in [../FORMATTING_GUIDE.md](../FORMATTING_GUIDE.md), with
-their source, capture command, and limitations documented there. Their provenance is recorded in
-[syntax_capture_receipt.json](syntax_capture_receipt.json).
+## Other retained captures
 
-## Roots authoring course
+The instructor gallery uses [capture_receipt.json](capture_receipt.json). Its completed ANOVA
+image is explicitly a demonstration: the capture applies authored actions to a disposable
+workbook and recalculates it. It is not a blank student starter.
 
-The three-part [student course](../STUDENT_GUIDE.md) has its own screenshots for the Roots lesson
-and starter workbook. Its assets are separate from the landing-page gallery and the syntax examples.
-The course pages link to the capture set; [course_capture_receipt.json](course_capture_receipt.json)
-records its provenance. Capture dimensions and other measurements belong in that receipt.
+The earlier Roots checkpoint illustrations and published example remain available with
+[course_capture_receipt.json](course_capture_receipt.json). They are retained examples, not the
+current three-part authoring path. Their standalone capture command remains available in
+[../../devel/capture_authoring_course.py](../../devel/capture_authoring_course.py).
 
-The course set distinguishes the generated lesson, blank student starter, and completed calculation
-demonstration. The completed view is a disposable copy for comparison; it is not the published
-starter workbook.
+## Refresh the current guides
 
-## Reproduce the capture
-
-From the repository root, rebuild the documentation artifacts and all capture sets with one command:
+From the repository root:
 
 ```bash
 source source_me.sh && python3 devel/refresh_documentation.py
 ```
 
-The repository-owned helpers build native artifacts in temporary workspaces and locate crop content
-automatically. No external skill renderer path is needed. They refresh the landing-page, syntax,
-and course captures and their receipts. The course refresh assembles practice source from the existing
-`root_05` checkpoints for Parts 1 and 2 and `root_06` for Part 3, then runs the normal compiler; the
-guides remain readable Markdown with literal student source in fenced code blocks, not direct build
-sources. Review rendered GFM documentation separately from the PDFs.
+The existing command rebuilds the instructor gallery, syntax/feature captures, and three guide
+Parts. For guide export it combines the Markdown page with the feature example's workbook;
+fenced snippets stay literal and are never executed. Guide exports are under
+`tutorial_output/authoring_course/parts/`. The source pages remain ordinary GitHub Markdown.
 
-This optional author workflow requires the existing Python environment with Pillow, Poppler
-(`pdftotext`, `pdftoppm`), WebP (`cwebp`), librsvg (`rsvg-convert`), LibreOffice, and the required
-fonts. See [../INSTALL.md](../INSTALL.md) for setup. On this macOS host, agents must run the command
-with `sandbox_permissions="require_escalated"` because it invokes LibreOffice. Human terminal
-commands use the ordinary command above.
+For only the syntax and feature images, run
+`source source_me.sh && python3 devel/capture_syntax_examples.py`.
+Review the resulting images at reading size, then check the rendered GitHub pages separately
+from the native guide PDFs. Local LibreOffice rendering does not prove Google import behavior.
+
+This optional maintainer workflow needs the tools and fonts in [../INSTALL.md](../INSTALL.md).
+On this macOS host, agents run all LibreOffice commands outside the sandbox.
