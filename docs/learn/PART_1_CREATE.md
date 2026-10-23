@@ -6,6 +6,9 @@ Keep editing one file, `my_roots_tutorial.md`, throughout all three Parts.
 
 [STUDENT_GUIDE.md](../STUDENT_GUIDE.md) | Next: [PART_2_STATISTICS.md](PART_2_STATISTICS.md)
 
+Student source for the Roots workbook (the Markdown below belongs in your lesson file):
+
+```markdown
 ## Workbook
 
 ### Sheet: Roots
@@ -31,6 +34,7 @@ Keep editing one file, `my_roots_tutorial.md`, throughout all three Parts.
 - **Region D1:E4:** results
 
 ## Tutorial
+```
 
 ### Part 1: Create your tutorial
 

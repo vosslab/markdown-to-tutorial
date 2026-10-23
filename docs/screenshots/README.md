@@ -59,7 +59,10 @@ source source_me.sh && python3 devel/refresh_documentation.py
 
 The repository-owned helpers build native artifacts in temporary workspaces and locate crop content
 automatically. No external skill renderer path is needed. They refresh the landing-page, syntax,
-and course captures and their receipts; the refresh also rebuilds the illustrated course Parts.
+and course captures and their receipts. The course refresh assembles practice source from the existing
+`root_05` checkpoints for Parts 1 and 2 and `root_06` for Part 3, then runs the normal compiler; the
+guides remain readable Markdown with literal student source in fenced code blocks, not direct build
+sources. Review rendered GFM documentation separately from the PDFs.
 
 This optional author workflow requires the existing Python environment with Pillow, Poppler
 (`pdftotext`, `pdftoppm`), WebP (`cwebp`), librsvg (`rsvg-convert`), LibreOffice, and the required

@@ -1,5 +1,5 @@
 {
-  "captured_utc": "2026-10-23T12:22:19.356060+00:00",
+  "captured_utc": "2026-10-23T15:28:00.988045+00:00",
   "source": "docs/examples/formatting_demo.md",
   "protected_sha256": {
     "docs/examples/formatting_demo.md": "5fa7142bd045f4cdc8f8179174003d9ce7dd049a478d88dd4086e975be788949",
@@ -27,7 +27,7 @@
   "captures": [
     {
       "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/syntax_headings.webp",
-      "source": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_zf6cqbnf/build/formatting_demo.pdf",
+      "source": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_8c1iude1/build/formatting_demo.pdf",
       "start_anchor": "Part 1: Explore a curved relationship",
       "end_anchor": "Explanation: Why square a value?",
       "segments": [
@@ -55,7 +55,7 @@
     },
     {
       "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/syntax_text.webp",
-      "source": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_zf6cqbnf/build/formatting_demo.pdf",
+      "source": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_8c1iude1/build/formatting_demo.pdf",
       "start_anchor": "Explanation: Why square a value?",
       "end_anchor": "Step 2: Calculate squared sleep hours",
       "segments": [
@@ -83,7 +83,7 @@
     },
     {
       "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/syntax_actions.webp",
-      "source": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_zf6cqbnf/build/formatting_demo.pdf",
+      "source": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_8c1iude1/build/formatting_demo.pdf",
       "start_anchor": "Step 2: Calculate squared sleep hours",
       "end_anchor": "Explanation: Read a formula before copying it",
       "segments": [
@@ -111,7 +111,7 @@
     },
     {
       "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/syntax_table.webp",
-      "source": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_zf6cqbnf/build/formatting_demo.pdf",
+      "source": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_8c1iude1/build/formatting_demo.pdf",
       "start_anchor": "Step 3: Compare the model features",
       "end_anchor": null,
       "segments": [
@@ -139,7 +139,7 @@
     },
     {
       "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/syntax_workbook.webp",
-      "source": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_zf6cqbnf/build/formatting_demo.xlsx",
+      "source": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_8c1iude1/build/formatting_demo.xlsx",
       "print_area": "A1:F4",
       "renderer": "LibreOffice Calc PDF export and Poppler",
       "page": 1,
@@ -151,7 +151,7 @@
       ],
       "dpi": 144,
       "webp_quality": 90,
-      "native_pdf": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_zf6cqbnf/workbook_933n7rrw/syntax_workbook.pdf",
+      "native_pdf": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_8c1iude1/workbook_flvdufc8/syntax_workbook.pdf",
       "scale": 1.0,
       "original_dimensions": [
         1233,

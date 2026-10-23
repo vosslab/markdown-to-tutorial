@@ -4,6 +4,7 @@ import pathlib
 
 import pytest
 import make_tutorial
+import tutorial_lib.compiler
 import tutorial_lib.worksheet_edit
 
 
@@ -174,3 +175,49 @@ def test_write_requires_source_to_match_preview_and_does_not_apply_partial_edit(
 	with pytest.raises(tutorial_lib.worksheet_edit.WorksheetEditError, match="changed after preview"):
 		tutorial_lib.worksheet_edit.write_edit(path, result)
 	assert path.read_text(encoding="utf-8").endswith("Author revision.\n")
+
+
+#============================================
+@pytest.mark.parametrize("kind,at,value_cell,target", [
+	("insert-columns", 1, (1, 6), "F2"),
+	("insert-columns", 5, (1, 6), "F2"),
+	("insert-rows", 1, (2, 5), "E3"),
+	("insert-rows", 2, (1, 5), "E3"),
+])
+def test_insert_preserves_all_anchored_table_geometry(tmp_path: pathlib.Path, kind: str,
+	at: int, value_cell: tuple[int, int], target: str) -> None:
+	"""Every supplied table moves or expands with its matching student action."""
+	source = "# Tables\n\n## Workbook\n\n### Sheet: Data\n\n#### At: B1\n\n"
+	source += "| Observation |\n| --- |\n| 12 |\n| 15 |\n"
+	source += "\n#### At: D1\n\n| Statistic | Value |\n| --- | --- |\n| Mean | |\n"
+	source += "\n## Tutorial\n\n### Part: Calculate\n\n#### Step: Mean\n\n"
+	source += "In cell E2, enter [`=AVERAGE(B2:B3)`](enter:E2).\n"
+	path = tmp_path / "tables.md"
+	path.write_text(source, encoding="utf-8")
+	request = tutorial_lib.worksheet_edit.WorksheetEdit(kind, "Data", at=at, count=1)
+	result = tutorial_lib.worksheet_edit.prepare_edit(path, request)
+	document = tutorial_lib.compiler.compile_source(result.updated_source, path)
+	sheet = document.worksheets[0]
+	assert sheet.cells[value_cell].scalar.value == "Value"
+	assert document.actions[0].target.address == target
+	assert sheet.cells[(document.actions[0].target.start_row,
+		document.actions[0].target.start_column)].scalar.kind == "blank"
+
+
+#============================================
+def test_legacy_target_and_nested_formula_shift_once_but_code_examples_stay_literal(
+	tmp_path: pathlib.Path) -> None:
+	"""Executable fenced formulas follow the same edit as their legacy target."""
+	source = "# Formula\n\n## Workbook\n\n### Sheet: Data\n\n"
+	source += "| Observation |\n| --- |\n| 12 |\n| 15 |\n"
+	source += "\n## Tutorial\n\n### Part: Calculate\n\n#### Step: Count\n\n"
+	source += "- **Enter E2:**\n\n  ```sheets\n  =COUNT(A2:A3)\n  ```\n"
+	source += "\n```text\nIn cell E2, use `=COUNT(A2:A3)`.\n```\n"
+	path = tmp_path / "formula.md"
+	path.write_text(source, encoding="utf-8")
+	request = tutorial_lib.worksheet_edit.WorksheetEdit("insert-columns", "Data", at=1, count=1)
+	result = tutorial_lib.worksheet_edit.prepare_edit(path, request)
+	document = tutorial_lib.compiler.compile_source(result.updated_source, path)
+	assert "**Enter F2:**" in result.updated_source
+	assert document.actions[0].scalar.value == "=COUNT(B2:B3)"
+	assert "In cell E2, use `=COUNT(A2:A3)`." in result.updated_source

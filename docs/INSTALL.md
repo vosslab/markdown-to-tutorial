@@ -5,31 +5,76 @@ uses LibreOffice Writer to export PDF; the `docx,xlsx` build does not need Libre
 
 Generated DOCX files use Google Docs paragraph styles and PT Sans, PT Sans Narrow, and Roboto Mono.
 PDF export requires these fonts to be installed locally and visible to LibreOffice. Setup does not
-install fonts or download fallback fonts; the current macOS environment has the required families.
+install fonts or download fallback fonts.
+
+Download [PT Sans](https://fonts.google.com/specimen/PT+Sans),
+[PT Sans Narrow](https://fonts.google.com/specimen/PT+Sans+Narrow), and
+[Roboto Mono](https://fonts.google.com/specimen/Roboto+Mono) from Google Fonts. Extract each
+download, open its font files in Font Book on macOS, and choose **Install**. Restart LibreOffice
+after installing the fonts. On other systems, install these same families with your font manager.
 
 ## macOS setup
+
+1. Install [Homebrew](https://brew.sh/) using its instructions. Follow the installer's **Next
+   steps** to make the `brew` command available, then return to this setup.
+2. Open Terminal and download a working project copy with Git:
+
+   ```bash
+   git clone https://github.com/vosslab/markdown-to-tutorial.git
+   cd markdown-to-tutorial
+   ```
+
+   This downloads the project into a folder named `markdown-to-tutorial`. You do not need to know
+   Git to follow these commands. Run the setup commands below from this folder; it contains
+   `make_tutorial.py`, `source_me.sh`, and `pip_requirements.txt`.
 
 Install Python 3.12, LibreOffice, and the Python packages:
 
 ```bash
 brew install python@3.12
 brew install --cask libreoffice
+python3 --version
+```
+
+Check that the last command reports Python 3.12. If it reports another version, use the local
+package folder steps below, which select Python 3.12 explicitly. Otherwise, install the packages:
+
+```bash
 python3 -m pip install -r pip_requirements.txt
 ```
+
+### If pip reports externally-managed-environment
+
+[Homebrew protects its Python installation](https://docs.brew.sh/Language-Runtimes-and-Packages#python)
+from direct package changes. If the package command above reports `externally-managed-environment`,
+or `python3 --version` reported a different Python version, create a local package folder for
+this project:
+
+```bash
+bash
+source source_me.sh
+python3.12 -m venv .venv
+source .venv/bin/activate
+python3 -m pip install -r pip_requirements.txt
+```
+
+In each new Bash shell, run `source source_me.sh` first, then `source .venv/bin/activate` before
+running Python commands. Keep using this same shell after installation.
 
 For other systems, install Python 3, LibreOffice, and the same Python requirements with that
 system's package tools. Keep LibreOffice available on `PATH` for PDF builds.
 
-On this macOS host, agents must invoke the build command that calls the project's LibreOffice
-conversion wrapper with `sandbox_permissions="require_escalated"`. LibreOffice must run outside
-the agent sandbox. Commands run directly in a human terminal use the ordinary command shown in
-[USAGE.md](USAGE.md).
-
-Before running a repository command, load the shell environment:
+Before running a repository command, start Bash and load the shell environment. The setup script
+requires Bash; macOS terminals often start in Zsh.
 
 ```bash
+bash
 source source_me.sh
 ```
+
+If you created `.venv` above, also run `source .venv/bin/activate` in this shell.
+
+Run subsequent repository commands in this same Bash shell.
 
 See [USAGE.md](USAGE.md) for lint, build, and import commands. See
 [AUTHORING_GUIDE.md](AUTHORING_GUIDE.md) for the Markdown format.
@@ -54,7 +99,5 @@ Refresh all documentation artifacts and screenshots from the repository root:
 source source_me.sh && python3 devel/refresh_documentation.py
 ```
 
-On this macOS host, agents must run this command with
-`sandbox_permissions="require_escalated"` because it invokes LibreOffice. Human terminal commands
-use the ordinary command above. See [screenshots/README.md](screenshots/README.md) for capture
+See [screenshots/README.md](screenshots/README.md) for capture
 provenance and the distinction between starter workbooks and completed demonstrations.

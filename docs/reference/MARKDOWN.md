@@ -48,6 +48,7 @@ a Step, and use indentation to place supporting details under the instruction th
 ![A rendered Part and Step with numbered instructions and nested details](../screenshots/syntax_headings.webp)
 <!-- screenshots:end -->
 
+The crop uses the older Sleep-and-scores example to show the same heading structure.
 Notice how the heading levels remain distinct even though the source contains no font settings.
 A bullet such as `- **Worksheet:** Roots` binds the Part to the worksheet named Roots.
 

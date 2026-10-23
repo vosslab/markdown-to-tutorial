@@ -593,7 +593,9 @@ def test_native_tables_images_and_menu_segments(tmp_path: pathlib.Path) -> None:
 	png = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aS1sAAAAASUVORK5CYII="
 	(tmp_path / "pixel.png").write_bytes(base64.b64decode(png))
 	source = "Before [linked before ![Local alt](pixel.png) linked after](https://example.org) after\n\n"
-	source += "| Group | Value |\n| --- | --- |\n| native | 12 |\n\n"
+	source += "- Read the supplied table.\n\n"
+	source += "| Group | Value |\n| --- | --- |\n| native | **12** |\n"
+	source += "| `next` | [More](https://example.org/more) |\n\n"
 	source += "![Data alt](data:image/png;base64," + png + ")\n\n"
 	source += "- **Choose:** Format > Number > Percent\n"
 	document = tutorial_lib.model.Document(tmp_path / "images.md", source)
@@ -625,6 +627,8 @@ def test_native_tables_images_and_menu_segments(tmp_path: pathlib.Path) -> None:
 	assert linked_content == ["linked before ", "image", " linked after"]
 	assert 'Target="https://example.org"' in relations
 	assert "native12" in texts
+	assert "nextMore" in texts
+	assert 'Target="https://example.org/more"' in relations
 	assert "Format > Number > Percent" in texts
 	menu_run = next(run for run in document_xml.findall(".//w:r", NAMESPACES)
 		if "Format >" in "".join(run.itertext()))
@@ -636,5 +640,10 @@ def test_native_tables_images_and_menu_segments(tmp_path: pathlib.Path) -> None:
 	assert all(row.find("w:trPr/w:cantSplit", NAMESPACES) is not None for row in rows)
 	assert rows[0].find("w:trPr/w:tblHeader", NAMESPACES) is not None
 	assert rows[1].find("w:trPr/w:tblHeader", NAMESPACES) is None
-	assert document_xml.find(".//w:tbl/w:tr/w:tc/w:p/w:pPr/w:keepNext", NAMESPACES) is None
+	header_paragraphs = rows[0].findall("w:tc/w:p", NAMESPACES)
+	assert all(paragraph.find("w:pPr/w:keepNext", NAMESPACES) is not None
+		for paragraph in header_paragraphs)
+	assert all(row.find(".//w:keepNext", NAMESPACES) is None for row in rows[1:])
+	assert [["".join(cell.itertext()) for cell in row.findall("w:tc", NAMESPACES)]
+		for row in rows] == [["Group", "Value"], ["native", "12"], ["next", "More"]]
 	assert len(document_xml.findall(".//w:drawing", NAMESPACES)) == 2

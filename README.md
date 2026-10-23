@@ -55,6 +55,7 @@ unverified; Google may also wrap text differently.
 
 Start small and adapt a copy. You choose the scientific question, worksheet arrangement, and
 learning activities.
+On GitHub, open the file and choose **Raw** or **Copy raw file** to copy the full Markdown source.
 
 | I want to... | Open this file |
 | --- | --- |
@@ -192,12 +193,14 @@ web form or an upload button. First follow [docs/INSTALL.md](docs/INSTALL.md) to
 the required packages. Then open a terminal in the project folder and try the small example:
 
 ```bash
+bash
 source source_me.sh
 python3 make_tutorial.py lint docs/examples/formatting_demo.md
 python3 make_tutorial.py build docs/examples/formatting_demo.md --format docx,xlsx
 ```
 
-`lint` checks the source for problems. `build` makes the files. Open:
+Keep subsequent commands in that same Bash shell. `lint` checks the source for problems.
+`build` makes the files. Open:
 
 - `tutorial_output/formatting_demo/formatting_demo.docx` - the formatted instructions.
 - `tutorial_output/formatting_demo/formatting_demo.xlsx` - the labeled worksheet, with calculation

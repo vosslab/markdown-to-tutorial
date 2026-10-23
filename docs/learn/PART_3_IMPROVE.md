@@ -6,6 +6,9 @@ You will build an expanded workbook with six observations and a blank deviation 
 
 [STUDENT_GUIDE.md](../STUDENT_GUIDE.md) | Previous: [PART_2_STATISTICS.md](PART_2_STATISTICS.md)
 
+Student source for the expanded Roots workbook used in this Part:
+
+```markdown
 ## Workbook
 
 ### Sheet: Roots
@@ -33,6 +36,7 @@ You will build an expanded workbook with six observations and a blank deviation 
 - **Region D1:E4:** results
 
 ## Tutorial
+```
 
 ### Part 3: Improve your tutorial
 
@@ -244,7 +248,7 @@ The workbook picture below shows its expected results after the reader finishes.
 <!-- screenshots:end -->
 
 Use the picture as a **completed demonstration**, not as the file you give a reader to complete.
-Your final source remains the owner of the lesson text, data, and instructions.
+Keep the lesson text, data, and instructions in your Markdown source.
 The DOCX, PDF, and XLSX are generated copies. Editing one of those copies does not update the source.
 
 ##### Substep: Try a reader handoff

@@ -7,6 +7,9 @@ Part 3 is an optional extension.
 [STUDENT_GUIDE.md](../STUDENT_GUIDE.md) | Previous: [PART_1_CREATE.md](PART_1_CREATE.md)
 | Next: [PART_3_IMPROVE.md](PART_3_IMPROVE.md)
 
+Student source for the Roots workbook used in this Part:
+
+```markdown
 ## Workbook
 
 ### Sheet: Roots
@@ -32,6 +35,7 @@ Part 3 is an optional extension.
 - **Region D1:E4:** results
 
 ## Tutorial
+```
 
 ### Part 2: Complete the statistics lesson
 
@@ -170,10 +174,13 @@ Complete the setup in [INSTALL.md](../INSTALL.md) before running the compiler; s
 commands. Open one in the downloaded `markdown-to-tutorial` project folder, which contains
 `source_me.sh` and `make_tutorial.py`. Save `my_roots_tutorial.md` there for the commands below,
 or replace its name with the path to your saved source.
+Start Bash, then run these commands in that same shell:
 
 ```bash
-source source_me.sh && python3 make_tutorial.py lint my_roots_tutorial.md
-source source_me.sh && python3 make_tutorial.py build my_roots_tutorial.md
+bash
+source source_me.sh
+python3 make_tutorial.py lint my_roots_tutorial.md
+python3 make_tutorial.py build my_roots_tutorial.md
 ```
 
 <!-- screenshots:begin (managed by screenshot-docs) -->

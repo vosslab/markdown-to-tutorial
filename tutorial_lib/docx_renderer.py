@@ -327,6 +327,10 @@ def render_tokens(output: object, document: tutorial_lib.model.Document) -> None
 			paragraph.style = "Normal"
 			paragraph.paragraph_format.left_indent = docx.shared.Inches(0)
 			if kind == "th_open":
+				# A table header belongs with its first data row. Allowing an
+				# orphaned header before intact rows can lose the continuation
+				# during native Writer pagination at the bottom of a page.
+				paragraph.paragraph_format.keep_with_next = True
 				tutorial_lib.docx_styles.shade(
 					cell._tc.get_or_add_tcPr(), tutorial_lib.docx_styles.TABLE_HEADER_FILL,
 				)

@@ -6,6 +6,7 @@ one source file from first draft to a complete statistics tutorial, with an opti
 When you are ready to author another lesson, copy a suitable file from `templates/`. Keep the
 student-facing writing, workbook tables, and tutorial instructions in one Markdown source. The
 compiler formats that source as an editable DOCX, XLSX, and PDF.
+On GitHub, open the template and choose **Raw** or **Copy raw file** to copy the full Markdown source.
 
 Use the topic references when needed:
 

@@ -18,6 +18,21 @@
 
 ### Fixes and Maintenance
 
+- Show literal student source in fenced examples and refresh the illustrated course by composing
+  practice source from the existing Roots checkpoints before the normal compiler runs. Correct
+  worksheet editing at its source and compiled-table owner, give interpretation response rows a
+  shared eight-line / 123-point minimum while preserving taller regions, and clarify novice setup.
+  Keep five humanizer edits restrained and grounded in existing lesson content. The initial native
+  PDF review found that the Part 1 instructional table lost its five data rows; a DOCX renderer
+  header-cell keep-with-next fix resolves the loss. Final PDF inspection confirms all five rows
+  together and all 106 cells across six tables. The [native visual report](active_plans/reports/pipeline_quality_followup_visual.md)
+  records the initial failure and final proof. The GFM baseline found two source/output mismatches
+  and setup gaps; current sources now match accepted actual GitHub GFM renders. Fresh SPEC,
+  QUALITY, and [integration](active_plans/reports/pipeline_quality_followup_integration.md)
+  reviews accept the follow-up, including the Git checkout and Homebrew pip recovery route.
+  All 20 canonical lesson/checkpoint sources remain unchanged; all 102 bundle and 131 receipt
+  comparisons match. Final full-suite verification passes 2,054 tests after closeout edits.
+  Google behavior and student outcomes remain unverified.
 - Record the course structure and capture design in the decision and human-guidance ledgers.
 - Reorganize the README around a BIOL 318 student reading path, starting examples, and a plain-language
   explanation of Workbook and Tutorial sections. Keep build commands and advanced examples later.

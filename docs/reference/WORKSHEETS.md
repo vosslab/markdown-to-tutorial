@@ -46,11 +46,11 @@ An `At:` heading sets the upper-left cell of the next table. This table starts a
 ```markdown
 #### At: D1
 
-| Summary | Value |
+| Statistic | Value |
 | --- | --- |
-| n | |
+| Sample size | |
 | Mean (mm) | |
-| Sample SD (mm) | |
+| Sample standard deviation (mm) | |
 
 - **Region D1:E4:** results
 ```
@@ -83,7 +83,7 @@ A table supplies a rectangular block. Give every row the same number of cells, i
 cells. To add a blank calculation column, add its heading, separator cell, and a blank cell to
 every observation row.
 
-## Separate seeds from work
+## Separate supplied values from work
 
 Anything written in a Workbook table is supplied to students. This includes formulas.
 If students should calculate the mean, leave E3 blank and write the action in Tutorial:

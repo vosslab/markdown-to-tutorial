@@ -69,8 +69,8 @@ one place right. The fixed reference moves too, because the mean itself has move
 | First deviation | `=A2-$E$3` in B2 | `=B2-$F$3` in C2 |
 
 Change the Workbook table placement, region coordinates, action targets, formula inputs,
-and visible cell instructions. Dollar signs preserve a reference during filling; they do not
-excuse leaving a moved mean at its old address in the source.
+and visible cell instructions. Dollar signs preserve a reference during filling. If the mean moves,
+update its address in the source.
 
 <!-- screenshots:begin (managed by screenshot-docs) -->
 ![Moved completed worksheet with observations in B and deviations in C](../screenshots/course_moved_complete.webp)
@@ -95,8 +95,9 @@ The command prints a preview and leaves the file unchanged. Read the diff and re
 To apply the reviewed edit, repeat the command with `--write`. Work on your own copy when you
 want to preserve the course checkpoint.
 
-The helper updates declared geometry, marked spreadsheet formulas, semantic targets, and explicit
-cell instructions. It retains scientific prose and worked numerical explanations for your review.
+The helper updates table positions, region coordinates, marked spreadsheet formulas, action targets,
+and explicit cell instructions. It retains scientific prose and worked numerical explanations for
+your review.
 A notice is a request to inspect a passage, not evidence that its scientific meaning was updated.
 
 ## Rebuild and inspect

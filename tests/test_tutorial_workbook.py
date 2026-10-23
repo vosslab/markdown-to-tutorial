@@ -123,7 +123,8 @@ def test_future_headers_and_empty_interpretation_space_preserve_student_work(
 	source = "# Analysis\n\n## Workbook\n\n### Sheet: Data\n\n"
 	source += "| Observation |\n| --- |\n| 1 |\n\n"
 	source += "- **Region A1:A2:** source\n- **Region C1:D3:** results\n"
-	source += "- **Region C5:E8:** interpretation\n- **Region H3:I5:** calculation\n\n## Tutorial\n\n"
+	source += "- **Region C5:E8:** interpretation\n- **Region C10:E10:** interpretation\n"
+	source += "- **Region H3:I5:** calculation\n\n## Tutorial\n\n"
 	source += "### Part: Summarize\n\n- **Worksheet:** Data\n\n#### Step: Calculate\n\n"
 	source += "- **Label C1:** Statistic\n- **Label D1:** Value\n- **Enter D2:** `=A2`\n"
 	source += "- **Label H4:** Group A\n- **Label I4:** Group B\n"
@@ -142,6 +143,10 @@ def test_future_headers_and_empty_interpretation_space_preserve_student_work(
 	assert sheet["E8"].fill.fgColor.rgb.endswith("FFF7FB")
 	assert sheet["C5"].border.top.style == "medium"
 	assert sheet["E8"].border.bottom.style == "medium"
+	# Blank short response panels still reserve room for a written paragraph.
+	assert sheet["E10"].value is None and sheet["E10"].alignment.wrap_text
+	assert sheet.row_dimensions[10].height >= 90
+	assert sum(sheet.row_dimensions[row].height for row in range(5, 9)) >= 90
 	assert sheet["H4"].fill.fgColor.rgb.endswith("00775F")
 	assert sheet["I4"].font.bold
 	book.close()

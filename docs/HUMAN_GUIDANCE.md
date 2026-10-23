@@ -75,6 +75,11 @@ origin belongs there too. Rules: [REPO_STYLE.md](REPO_STYLE.md).
 - Restore the original wording, descriptive headings, humor, and compact numbered groups across all
   tutorials. Change prose only for technical references, formulas, data, or genuine science errors;
   complete missing Caffeine content while preserving its good prose.
+- I distrust LLM-written prose. Prefer existing authored content when it is available, and keep any
+  humanizer edits restrained and grounded in the author's science and voice.
+- Keep Roots in the course for now.
+- Show the literal student source in fenced code blocks, and inspect rendered GFM documentation
+  rather than assuming Markdown source will render correctly. I am concerned about the existing files.
 
 ## Student publishing
 

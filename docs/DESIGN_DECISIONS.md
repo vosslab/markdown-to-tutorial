@@ -488,6 +488,51 @@ a separate support namespace.
 **Owner.** [Documentation refresh command](../devel/refresh_documentation.py),
 [shared capture helpers](../devel/capture_readme_artifacts.py), and [usage guide](USAGE.md).
 
+### Keep guide examples as literal Markdown
+
+**Decision.** Write the guides as ordinary readable Markdown with student source examples in fenced
+code blocks. Refreshing the course composes the practice source from the existing
+[root_05_variation.md](examples/authoring_course/root_05_variation.md) for Parts 1 and 2 and
+[root_06_grow.md](examples/authoring_course/root_06_grow.md) for Part 3, then uses the normal
+compiler.
+
+**Why.** Students need to see and copy the actual source they are learning, while the course can
+reuse established workbook content without adding custom Markdown syntax.
+
+**Consequence.** Fences stay literal in the guides; the guides are not direct compiler inputs. Review
+rendered GFM separately from native PDF output.
+
+**Owner.** [Student guide](STUDENT_GUIDE.md), [course Parts](learn/PART_1_CREATE.md),
+[documentation refresh command](../devel/refresh_documentation.py), and
+[tutorial compiler](../make_tutorial.py).
+
+### Size blank response panels by role
+
+**Decision.** Give authored interpretation response rows a shared minimum total height of eight lines
+or 123 points, while leaving taller authored regions unchanged.
+
+**Why.** Learners need room for a complete written interpretation without losing intentionally larger
+response areas.
+
+**Consequence.** Apply the minimum across the authored rows that make up the response panel; keep the
+response cells blank.
+
+**Owner.** [Workbook renderer](../tutorial_lib/workbook.py) and
+[response panel guidance](TUTORIAL_SPEC.md).
+
+### Repair worksheet edits at their owner
+
+**Decision.** Repair compiled table ownership and source-coordinate updates once in the worksheet
+editor, including table movement, `At` blank-line parsing, and legacy fenced formulas.
+
+**Why.** These failures affect the editor's own workbook/source synchronization boundary.
+
+**Consequence.** Keep a few focused behavior checks at that boundary; do not add downstream correction
+paths.
+
+**Owner.** [Worksheet editor](../tutorial_lib/worksheet_edit.py) and
+[worksheet maintenance instructions](USAGE.md#maintain-a-worksheet-after-a-layout-decision).
+
 ### Keep checkpoint copies distinct
 
 **Decision.** Use named course checkpoint sources as comparison examples while students maintain
@@ -500,3 +545,17 @@ separate files students must merge.
 their own directory.
 
 **Owner.** [Student guide](STUDENT_GUIDE.md) and `docs/examples/authoring_course/`.
+
+### Keep DOCX table headers with their first body row
+
+**Decision.** Set `keep_with_next` on header-cell paragraphs so a table header cannot be stranded
+at the bottom of a page without its first body row.
+
+**Why.** Native PDF review found the Part 1 instructional table's header on page 5 while all five
+data rows were pushed off the page, making the table content disappear from the rendered document.
+
+**Consequence.** Apply this at the DOCX table renderer and verify the built PDF. The final native
+review confirms all five rows together and all 106 cells across six tables are present.
+
+**Owner.** [DOCX renderer](../tutorial_lib/docx_renderer.py); see the
+[native visual report](active_plans/reports/pipeline_quality_followup_visual.md).

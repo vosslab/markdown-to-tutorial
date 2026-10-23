@@ -3,11 +3,18 @@
 For the student learning path, see the [student guide](STUDENT_GUIDE.md). This page is for building
 and maintaining tutorial files.
 
-Run commands from the repository root after loading its shell environment:
+Follow [INSTALL.md](INSTALL.md) to download the project and install its requirements. In Terminal,
+open the project folder, then start Bash and load its shell environment:
 
 ```bash
+bash
 source source_me.sh
 ```
+
+If you created `.venv` using [INSTALL.md](INSTALL.md#if-pip-reports-externally-managed-environment),
+run `source .venv/bin/activate` after `source source_me.sh` and before any Python commands.
+
+Run subsequent commands in this same Bash shell.
 
 Choose a lesson from [TUTORIAL_CATALOG.md](TUTORIAL_CATALOG.md), which indexes all 12 migrated
 sources, including the explicitly synthetic PETase calibration example.
@@ -26,10 +33,7 @@ Build DOCX, XLSX, and PDF into `tutorial_output/<source-stem>/`:
 python3 make_tutorial.py build tutorial_data/babies_1_z_test.md
 ```
 
-On this macOS host, an agent must invoke this build command with
-`sandbox_permissions="require_escalated"` so the project's LibreOffice conversion wrapper runs
-outside the sandbox. The command above runs normally in a human terminal. PDF output is reopened
-with a PDF reader and must contain pages before the bundle is published.
+PDF output is reopened with a PDF reader and must contain pages before the bundle is published.
 
 Use `--format` to build a supported subset. `docx,xlsx` skips PDF conversion; `docx` and `xlsx`
 build one file. `all` is the default. `--output-dir` selects a different bundle directory.
@@ -55,8 +59,7 @@ python3 devel/validate_libreoffice.py tutorial_data/*.md \
 ```
 
 This compares Calc's saved results with independent expectations after all authored assignments.
-It does not verify intermediate steps or Google Sheets behavior. On macOS, invoke the validator
-outside the sandbox because it launches LibreOffice. See
+It does not verify intermediate steps or Google Sheets behavior. See
 [local_calculation_readiness.md](active_plans/reports/local_calculation_readiness.md) for current
 engine evidence.
 
@@ -138,10 +141,11 @@ source source_me.sh && python3 devel/refresh_documentation.py
 The refresh renders the documentation capture sets from native outputs and anchors crops to
 semantic content, so a style change can be reviewed in the affected images. It also records a
 machine-readable capture receipt. Review the refreshed images and receipt alongside the lesson
-pages that use them.
+pages that use them. For the illustrated course, the refresh assembles practice source from the
+existing `root_05` checkpoints for Parts 1 and 2 and `root_06` for Part 3, then runs the normal
+compiler. The guides remain ordinary Markdown with literal student source in fenced code blocks;
+they are not direct build sources. Review rendered GFM documentation separately from the PDFs.
 
 This optional documentation workflow uses the existing application environment and Pillow,
 Poppler (`pdftotext`, `pdftoppm`), WebP (`cwebp`), librsvg (`rsvg-convert`), LibreOffice, and the
-required fonts. See [INSTALL.md](INSTALL.md) for `brew bundle` and font requirements. On this
-macOS host, agents must run the command with `sandbox_permissions="require_escalated"` because
-it invokes LibreOffice. Human terminal commands use the ordinary command above.
+required fonts. See [INSTALL.md](INSTALL.md) for `brew bundle` and font requirements.

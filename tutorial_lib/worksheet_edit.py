@@ -123,9 +123,10 @@ def prepare_edit(path: pathlib.Path, request: WorksheetEdit) -> WorksheetEditRes
 		transform = _insert_transform(request)
 	# Table anchoring changes the candidate only.  The preview guard must retain
 	# the exact bytes that the author originally approved for editing.
-	working_source = _patch_workbook_tables(original_source, request, sheet)
-	_scopes = _line_scopes(working_source, document)
-	updated, notices = _transform_source(working_source, _scopes, request.sheet, transform)
+	_scopes = _line_scopes(original_source, document)
+	updated, notices = _transform_source(original_source, _scopes, request.sheet, transform,
+		document)
+	updated = _patch_workbook_tables(updated, request, sheet, transform)
 	if request.kind == "resize-observations":
 		updated = _extend_data_table(updated, request, sheet)
 		notices.extend(_worked_example_notices(updated, request, transform))
@@ -317,15 +318,42 @@ def _line_scopes(source: str, document: object) -> list[str | None]:
 
 
 #============================================
-def _transform_source(source: str, scopes: list[str | None], sheet: str, transform: object) -> tuple[str, list[str]]:
+def _transform_source(source: str, scopes: list[str | None], sheet: str, transform: object,
+	document: object) -> tuple[str, list[str]]:
 	"""Transform recognized visible and executable references in their worksheet scope."""
 	lines = source.splitlines(keepends=True)
 	notices = []
 	updated = []
+	# The compiler owns which fenced payloads are executable assignments.
+	code_lines = set()
+	formula_lines = set()
+	for token in document.tokens:
+		if token.type not in ("fence", "code_block") or token.map is None:
+			continue
+		code_lines.update(range(token.map[0], token.map[1]))
+		if token.type != "fence" or token.info.strip() != "sheets":
+			continue
+		for action in document.actions:
+			if action.kind not in ("enter", "replace") or action.scalar is None:
+				continue
+			if action.scalar.kind != "formula":
+				continue
+			# An action's enclosing list item includes its nested formula fence.
+			opening = document.tokens[action.token_index - 2]
+			if (opening.type == "list_item_open" and opening.map is not None
+				and opening.map[0] <= token.map[0] < opening.map[1]):
+				formula_lines.add(token.map[0] + 1)
 	for index, line in enumerate(lines):
 		scope = scopes[index]
 		try:
-			updated.append(_transform_line(line, scope, sheet, transform))
+			if index in formula_lines:
+				formula = line.strip()
+				updated.append(line.replace(formula,
+					_transform_formula(formula, scope, sheet, transform), 1))
+			elif index in code_lines:
+				updated.append(line)
+			else:
+				updated.append(_transform_line(line, scope, sheet, transform))
 		except WorksheetEditError as error:
 			raise WorksheetEditError(f"{index + 1}: {error}") from error
 		if scope is None and _line_has_unqualified_reference(line):
@@ -454,8 +482,6 @@ def _transform_visible_references(text: str, scope: str | None, sheet: str, tran
 	if anchor is not None:
 		newline = "\n" if text.endswith("\n") else ""
 		return anchor[1] + _transform_reference_text(anchor[2], scope, sheet, transform) + anchor[3] + newline
-	text = LEGACY_TARGET.sub(lambda match: match[1]
-		+ _transform_reference_text(match[2], scope, sheet, transform) + match[3], text)
 	text = ACTION_CELL.sub(lambda match: match[1]
 		+ _transform_reference_text(match[2], scope, sheet, transform) + match[3], text)
 	def code_reference(match: re.Match) -> str:
@@ -467,10 +493,15 @@ def _transform_visible_references(text: str, scope: str | None, sheet: str, tran
 			match["reference"], scope, sheet, transform)
 	text = TECHNICAL_RANGE_REFERENCE.sub(technical_range, text)
 	def prose_reference(match: re.Match) -> str:
+		if match["reference"] is None:
+			return match[1] + _transform_reference_text(match[2], scope, sheet, transform) + match[3]
 		return match["introducer"] + " " + (match["opening"] or "") \
 			+ _transform_reference_text(match["reference"], scope, sheet, transform) \
 			+ (match["closing"] or "")
-	text = PROSE_REFERENCE.sub(prose_reference, text)
+	# Both forms recognize "Enter E2". Match the original text once so a legacy
+	# target cannot also be shifted by the prose rule.
+	prose = re.compile(LEGACY_TARGET.pattern + "|" + PROSE_REFERENCE.pattern, re.IGNORECASE)
+	text = prose.sub(prose_reference, text)
 	# This established tutorial style names an output and gives its cell in bold
 	# parentheses.  The phrase makes the coordinate a worksheet instruction;
 	# unrelated bold scientific symbols, including H0/H1, are left alone.
@@ -632,7 +663,8 @@ def _has_ambiguous_instruction_reference(original: str, updated: str) -> bool:
 
 
 #============================================
-def _patch_workbook_tables(source: str, request: WorksheetEdit, sheet: object) -> str:
+def _patch_workbook_tables(source: str, request: WorksheetEdit, sheet: object,
+	transform: object) -> str:
 	"""Keep the supplied Markdown table at the same physical worksheet geometry.
 
 	A primary table is implicitly at A1.  When an insertion pushes that table,
@@ -641,43 +673,38 @@ def _patch_workbook_tables(source: str, request: WorksheetEdit, sheet: object) -
 	if request.kind not in ("insert-rows", "insert-columns"):
 		return source
 	lines = source.splitlines(keepends=True)
-	start = _table_start_line(lines, sheet.name)
-	if start is None:
-		return source
-	end = start + 2
-	while end < len(lines) and lines[end].lstrip().startswith("|"):
-		end += 1
-	anchor_line = start - 1 if start and ANCHOR_TARGET.match(lines[start - 1].rstrip("\n")) else None
-	anchor = "A1"
-	if anchor_line is not None:
-		anchor = ANCHOR_TARGET.match(lines[anchor_line].rstrip("\n"))[2]
-	reference = tutorial_lib.references.parse_reference(anchor, sheet.name)
-	if reference is None:
-		return source
-	width = len(tutorial_lib.parser.split_table_row(lines[start]))
-	height = end - (start + 2)
-	if request.kind == "insert-columns":
-		if request.at <= reference.start_column:
-			# Introduce the old position; the normal reference pass applies the
-			# insertion exactly once along with all other worksheet references.
-			lines = _set_table_anchor(lines, start, anchor_line, anchor)
-			# _set_table_anchor may insert directly before the table.
+	# Compiler regions retain every table's source span and physical geometry.
+	# Work backwards so inserted lines cannot invalidate subsequent spans.
+	for region in reversed(sheet.regions):
+		start = region.span.start_line - 1
+		end = region.span.end_line
+		preceding = start - 1
+		while preceding >= 0 and not lines[preceding].strip():
+			preceding -= 1
+		anchor_line = preceding if preceding >= 0 and ANCHOR_TARGET.match(
+			lines[preceding].rstrip("\n")) else None
+		width = region.end_column - region.start_column + 1
+		position = region.start_column if request.kind == "insert-columns" else region.start_row
+		last = region.end_column if request.kind == "insert-columns" else region.end_row
+		if request.at <= position:
 			if anchor_line is None:
-				start += 1
-				end += 1
-		elif reference.start_column < request.at <= reference.start_column + width - 1:
-			index = request.at - reference.start_column
-			for row in range(start, end):
-				cells = tutorial_lib.parser.split_table_row(lines[row])
-				cells[index:index] = [""] * request.count
-				lines[row] = "| " + " | ".join(cells) + " |\n"
-	else:
-		if request.at <= reference.start_row:
-			lines = _set_table_anchor(lines, start, anchor_line, anchor)
-		elif reference.start_row < request.at <= reference.start_row + height - 1:
-			index = start + 2 + request.at - reference.start_row - 1
-			blank = "|" + " |" * width + "\n"
-			lines[index:index] = [blank] * request.count
+				anchor = _address(region.start_row, region.start_row,
+					region.start_column, region.start_column)
+				reference = tutorial_lib.references.parse_reference(anchor, sheet.name)
+				lines = _set_table_anchor(lines, start, None, transform(reference).address)
+		elif request.at <= last:
+			if request.kind == "insert-columns":
+				index = request.at - region.start_column
+				for row in range(start, end):
+					cells = tutorial_lib.parser.split_table_row(lines[row])
+					# Added delimiter cells must remain valid GFM table syntax.
+					cells[index:index] = ["---" if row == start + 1 else ""] * request.count
+					lines[row] = "| " + " | ".join(cell.replace("|", r"\|")
+						for cell in cells) + " |\n"
+			else:
+				index = start + 2 + request.at - region.start_row - 1
+				blank = "|" + " |" * width + "\n"
+				lines[index:index] = [blank] * request.count
 	return "".join(lines)
 
 

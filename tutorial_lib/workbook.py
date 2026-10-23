@@ -266,6 +266,17 @@ def write_workbook(document: tutorial_lib.model.Document, output_path: pathlib.P
 				height = 15 * lines + 3
 				dimension = sheet.row_dimensions[row]
 				dimension.height = max(dimension.height or 15, height)
+		# A brief written interpretation needs eight lines even when no answer is
+		# supplied. Share that minimum across the authored rows so a tall response
+		# area keeps its existing footprint rather than expanding every row.
+		for region in source.role_regions:
+			if region.role != "interpretation":
+				continue
+			reference = region.reference
+			minimum_height = (15 * 8 + 3) / (reference.end_row - reference.start_row + 1)
+			for row in range(reference.start_row, reference.end_row + 1):
+				dimension = sheet.row_dimensions[row]
+				dimension.height = max(dimension.height or 15, minimum_height)
 	book.save(output_path)
 	book.close()
 	_preserve_numbers(document, pathlib.Path(output_path))

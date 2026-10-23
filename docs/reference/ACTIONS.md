@@ -61,8 +61,8 @@ needs a value already supplied in Workbook or established by an earlier action.
 
 ## Enter a value
 
-Use `enter:` for a blank destination. The linked value can be a formula or another scalar such
-as a number. Keep the formula's explanation outside the linked scalar:
+Use `enter:` for a blank destination. The linked value can be a formula or a single value such as
+a number. Keep the formula's explanation outside the link:
 
 ```markdown
 1. In cell E4, enter:
