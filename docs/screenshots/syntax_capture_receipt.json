@@ -1,5 +1,5 @@
 {
-  "captured_utc": "2026-10-23T11:22:25.277135+00:00",
+  "captured_utc": "2026-10-23T12:22:19.356060+00:00",
   "source": "docs/examples/formatting_demo.md",
   "protected_sha256": {
     "docs/examples/formatting_demo.md": "5fa7142bd045f4cdc8f8179174003d9ce7dd049a478d88dd4086e975be788949",
@@ -17,16 +17,155 @@
     "tutorial_data/petase_1_linear_regression.md": "e00e11da9cc7144b674f8334bfa1e0d8357e039448a3008502e207e4df60536e"
   },
   "assets_sha256": {
-    "syntax_headings.webp": "26992d8298d704bcd0c6d064957472bc4d65d90f43530725041360f5c4ce1af4",
-    "syntax_text.webp": "3bb8bcd805a244902684b3ca6b300263690f3ebf8ee0313e5b749e012927ee49",
-    "syntax_actions.webp": "95f818c55aeb7988424cac9b3652d2d47df6edd76e580b654f26183f39de4e21",
-    "syntax_table.webp": "4524d2f4217351918131be3016449f4ce624b045280e018019bd8f7b03d61e6b",
-    "syntax_workbook.webp": "6081b4f9f698ea18a225e03d341d9571511b080459628fdb4793e30d259d9b43"
+    "syntax_headings.webp": "f5158f1d7529d6408797ef04348f5aad92ac2b529916f839d0595fc207fc284c",
+    "syntax_text.webp": "bbbb93bf181b289cccb4603012634d6c84481bd4fc5570899fd1d5a5374a082f",
+    "syntax_actions.webp": "311d966e06115bf86ab55b2dad440df288c500c2d691f6cec22f460e418102e4",
+    "syntax_table.webp": "953d5215d9928746f9119463e55055ff73b3030d9664db11b66553bf7323254f",
+    "syntax_workbook.webp": "65e7a1c48b1a9cdf108292ad616e3ed66a387e4ed57c3765234c9c90bdbfc408"
   },
-  "renderer": "/Users/vosslab/nsh/vosslab-skills/skills/documentation/screenshot-docs/scripts/render_artifact_libreoffice.sh",
+  "renderer": "repository-owned LibreOffice and Poppler",
+  "captures": [
+    {
+      "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/syntax_headings.webp",
+      "source": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_zf6cqbnf/build/formatting_demo.pdf",
+      "start_anchor": "Part 1: Explore a curved relationship",
+      "end_anchor": "Explanation: Why square a value?",
+      "segments": [
+        {
+          "page": 1,
+          "bbox_points": [
+            52.0,
+            150.5,
+            555.5,
+            339.5
+          ]
+        }
+      ],
+      "dpi": 144,
+      "webp_quality": 90,
+      "page_separator_pixels": 0,
+      "original_dimensions": [
+        1007,
+        378
+      ],
+      "dimensions": [
+        1007,
+        378
+      ]
+    },
+    {
+      "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/syntax_text.webp",
+      "source": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_zf6cqbnf/build/formatting_demo.pdf",
+      "start_anchor": "Explanation: Why square a value?",
+      "end_anchor": "Step 2: Calculate squared sleep hours",
+      "segments": [
+        {
+          "page": 1,
+          "bbox_points": [
+            61.0,
+            345.5,
+            560.0,
+            421.5
+          ]
+        }
+      ],
+      "dpi": 144,
+      "webp_quality": 90,
+      "page_separator_pixels": 0,
+      "original_dimensions": [
+        998,
+        152
+      ],
+      "dimensions": [
+        998,
+        152
+      ]
+    },
+    {
+      "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/syntax_actions.webp",
+      "source": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_zf6cqbnf/build/formatting_demo.pdf",
+      "start_anchor": "Step 2: Calculate squared sleep hours",
+      "end_anchor": "Explanation: Read a formula before copying it",
+      "segments": [
+        {
+          "page": 1,
+          "bbox_points": [
+            52.0,
+            429.0,
+            557.5,
+            545.5
+          ]
+        }
+      ],
+      "dpi": 144,
+      "webp_quality": 90,
+      "page_separator_pixels": 0,
+      "original_dimensions": [
+        1011,
+        233
+      ],
+      "dimensions": [
+        1011,
+        233
+      ]
+    },
+    {
+      "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/syntax_table.webp",
+      "source": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_zf6cqbnf/build/formatting_demo.pdf",
+      "start_anchor": "Step 3: Compare the model features",
+      "end_anchor": null,
+      "segments": [
+        {
+          "page": 1,
+          "bbox_points": [
+            45.5,
+            619.0,
+            555.5,
+            725.0
+          ]
+        }
+      ],
+      "dpi": 144,
+      "webp_quality": 90,
+      "page_separator_pixels": 0,
+      "original_dimensions": [
+        1020,
+        212
+      ],
+      "dimensions": [
+        1020,
+        212
+      ]
+    },
+    {
+      "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/syntax_workbook.webp",
+      "source": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_zf6cqbnf/build/formatting_demo.xlsx",
+      "print_area": "A1:F4",
+      "renderer": "LibreOffice Calc PDF export and Poppler",
+      "page": 1,
+      "bbox_pixels": [
+        24,
+        24,
+        1257,
+        225
+      ],
+      "dpi": 144,
+      "webp_quality": 90,
+      "native_pdf": "/var/folders/32/jn37sr213255rv_yn8l58gnh0000gn/T/syntax_capture_zf6cqbnf/workbook_933n7rrw/syntax_workbook.pdf",
+      "scale": 1.0,
+      "original_dimensions": [
+        1233,
+        201
+      ],
+      "dimensions": [
+        1233,
+        201
+      ]
+    }
+  ],
   "native_artifacts": {
     "document": "DOCX rendered to PDF by the project build, then cropped from PDF",
-    "workbook": "generated XLSX rendered through screenshot-docs LibreOffice renderer"
+    "workbook": "generated XLSX printed through repository-owned LibreOffice Calc helper"
   },
   "protected_sources_unchanged": true,
   "build_output": "isolated temporary directory; canonical tutorial_output is not used"

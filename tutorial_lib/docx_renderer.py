@@ -9,6 +9,7 @@ import docx.oxml.ns
 import docx.shared
 
 import tutorial_lib.model
+import tutorial_lib.validation
 import tutorial_lib.docx_inline
 import tutorial_lib.docx_styles
 import tutorial_lib.docx_numbering
@@ -287,6 +288,9 @@ def render_tokens(output: object, document: tutorial_lib.model.Document) -> None
 				output.paragraphs[-1].paragraph_format.keep_with_next = True
 			paragraph = output.add_paragraph(style="Normal")
 			tutorial_lib.docx_styles.format_formula(paragraph)
+			# Keep short source blocks intact; native pagination still splits
+			# paragraphs whose full height exceeds the printable page.
+			paragraph.paragraph_format.keep_together = True
 			if items:
 				tutorial_lib.docx_styles.format_list(paragraph)
 			# Markdown fences carry a parser-added final newline, outside the formula.
@@ -334,6 +338,8 @@ def render_tokens(output: object, document: tutorial_lib.model.Document) -> None
 			column += 1
 		elif kind == "table_close":
 			table = None
+		elif tutorial_lib.validation.is_managed_screenshot_comment(token):
+			continue
 		elif kind not in ("heading_close", "tr_close", "thead_open", "thead_close",
 			"tbody_open", "tbody_close"):
 			raise ValueError(f"Unsupported DOCX block token: {kind}")

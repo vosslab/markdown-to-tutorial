@@ -104,9 +104,14 @@ tables at A1 and F1; F2:H2 remain blank but are visibly identified as student en
   locations, list nesting, inline formatting, and formula text across semantic classification.
 
 Supported tutorial prose includes paragraphs, emphasis, strong text, inline code, fenced code,
-ordered and unordered lists, block quotes, links, local PNG/JPEG images, and ordinary GFM tables.
+ordered and unordered lists, block quotes, links, local PNG/JPEG/WebP images, and ordinary GFM tables.
 Reference-style links and images used by the existing exports are included. HTML character entities
 and inline `sub`, `sup`, and `br` are supported; other raw HTML gets a source-located diagnostic.
+The exact standalone comments `<!-- screenshots:begin (managed by screenshot-docs) -->` and
+`<!-- screenshots:end -->` are nonvisible screenshot metadata. Surrounding whitespace is allowed;
+each complete HTML block token must contain only one marker. They remain in source and produce no
+DOCX/PDF text. Other HTML comments and adjacent raw HTML remain unsupported. Markers inside inline
+code or fenced code remain literal examples.
 Task lists, footnotes, executable content, and full mathematical typesetting are not initial features.
 Unsupported visible constructs must be reported, not silently discarded. Plain Unicode scientific
 text remains text; formulas receive no smart-quote or typography substitutions.
@@ -442,6 +447,9 @@ worksheet label remains useful without links. Resolve internal heading links to 
 
 Preserve image order, proportions, and alternative text. Resolve local assets relative to the
 Markdown source; decode existing PNG/JPEG data-URI references without treating them as prose.
+Local `.webp` assets must have a genuine RIFF/WEBP container and decodable image content. For DOCX,
+embed their decoded pixels losslessly as an in-memory PNG, preserving transparency and proportions.
+Keep source WebP paths and bytes unchanged; build asset fingerprints identify the original WebP.
 No network fetching occurs during build. SVG and mathematical image generation require explicit
 future work; migrate such content to supported assets or report it rather than discarding it.
 

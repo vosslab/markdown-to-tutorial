@@ -78,6 +78,10 @@ origin belongs there too. Rules: [REPO_STYLE.md](REPO_STYLE.md).
 
 ## Student publishing
 
+- Organize the student course as Parts, Steps, and Substeps. Use cropped visuals to emphasize the
+  relevant part of a page, and refresh screenshots automatically after style changes.
+- Let the course proceed without human milestone gates.
+
 - BIOL318 tutorial authors should learn spreadsheet formulas, layout, and design; readers should
   learn statistics and how to construct spreadsheets.
 - Keep source characters ASCII. Straight quotes and named entities are acceptable; numeric character

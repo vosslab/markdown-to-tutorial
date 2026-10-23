@@ -1,5 +1,8 @@
 # Usage
 
+For the student learning path, see the [student guide](STUDENT_GUIDE.md). This page is for building
+and maintaining tutorial files.
+
 Run commands from the repository root after loading its shell environment:
 
 ```bash
@@ -122,3 +125,23 @@ and choose a separate output directory. The live runner creates fresh test workb
 their IDs; it does not modify linked original spreadsheets. See
 [GOOGLE_SHEETS_VALIDATION.md](GOOGLE_SHEETS_VALIDATION.md) for credentials, evidence, and limits.
 An unavailable-credentials result is not a successful calculation check.
+
+## Refresh documentation screenshots
+
+After changing renderer styles, rebuild the documentation screenshots so the examples show the
+current output. From the repository root, run:
+
+```bash
+source source_me.sh && python3 devel/refresh_documentation.py
+```
+
+The refresh renders the documentation capture sets from native outputs and anchors crops to
+semantic content, so a style change can be reviewed in the affected images. It also records a
+machine-readable capture receipt. Review the refreshed images and receipt alongside the lesson
+pages that use them.
+
+This optional documentation workflow uses the existing application environment and Pillow,
+Poppler (`pdftotext`, `pdftoppm`), WebP (`cwebp`), librsvg (`rsvg-convert`), LibreOffice, and the
+required fonts. See [INSTALL.md](INSTALL.md) for `brew bundle` and font requirements. On this
+macOS host, agents must run the command with `sandbox_permissions="require_escalated"` because
+it invokes LibreOffice. Human terminal commands use the ordinary command above.

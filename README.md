@@ -1,30 +1,27 @@
 # markdown-to-tutorial
 
-Create a biology tutorial for your classmates using a plain-text template. You write the explanations
-and design the spreadsheet; this tool turns your work into formatted Word, PDF, and Excel files
-while keeping your words.
+Create a biology tutorial for classmates in one plain-text file. Write the lesson and design the
+spreadsheet; the compiler formats your work as editable Word, PDF, and Excel files.
 
 ## Start here
 
-**Writing a tutorial for BIOL 318? Start with the reading path below.** You can read the examples
-and plan your lesson before installing anything. Markdown is plain text with simple markers for
-headings, lists, and tables; the templates show what to type.
+**Writing your first tutorial? Start with the [student guide](docs/STUDENT_GUIDE.md).** Its three
+short Parts guide you through one Roots lesson: write the source, add `COUNT`, `AVERAGE`, and
+`STDEV.S`, then optionally extend it with deviations and a classmate check. You can explore the
+lesson and examples before installing anything.
 
-1. **See what your writing becomes.** Open
-   [docs/FORMATTING_GUIDE.md](docs/FORMATTING_GUIDE.md). It pairs Markdown with screenshots.
-   Start with the headings and formula examples, then read "Connect a table to actions" and the
-   examples of adding a column and a row.
-2. **Copy a small working example.** Use
-   [docs/examples/formatting_demo.md](docs/examples/formatting_demo.md) for a labeled worksheet
-   with one calculation. Save your own copy as a `.md` file in a plain-text editor. Keep its section
-   headings while you replace the explanation, data, and instructions.
-3. **Write your lesson.** Follow [docs/AUTHORING_GUIDE.md](docs/AUTHORING_GUIDE.md) as you work.
-   Decide which labels and data students receive and which calculations they complete.
-4. **Build and check it.** Once the software is installed, follow [Build your files](#build-your-files).
-   Open both the document and workbook, then follow your own instructions as a classmate would.
+1. **Make your first tutorial.** Follow [docs/learn/PART_1_CREATE.md](docs/learn/PART_1_CREATE.md),
+   then continue to Part 2. Keep editing `my_roots_tutorial.md` throughout.
+2. **Find a checkpoint.** The [student guide](docs/STUDENT_GUIDE.md) links to eight complete source
+   examples, from the first observation lesson through the optional classmate review.
+3. **Look up a topic.** Use the guide's focused references for Markdown, worksheets, formulas,
+   actions, worksheet changes, and common mistakes. Start with the [formatting guide](docs/FORMATTING_GUIDE.md)
+   to see source syntax beside its rendered result.
+4. **Build your files.** After installation, follow [Build your files](#build-your-files). Open the
+   document and workbook, then follow your instructions as a classmate would.
 
 If you are **using a tutorial for an assignment**, start with the document and workbook provided
-for that lesson. This repository's authoring guides are for students making tutorials.
+for that lesson. The authoring guide is for students making tutorials.
 
 ## See the finished materials
 

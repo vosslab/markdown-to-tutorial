@@ -1,5 +1,6 @@
 """Protect native formula fidelity and document navigation in DOCX output."""
 
+import io
 import pathlib
 import base64
 import zipfile
@@ -7,6 +8,9 @@ import copy
 import json
 
 import markdown_it
+import pytest
+import PIL.Image
+import PIL.features
 import defusedxml.ElementTree
 import docx
 
@@ -21,6 +25,40 @@ NAMESPACES = {
 	"w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
 	"r": "http://schemas.openxmlformats.org/package/2006/relationships",
 }
+
+
+#============================================
+def test_managed_screenshot_comments_are_nonvisible_metadata_only(tmp_path: pathlib.Path) -> None:
+	"""Accept screenshot boundaries without allowing HTML or hiding literal examples."""
+	begin = '<!-- screenshots:begin (managed by screenshot-docs) -->'
+	end = '<!-- screenshots:end -->'
+	prefix = '# Metadata\n\n## Workbook\n\n### Sheet: Data\n\n'
+	prefix += '| Value |\n| --- |\n| 1 |\n\n## Tutorial\n\n### Part: Review\n\n'
+	prefix += '#### Step: Observe\n\n'
+	source = prefix + '  ' + begin + '  \n' + end + '\n\nRead the evidence.\n'
+	document = tutorial_lib.compiler.compile_source(source)
+	assert not document.has_errors
+	assert document.source == source
+	path = tmp_path / 'metadata.docx'
+	tutorial_lib.docx_renderer.write_document(document, path)
+	output = docx.Document(path)
+	text = '\n'.join(paragraph.text for paragraph in output.paragraphs)
+	assert 'Read the evidence.' in text
+	assert 'screenshots:' not in text
+
+	for content in ('`' + begin + '`', '```html\n' + begin + '\n' + end + '\n```'):
+		document = tutorial_lib.compiler.compile_source(prefix + content)
+		assert not document.has_errors
+		output = docx.Document()
+		tutorial_lib.docx_styles.configure(output)
+		tutorial_lib.docx_renderer.render_tokens(output, document)
+		assert begin in '\n'.join(paragraph.text for paragraph in output.paragraphs)
+
+	for content in ('<div>Hidden</div>', '<script>alert(1)</script>', '<!-- ordinary -->',
+		begin + '<div>Hidden</div>', begin + '\n<script>alert(1)</script>',
+		begin.replace('screenshots:begin', 'screenshots:BEGIN'), 'Text ' + end):
+		document = tutorial_lib.compiler.compile_source(prefix + content)
+		assert any(item.category == 'unsupported-content' for item in document.diagnostics)
 
 
 #============================================
@@ -240,6 +278,7 @@ def test_standard_styles_and_direct_fonts() -> None:
 	assert output.tables[0].cell(1, 1).paragraphs[0].runs[0].font.name == "Roboto Mono"
 	formula = output.paragraphs[-1]
 	assert formula.runs[0].font.name == "Roboto Mono"
+	assert formula.paragraph_format.keep_together is True
 	assert formula._p.find("w:pPr/w:shd", NAMESPACES) is not None
 	assert formula._p.find("w:pPr/w:pBdr", NAMESPACES) is not None
 	assert output.paragraphs[-2].paragraph_format.left_indent is not None
@@ -474,6 +513,78 @@ def test_final_body_paragraph_stays_with_its_predecessor(tmp_path: pathlib.Path)
 		"w:pPr/w:keepNext", NAMESPACES) is not None
 	assert paragraphs["Ask the instructor for the next tutorial link."].find(
 		"w:pPr/w:keepNext", NAMESPACES) is None
+
+
+#============================================
+@pytest.mark.skipif(not PIL.features.check("webp"), reason="Pillow requires WebP support")
+def test_local_webp_embeds_lossless_png_without_changing_source(tmp_path: pathlib.Path) -> None:
+	"""WebP screenshots retain pixels, alpha, proportions, alt text and original asset identity."""
+	asset = tmp_path / "screenshot.webp"
+	image = PIL.Image.new("RGBA", (4, 2), (12, 34, 56, 255))
+	image.putpixel((1, 0), (200, 100, 50, 128))
+	image.save(asset, format="WEBP", lossless=True, exact=True)
+	original = asset.read_bytes()
+	source = "# Image\n\n## Workbook\n\n### Sheet: Data\n\n| A |\n| --- |\n| 1 |\n\n"
+	source += "## Tutorial\n\n### Part: Review\n\n#### Step: Observe\n\n"
+	source += "![Screenshot evidence](screenshot.webp)\n"
+	document = tutorial_lib.compiler.compile_source(source, tmp_path / "images.md")
+	assert not document.has_errors
+	assert document.assets == [asset.resolve()]
+	output = tmp_path / "images.docx"
+	tutorial_lib.docx_renderer.write_document(document, output)
+	reopened = docx.Document(output)
+	shape = reopened.inline_shapes[0]
+	assert shape.width == 2 * shape.height
+	assert shape._inline.docPr.get("descr") == "Screenshot evidence"
+	assert shape._inline.docPr.get("title") == "Screenshot evidence"
+	with zipfile.ZipFile(output) as archive:
+		media = [name for name in archive.namelist() if name.startswith("word/media/")]
+		assert len(media) == 1
+		with PIL.Image.open(io.BytesIO(archive.read(media[0]))) as embedded:
+			assert embedded.format == "PNG"
+			assert embedded.size == image.size
+			assert embedded.convert("RGBA").tobytes() == image.tobytes()
+	assert asset.read_bytes() == original
+	assert document.source == source
+	assert list(tmp_path.glob("*.png")) == []
+	for invalid in (b"not an image", b"RIFF\x00\x00\x00\x00WEBPbroken"):
+		asset.write_bytes(invalid)
+		rejected = tutorial_lib.compiler.compile_source(source, tmp_path / "images.md")
+		assert any(item.category == "image-invalid" for item in rejected.diagnostics)
+
+
+#============================================
+def test_tall_images_fit_native_printable_page_without_cropping(tmp_path: pathlib.Path) -> None:
+	"""Tall screenshots scale into the body while keeping source pixels and alt text."""
+	for extension in ("png", "webp"):
+		asset = tmp_path / f"tall.{extension}"
+		PIL.Image.new("RGB", (300, 1800), (12, 34, 56)).save(asset)
+		original = asset.read_bytes()
+		source = f"![Tall evidence]({asset.name})\n"
+		document = tutorial_lib.parser.parse_source(source, tmp_path / "images.md")
+		document.content_token_indices = list(range(len(document.tokens)))
+		output = docx.Document()
+		tutorial_lib.docx_styles.configure(output)
+		section = output.sections[0]
+		# Exercise native dimensions rather than assuming the default paper size.
+		section.page_height = docx.shared.Inches(8)
+		section.top_margin = docx.shared.Inches(1)
+		section.bottom_margin = docx.shared.Inches(1)
+		tutorial_lib.docx_renderer.render_tokens(output, document)
+		path = tmp_path / f"{extension}.docx"
+		output.save(path)
+		reopened = docx.Document(path)
+		shape = reopened.inline_shapes[0]
+		assert 0 < shape.height < section.page_height - section.top_margin - section.bottom_margin
+		assert 0 < shape.width <= section.page_width - section.left_margin - section.right_margin
+		assert shape.height / shape.width == pytest.approx(6)
+		assert shape._inline.docPr.get("descr") == "Tall evidence"
+		with zipfile.ZipFile(path) as archive:
+			media = next(name for name in archive.namelist() if name.startswith("word/media/"))
+			with PIL.Image.open(io.BytesIO(archive.read(media))) as embedded:
+				assert embedded.size == (300, 1800)
+		assert asset.read_bytes() == original
+		assert document.source == source
 
 
 #============================================

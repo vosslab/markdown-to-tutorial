@@ -7,6 +7,7 @@ import hashlib
 import pathlib
 import urllib.parse
 
+import PIL.Image
 import docx.oxml
 import docx.oxml.ns
 import docx.shared
@@ -68,7 +69,7 @@ def add_text(paragraph: object, text: str, state: dict, role: str | None = None,
 #============================================
 def add_image(paragraph: object, token: object, document: object,
 	parent: object | None = None) -> None:
-	"""Embed local or data-URI PNG/JPEG content at its original aspect ratio."""
+	"""Embed local PNG/JPEG/WebP or PNG/JPEG data URIs at their original aspect ratio."""
 	source = token.attrGet("src")
 	if source.startswith("data:"):
 		header, payload = source.split(",", 1)
@@ -79,16 +80,42 @@ def add_image(paragraph: object, token: object, document: object,
 		path = pathlib.Path(urllib.parse.unquote(source))
 		if not path.is_absolute():
 			path = document.path.parent / path
-		stream = str(path)
+		if path.suffix.lower() == ".webp":
+			# DOCX needs PNG pixels; preserve the authored WebP file and its alpha channel.
+			stream = io.BytesIO()
+			with PIL.Image.open(path, formats=("WEBP",)) as image:
+				image.save(stream, format="PNG")
+			stream.seek(0)
+		else:
+			stream = str(path)
 	run = paragraph.add_run()
 	shape = run.add_picture(stream)
 	# Keep the image at the current position within an authored link.
 	if parent is not None:
 		parent.append(run._r)
-	maximum = docx.shared.Inches(tutorial_lib.docx_styles.IMAGE_WIDTH)
-	if shape.width > maximum:
-		height = round(shape.height * maximum / shape.width)
-		shape.width = maximum
+	section = paragraph.part.document.sections[-1]
+	maximum_width = min(docx.shared.Inches(tutorial_lib.docx_styles.IMAGE_WIDTH),
+		section.page_width - section.left_margin - section.right_margin)
+	maximum_height = section.page_height - section.top_margin - section.bottom_margin
+	# Inline drawings occupy a paragraph line box, including baseline clearance
+	# and inherited paragraph spacing. Leave that room inside the body margins.
+	spacing = 0
+	for name in ("space_before", "space_after"):
+		value = getattr(paragraph.paragraph_format, name)
+		if value is None:
+			value = getattr(paragraph.style.paragraph_format, name)
+		if value is not None:
+			spacing += value
+	line_spacing = paragraph.paragraph_format.line_spacing
+	if line_spacing is None:
+		line_spacing = paragraph.style.paragraph_format.line_spacing
+	line_multiple = max(1.0, line_spacing) if isinstance(line_spacing, float) else 1.0
+	maximum_height = (maximum_height - spacing
+		- docx.shared.Pt(tutorial_lib.docx_styles.BODY_SIZE)) / line_multiple
+	scale = min(1.0, maximum_width / shape.width, maximum_height / shape.height)
+	if scale < 1.0:
+		width, height = round(shape.width * scale), round(shape.height * scale)
+		shape.width = width
 		shape.height = height
 	shape._inline.docPr.set("descr", token.content)
 	shape._inline.docPr.set("title", token.content)

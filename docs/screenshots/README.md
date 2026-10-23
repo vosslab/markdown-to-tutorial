@@ -1,11 +1,9 @@
 # Screenshot capture receipt
 
-Captured 2026-10-23 UTC from the current canonical tutorial outputs. These four views demonstrate
-the publishing pipeline's illustrated document opening, scannable spreadsheet actions,
-formula treatment, and a completed calculation example. The rendered
-instruction excerpts preserve the source writing while the renderer supplies the hierarchy,
-indentation, justification, and formula styling. The workbook captures use the current three-decimal
-number format; the ANOVA bundle was rebuilt before capture.
+These four views demonstrate the publishing pipeline's illustrated document opening, spreadsheet
+actions, formula treatment, and a completed calculation example. The rendered instruction excerpts
+preserve the source writing while the renderer supplies the hierarchy, indentation, justification,
+and formula styling. Workbook captures use the current three-decimal number format.
 
 ## Gallery
 
@@ -17,12 +15,12 @@ number format; the ANOVA bundle was rebuilt before capture.
 
 ![Completed Microbes 5 ANOVA demonstration with calculated values in a styled worksheet](microbes_5_completed_anova.webp)
 
-| Asset | Actual view | Dimensions | Bytes |
-| --- | --- | --- | ---: |
-| `caffeine_3_illustrated_opening.webp` | PDF page 1: title, research story, and embedded illustration | 1028 x 1230 | 279774 |
-| `caffeine_3_fill_down_instructions.webp` | PDF page 4: complete Step 3, formula, and justified teaching aside | 1064 x 350 | 45832 |
-| `microbes_4_formula_instruction.webp` | PDF page 3: F-statistic spreadsheet action, standalone formula, and explanation | 1064 x 620 | 85526 |
-| `microbes_5_completed_anova.webp` | Disposable completed demonstration of the styled Microbes 5 ANOVA worksheet, H1:M16 | 1507 x 686 | 61264 |
+| Asset | View |
+| --- | --- |
+| `caffeine_3_illustrated_opening.webp` | Title, research story, and embedded illustration |
+| `caffeine_3_fill_down_instructions.webp` | Complete squared-column Step, formula, and teaching aside |
+| `microbes_4_formula_instruction.webp` | F-statistic action, standalone formula, and explanation |
+| `microbes_5_completed_anova.webp` | Disposable completed demonstration of the styled ANOVA worksheet |
 
 The completed ANOVA image is a demonstration, not the student starter workbook. It starts with
 the canonical styled starter, applies only the authored baseline label and formula actions in a
@@ -31,34 +29,40 @@ remains unchanged. This completed view does not establish that the starter has a
 instructional structure. Authors should establish labels before the compiler applies styling;
 tutorial users should normally receive those labels already present.
 
-The capture harness fingerprinted all 12 Markdown sources and their 36 canonical DOCX, PDF, and
-XLSX outputs before and after capture. All 48 protected files were unchanged. The machine-readable
-[capture receipt](capture_receipt.json) records the current SHA-256 fingerprints, each image hash,
-and the completed-demo provenance.
-
-All WebPs were encoded with `cwebp -q 90` under `/tmp`, visually inspected after encoding, and are
-within the 1920-pixel edge and 1 MB limits. These four images form the landing-page capture set.
-Removed `caffeine_3_blank_predictor_workspace.webp`: its unlabeled colored areas obscured the
-worksheet's purpose and did not demonstrate useful authoring or learner behavior. No other stale
-images or retained reference images remain in that set.
+The [capture receipt](capture_receipt.json) records the current source and artifact fingerprints,
+image dimensions and hashes, protected-file checks, and completed-demo provenance. Capture counts
+and measurements belong in that receipt rather than this gallery. Images are encoded as WebP at
+quality 90; review the refreshed images alongside the receipt.
 
 The separate syntax examples appear in [../FORMATTING_GUIDE.md](../FORMATTING_GUIDE.md), with
 their source, capture command, and limitations documented there. Their provenance is recorded in
 [syntax_capture_receipt.json](syntax_capture_receipt.json).
 
+## Roots authoring course
+
+The three-part [student course](../STUDENT_GUIDE.md) has its own screenshots for the Roots lesson
+and starter workbook. Its assets are separate from the landing-page gallery and the syntax examples.
+The course pages link to the capture set; [course_capture_receipt.json](course_capture_receipt.json)
+records its provenance. Capture dimensions and other measurements belong in that receipt.
+
+The course set distinguishes the generated lesson, blank student starter, and completed calculation
+demonstration. The completed view is a disposable copy for comparison; it is not the published
+starter workbook.
+
 ## Reproduce the capture
 
-Use [../../devel/capture_readme_artifacts.py](../../devel/capture_readme_artifacts.py) after
-building the canonical outputs. This optional documentation workflow requires the existing
-application environment, Poppler (`pdftoppm`), WebP (`cwebp`), LibreOffice, and the
-screenshot-docs skill renderer. These capture tools are not application runtime dependencies.
-Run the entire command outside the macOS sandbox because it invokes LibreOffice:
+From the repository root, rebuild the documentation artifacts and all capture sets with one command:
 
 ```bash
-source source_me.sh && python3 devel/capture_readme_artifacts.py \
-  --artifact-renderer /Users/vosslab/nsh/vosslab-skills/skills/documentation/screenshot-docs/scripts/render_artifact_libreoffice.sh
+source source_me.sh && python3 devel/refresh_documentation.py
 ```
 
-The script uses a fresh temporary workspace, refreshes the same four asset names,
-writes [capture_receipt.json](capture_receipt.json), and fails if a canonical source or built
-artifact changes during capture.
+The repository-owned helpers build native artifacts in temporary workspaces and locate crop content
+automatically. No external skill renderer path is needed. They refresh the landing-page, syntax,
+and course captures and their receipts; the refresh also rebuilds the illustrated course Parts.
+
+This optional author workflow requires the existing Python environment with Pillow, Poppler
+(`pdftotext`, `pdftoppm`), WebP (`cwebp`), librsvg (`rsvg-convert`), LibreOffice, and the required
+fonts. See [../INSTALL.md](../INSTALL.md) for setup. On this macOS host, agents must run the command
+with `sandbox_permissions="require_escalated"` because it invokes LibreOffice. Human terminal
+commands use the ordinary command above.

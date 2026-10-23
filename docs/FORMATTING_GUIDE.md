@@ -8,6 +8,25 @@ with cropped views of the actual output. The later walkthrough connects the tabl
 then adds a column and a row in [examples/adding_rows_and_columns.md](examples/adding_rows_and_columns.md).
 Write plain ASCII: straight quotes, ordinary hyphens, and readable symbols such as `&alpha;`.
 
+## Find a practical pattern
+
+New to Markdown and spreadsheets? Start with [STUDENT_GUIDE.md](STUDENT_GUIDE.md) for the
+three-part BIOL 318 course. Use this index when you know the task you want to perform.
+The visual examples below remain useful for seeing how source becomes a document and workbook.
+
+| Task | Reference |
+| --- | --- |
+| Write headings, paragraphs, lists, links, and scientific symbols | [reference/MARKDOWN.md](reference/MARKDOWN.md) |
+| Place observations, supplied labels, and blank student work | [reference/WORKSHEETS.md](reference/WORKSHEETS.md) |
+| Calculate count, mean, sample SD, and fixed-reference deviations | [reference/FORMULAS.md](reference/FORMULAS.md) |
+| Connect visible instructions to Enter, Fill, Select, and Replace | [reference/ACTIONS.md](reference/ACTIONS.md) |
+| Add observations or move a worksheet layout | [reference/CHANGES.md](reference/CHANGES.md) |
+| Diagnose wrong ranges, targets, table rows, and seeded answers | [reference/MISTAKES.md](reference/MISTAKES.md) |
+
+The reference uses the course's small synthetic root-length dataset. Each page links back to a
+course exercise and working source. Copy a small pattern, then check its actual output.
+For every supported rule, use [TUTORIAL_SPEC.md](TUTORIAL_SPEC.md).
+
 ## Headings and nested instructions
 
 Use `Part:` and `Step:` to organize the lesson. The compiler adds their numbering. Indent a bullet
@@ -266,15 +285,21 @@ syntax and its rules, see [TUTORIAL_SPEC.md](TUTORIAL_SPEC.md).
 
 ## Refresh the screenshots
 
-For maintainers: [../devel/capture_syntax_examples.py](../devel/capture_syntax_examples.py) builds
-the example in a temporary directory and captures the same five views. It uses LibreOffice,
-Poppler, WebP, and the screenshot skill's artifact renderer. Run outside the macOS sandbox:
+For maintainers, refresh all documentation artifacts and screenshots after changing renderer styles:
 
 ```bash
-source source_me.sh && python3 devel/capture_syntax_examples.py \
-  --artifact-renderer /Users/vosslab/nsh/vosslab-skills/skills/documentation/screenshot-docs/scripts/render_artifact_libreoffice.sh
+source source_me.sh && python3 devel/refresh_documentation.py
 ```
 
-On another checkout, use the location of your installed `render_artifact_libreoffice.sh`.
+The repository-owned capture helpers locate semantic content automatically, so crops follow style
+changes without hand-adjusting coordinates. To rebuild only this guide's syntax examples, run:
+
+```bash
+source source_me.sh && python3 devel/capture_syntax_examples.py
+```
+
+See [INSTALL.md](INSTALL.md) for the optional capture dependencies. Both commands invoke
+LibreOffice; on this macOS host, agents must run them outside the sandbox with
+`sandbox_permissions="require_escalated"`. Human terminal commands use the syntax above.
 The [capture receipt](screenshots/syntax_capture_receipt.json) records the source and image hashes.
 The narrow crops keep each feature readable; they intentionally omit unrelated page content.

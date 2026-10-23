@@ -1,13 +1,26 @@
 """Static reference, availability, content, and instruction-history checks."""
 
+import io
 import re
 import base64
 import urllib.parse
+import PIL.Image
 import openpyxl.formula.translate
 import openpyxl.formula.tokenizer
 import tutorial_lib.model as model
 import tutorial_lib.compiler as compiler
 import tutorial_lib.references as references
+
+
+#============================================
+def is_managed_screenshot_comment(token: object) -> bool:
+	"""Identify complete nonvisible screenshot metadata without accepting adjacent HTML."""
+	# ASVS 2.2.1: allow only complete, nonvisible managed metadata tokens.
+	accepted = token.type == "html_block" and token.content.strip() in (
+		"<!-- screenshots:begin (managed by screenshot-docs) -->",
+		"<!-- screenshots:end -->",
+	)
+	return accepted
 
 
 def _canonical_sheet(document: model.Document, name: str) -> model.Worksheet | None:
@@ -216,9 +229,9 @@ def _content(document: model.Document, states_before: dict[int, list[dict]]) -> 
 		if token.type == "heading_open" and token.meta.get("heading") is not None:
 			if token.meta["heading"].kind == "part":
 				scope = document.worksheets[0].name if len(document.worksheets) == 1 else ""
-		if token.type == "html_block":
-			compiler.diagnostic(document, "unsupported-content", location, "Raw HTML block is unsupported",
-				"Use supported Markdown blocks")
+		if token.type == "html_block" and not is_managed_screenshot_comment(token):
+			compiler.diagnostic(document, "unsupported-content", location,
+				"Raw HTML block is unsupported", "Use supported Markdown blocks")
 		if token.type != "inline":
 			continue
 		action = token.meta.get("action")
@@ -302,16 +315,19 @@ def _asset(document: model.Document, token: object, location: model.SourceSpan) 
 	url = urllib.parse.urlparse(source)
 	if url.scheme or url.netloc:
 		compiler.diagnostic(document, "image-unsupported", location,
-			"Only local PNG/JPEG and image data URIs are supported", "Save the image beside the source")
+			"Only local PNG/JPEG/WebP and PNG/JPEG data URIs are supported",
+			"Save the image beside the source")
 		return
 	asset = (document.path.parent / urllib.parse.unquote(url.path)).resolve()
-	if not asset.is_file() or asset.suffix.lower() not in (".png", ".jpg", ".jpeg"):
+	if not asset.is_file() or asset.suffix.lower() not in (".png", ".jpg", ".jpeg", ".webp"):
 		compiler.diagnostic(document, "image-missing", location,
-			f"Missing or unsupported local image {source}", "Supply a local PNG/JPEG image")
+			f"Missing or unsupported local image {source}", "Supply a local PNG/JPEG/WebP image")
 		return
 	token.meta["asset"] = asset
-	if not _image_signature(asset.read_bytes()):
-		compiler.diagnostic(document, "image-invalid", location, "Local image is not PNG/JPEG",
+	data = asset.read_bytes()
+	valid = _webp_image(data) if asset.suffix.lower() == ".webp" else _image_signature(data)
+	if not valid:
+		compiler.diagnostic(document, "image-invalid", location, "Local image is not valid PNG/JPEG/WebP",
 			"Supply a valid supported image")
 	if asset not in document.assets:
 		document.assets.append(asset)
@@ -319,6 +335,24 @@ def _asset(document: model.Document, token: object, location: model.SourceSpan) 
 
 def _image_signature(data: bytes) -> bool:
 	return data.startswith(b"\x89PNG\r\n\x1a\n") or data.startswith(b"\xff\xd8\xff")
+
+
+#============================================
+def _webp_image(data: bytes) -> bool:
+	"""Require both WebP container identification and decodable image pixels."""
+	# ASVS 5.2.2: validate WebP content rather than trusting the filename extension.
+	if not (data.startswith(b"RIFF") and data[8:12] == b"WEBP"):
+		return False
+	try:
+		image = PIL.Image.open(io.BytesIO(data), formats=("WEBP",))
+	except (OSError, ValueError):
+		return False
+	with image:
+		try:
+			image.load()
+		except (OSError, ValueError):
+			return False
+	return True
 
 
 def validate_document(document: model.Document) -> None:

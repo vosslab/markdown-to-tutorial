@@ -9,10 +9,10 @@ install fonts or download fallback fonts; the current macOS environment has the 
 
 ## macOS setup
 
-Install the repository's Homebrew dependencies, LibreOffice, and Python packages:
+Install Python 3.12, LibreOffice, and the Python packages:
 
 ```bash
-brew bundle
+brew install python@3.12
 brew install --cask libreoffice
 python3 -m pip install -r pip_requirements.txt
 ```
@@ -33,3 +33,28 @@ source source_me.sh
 
 See [USAGE.md](USAGE.md) for lint, build, and import commands. See
 [AUTHORING_GUIDE.md](AUTHORING_GUIDE.md) for the Markdown format.
+
+## Optional screenshot tooling
+
+Authors who refresh documentation screenshots also need Poppler (`pdftotext`, `pdftoppm`),
+WebP (`cwebp`), and librsvg (`rsvg-convert`). Install these tools and the existing Python dependency
+with the repository's [Brewfile](../Brewfile):
+
+```bash
+brew bundle
+```
+
+Pillow is included in [pip_requirements.txt](../pip_requirements.txt). LibreOffice and the PT Sans,
+PT Sans Narrow, and Roboto Mono fonts described above are also required for capture. These extra
+command-line tools are optional for normal tutorial builds.
+
+Refresh all documentation artifacts and screenshots from the repository root:
+
+```bash
+source source_me.sh && python3 devel/refresh_documentation.py
+```
+
+On this macOS host, agents must run this command with
+`sandbox_permissions="require_escalated"` because it invokes LibreOffice. Human terminal commands
+use the ordinary command above. See [screenshots/README.md](screenshots/README.md) for capture
+provenance and the distinction between starter workbooks and completed demonstrations.

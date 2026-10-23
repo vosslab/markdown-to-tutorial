@@ -1,0 +1,858 @@
+{
+  "captured_utc": "2026-10-23T12:23:04.519027+00:00",
+  "renderer": "devel/capture_readme_artifacts.py",
+  "assets": {
+    "course_overview_document.webp": {
+      "sha256": "27d302a8f829997e822e811c6b494de29b4fde503c4b9760eb10b1c1af4dc79d",
+      "width": 1018,
+      "height": 1269,
+      "quality": 90,
+      "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/course_overview_document.webp",
+      "source": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/tutorial_output/authoring_course/root_05_variation/root_05_variation.pdf",
+      "start_anchor": "Exploring root lengths",
+      "end_anchor": null,
+      "segments": [
+        {
+          "page": 1,
+          "bbox_points": [
+            51.5,
+            56.0,
+            560.5,
+            690.5
+          ]
+        }
+      ],
+      "dpi": 144,
+      "webp_quality": 90,
+      "page_separator_pixels": 0,
+      "original_dimensions": [
+        1018,
+        1269
+      ],
+      "dimensions": [
+        1018,
+        1269
+      ]
+    },
+    "course_overview_excerpt.webp": {
+      "sha256": "920cacda3a51353c6d8fa70ce425c794131fb6b0a06aa7c2043fd5d462824ed0",
+      "width": 1018,
+      "height": 535,
+      "quality": 90,
+      "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/course_overview_excerpt.webp",
+      "source": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/tutorial_output/authoring_course/root_05_variation/root_05_variation.pdf",
+      "start_anchor": "Exploring root lengths",
+      "end_anchor": "Part 2: Summarize root lengths",
+      "segments": [
+        {
+          "page": 1,
+          "bbox_points": [
+            51.5,
+            56.0,
+            560.5,
+            323.5
+          ]
+        }
+      ],
+      "dpi": 144,
+      "webp_quality": 90,
+      "page_separator_pixels": 0,
+      "original_dimensions": [
+        1018,
+        535
+      ],
+      "dimensions": [
+        1018,
+        535
+      ]
+    },
+    "course_markdown.webp": {
+      "sha256": "24b2593fb7996cadcf36e21ab265de43bc553a211f82ac95f3c645c56d987472",
+      "width": 1018,
+      "height": 533,
+      "quality": 90,
+      "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/course_markdown.webp",
+      "source": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/tutorial_output/authoring_course/root_02_write/root_02_write.pdf",
+      "start_anchor": "Exploring root lengths",
+      "end_anchor": null,
+      "segments": [
+        {
+          "page": 1,
+          "bbox_points": [
+            51.5,
+            56.0,
+            560.5,
+            322.5
+          ]
+        }
+      ],
+      "dpi": 144,
+      "webp_quality": 90,
+      "page_separator_pixels": 0,
+      "original_dimensions": [
+        1018,
+        533
+      ],
+      "dimensions": [
+        1018,
+        533
+      ]
+    },
+    "course_count_action.webp": {
+      "sha256": "b0e0f7c8809b0b376c40e93f071e25ac839029c2e3812609fe5b944c4b2e89c0",
+      "width": 755,
+      "height": 163,
+      "quality": 90,
+      "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/course_count_action.webp",
+      "source": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/tutorial_output/authoring_course/root_04_calculate/root_04_calculate.pdf",
+      "start_anchor": "Step 1: Count the observations",
+      "end_anchor": "Step 2: Calculate the mean",
+      "segments": [
+        {
+          "page": 1,
+          "bbox_points": [
+            52.0,
+            404.5,
+            429.5,
+            486.0
+          ]
+        }
+      ],
+      "dpi": 144,
+      "webp_quality": 90,
+      "page_separator_pixels": 0,
+      "original_dimensions": [
+        755,
+        163
+      ],
+      "dimensions": [
+        755,
+        163
+      ]
+    },
+    "course_mean_action.webp": {
+      "sha256": "c2a573b6d334425a3bf34cd32f4775c67fa6cb3df082d88b1500a0d05a5d37c7",
+      "width": 816,
+      "height": 163,
+      "quality": 90,
+      "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/course_mean_action.webp",
+      "source": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/tutorial_output/authoring_course/root_04_calculate/root_04_calculate.pdf",
+      "start_anchor": "Step 2: Calculate the mean",
+      "end_anchor": null,
+      "segments": [
+        {
+          "page": 1,
+          "bbox_points": [
+            52.0,
+            492.0,
+            460.0,
+            573.5
+          ]
+        }
+      ],
+      "dpi": 144,
+      "webp_quality": 90,
+      "page_separator_pixels": 0,
+      "original_dimensions": [
+        816,
+        163
+      ],
+      "dimensions": [
+        816,
+        163
+      ]
+    },
+    "course_variation_action.webp": {
+      "sha256": "3e6f82ef4c6725ae22644938aeeeb4ac73639d831546d77bc411542e167625e4",
+      "width": 1011,
+      "height": 252,
+      "quality": 90,
+      "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/course_variation_action.webp",
+      "source": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/tutorial_output/authoring_course/root_05_variation/root_05_variation.pdf",
+      "start_anchor": "Step 3: Describe the spread",
+      "end_anchor": null,
+      "segments": [
+        {
+          "page": 1,
+          "bbox_points": [
+            52.0,
+            564.5,
+            557.5,
+            690.5
+          ]
+        }
+      ],
+      "dpi": 144,
+      "webp_quality": 90,
+      "page_separator_pixels": 0,
+      "original_dimensions": [
+        1011,
+        252
+      ],
+      "dimensions": [
+        1011,
+        252
+      ]
+    },
+    "course_fixed_formula.webp": {
+      "sha256": "f913647c2af44e70470bc303ee665f62792b3deedb376873fd2679a50c583402",
+      "width": 1008,
+      "height": 317,
+      "quality": 90,
+      "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/course_fixed_formula.webp",
+      "source": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/tutorial_output/authoring_course/root_06_grow/root_06_grow.pdf",
+      "start_anchor": "Step 1: Subtract the mean",
+      "end_anchor": null,
+      "segments": [
+        {
+          "page": 2,
+          "bbox_points": [
+            52.0,
+            146.0,
+            556.0,
+            304.5
+          ]
+        }
+      ],
+      "dpi": 144,
+      "webp_quality": 90,
+      "page_separator_pixels": 0,
+      "original_dimensions": [
+        1008,
+        317
+      ],
+      "dimensions": [
+        1008,
+        317
+      ]
+    },
+    "course_moved_action.webp": {
+      "sha256": "9a497f9296cf6e7a2ae82e575b6fb4e56670cc5c1935bbf4fc6b6ec5c11c7996",
+      "width": 1008,
+      "height": 317,
+      "quality": 90,
+      "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/course_moved_action.webp",
+      "source": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/tutorial_output/authoring_course/root_07_move/root_07_move.pdf",
+      "start_anchor": "Step 1: Subtract the mean",
+      "end_anchor": null,
+      "segments": [
+        {
+          "page": 2,
+          "bbox_points": [
+            52.0,
+            146.0,
+            556.0,
+            304.5
+          ]
+        }
+      ],
+      "dpi": 144,
+      "webp_quality": 90,
+      "page_separator_pixels": 0,
+      "original_dimensions": [
+        1008,
+        317
+      ],
+      "dimensions": [
+        1008,
+        317
+      ]
+    },
+    "course_overview_starter.webp": {
+      "sha256": "beb5e3b4df4b5b50dd7296e25976f676bebb810da04bb29ff447bceca117eb39",
+      "width": 963,
+      "height": 261,
+      "quality": 90,
+      "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/course_overview_starter.webp",
+      "source": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/tutorial_output/authoring_course/root_05_variation/root_05_variation.xlsx",
+      "print_area": "A1:E6",
+      "renderer": "LibreOffice Calc PDF export and Poppler",
+      "page": 1,
+      "bbox_pixels": [
+        24,
+        24,
+        987,
+        285
+      ],
+      "dpi": 144,
+      "webp_quality": 90,
+      "native_pdf": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/tutorial_output/authoring_course/capture_work/workbook_u5353qwh/course_overview_starter.pdf",
+      "scale": 1.0,
+      "original_dimensions": [
+        963,
+        261
+      ],
+      "dimensions": [
+        963,
+        261
+      ],
+      "native_xlsx": "tutorial_output/authoring_course/root_05_variation/root_05_variation.xlsx",
+      "state": "blank student starter",
+      "source_sha256": "cd88ff58d426e3aa509b6da67b241b2eae64a5255483f7b1581a983849499052"
+    },
+    "course_layout.webp": {
+      "sha256": "554af54b71d4fa26e189675a1031fb67d0622eed911cfd4f5b98bb1a1f43f26a",
+      "width": 963,
+      "height": 261,
+      "quality": 90,
+      "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/course_layout.webp",
+      "source": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/tutorial_output/authoring_course/root_03_layout/root_03_layout.xlsx",
+      "print_area": "A1:E6",
+      "renderer": "LibreOffice Calc PDF export and Poppler",
+      "page": 1,
+      "bbox_pixels": [
+        24,
+        24,
+        987,
+        285
+      ],
+      "dpi": 144,
+      "webp_quality": 90,
+      "native_pdf": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/tutorial_output/authoring_course/capture_work/workbook_vof49bmg/course_layout.pdf",
+      "scale": 1.0,
+      "original_dimensions": [
+        963,
+        261
+      ],
+      "dimensions": [
+        963,
+        261
+      ],
+      "native_xlsx": "tutorial_output/authoring_course/root_03_layout/root_03_layout.xlsx",
+      "state": "blank student starter",
+      "source_sha256": "527e909764baf5f206a530a0e899c5dc2d52a7a7efe5eddfc82bf65637b0792c"
+    },
+    "course_statistics.webp": {
+      "sha256": "6d4079075968f8e7ac8d32b82c62b836652da295487b94f2b3d239ff1caafd72",
+      "width": 571,
+      "height": 201,
+      "quality": 90,
+      "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/course_statistics.webp",
+      "source": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/tutorial_output/authoring_course/capture_work/course_statistics/root_05_variation_completed.xlsx",
+      "print_area": "D1:E4",
+      "renderer": "LibreOffice Calc PDF export and Poppler",
+      "page": 1,
+      "bbox_pixels": [
+        24,
+        24,
+        595,
+        225
+      ],
+      "dpi": 144,
+      "webp_quality": 90,
+      "native_pdf": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/tutorial_output/authoring_course/capture_work/workbook_unsnvelt/course_statistics.pdf",
+      "scale": 1.0,
+      "original_dimensions": [
+        571,
+        201
+      ],
+      "dimensions": [
+        571,
+        201
+      ],
+      "native_xlsx": "tutorial_output/authoring_course/capture_work/course_statistics/root_05_variation_completed.xlsx",
+      "state": "completed authored baseline",
+      "source_sha256": "7d5770b8d505b8cd0acf413ae0adb27c52572de68e84d61c10831316e9b7eaa8"
+    },
+    "course_expanded_starter.webp": {
+      "sha256": "e8b84c64740fa12c714c746ce02d686d5a12032d9aa133e4927d63551f10722a",
+      "width": 1155,
+      "height": 291,
+      "quality": 90,
+      "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/course_expanded_starter.webp",
+      "source": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/tutorial_output/authoring_course/root_06_grow/root_06_grow.xlsx",
+      "print_area": "A1:E7",
+      "renderer": "LibreOffice Calc PDF export and Poppler",
+      "page": 1,
+      "bbox_pixels": [
+        24,
+        24,
+        1179,
+        315
+      ],
+      "dpi": 144,
+      "webp_quality": 90,
+      "native_pdf": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/tutorial_output/authoring_course/capture_work/workbook_3o4hlwbg/course_expanded_starter.pdf",
+      "scale": 1.0,
+      "original_dimensions": [
+        1155,
+        291
+      ],
+      "dimensions": [
+        1155,
+        291
+      ],
+      "native_xlsx": "tutorial_output/authoring_course/root_06_grow/root_06_grow.xlsx",
+      "state": "blank student starter",
+      "source_sha256": "e7ffcec55b06272b49355d6ff4da24b57d1f5d33a629c389da3b1129dc508504"
+    },
+    "course_expanded_complete.webp": {
+      "sha256": "01aceef441ecd71007629402755ec9be3fc91bb048eda89abde57fd51cf58d31",
+      "width": 1155,
+      "height": 291,
+      "quality": 90,
+      "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/course_expanded_complete.webp",
+      "source": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/tutorial_output/authoring_course/capture_work/course_expanded_complete/root_06_grow_completed.xlsx",
+      "print_area": "A1:E7",
+      "renderer": "LibreOffice Calc PDF export and Poppler",
+      "page": 1,
+      "bbox_pixels": [
+        24,
+        24,
+        1179,
+        315
+      ],
+      "dpi": 144,
+      "webp_quality": 90,
+      "native_pdf": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/tutorial_output/authoring_course/capture_work/workbook_6lu7xrpk/course_expanded_complete.pdf",
+      "scale": 1.0,
+      "original_dimensions": [
+        1155,
+        291
+      ],
+      "dimensions": [
+        1155,
+        291
+      ],
+      "native_xlsx": "tutorial_output/authoring_course/capture_work/course_expanded_complete/root_06_grow_completed.xlsx",
+      "state": "completed authored baseline",
+      "source_sha256": "61ec2d9776b8e4a119c69aed830fed1078c6731f941058dfaa29a26161f3cca3"
+    },
+    "course_moved_starter.webp": {
+      "sha256": "6fdfc36414870c64599c5a4a9e608812458ae52ed7e275b83c9d1a1826ffb3a0",
+      "width": 1155,
+      "height": 291,
+      "quality": 90,
+      "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/course_moved_starter.webp",
+      "source": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/tutorial_output/authoring_course/root_07_move/root_07_move.xlsx",
+      "print_area": "B1:F7",
+      "renderer": "LibreOffice Calc PDF export and Poppler",
+      "page": 1,
+      "bbox_pixels": [
+        24,
+        24,
+        1179,
+        315
+      ],
+      "dpi": 144,
+      "webp_quality": 90,
+      "native_pdf": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/tutorial_output/authoring_course/capture_work/workbook_qgnt23pk/course_moved_starter.pdf",
+      "scale": 1.0,
+      "original_dimensions": [
+        1155,
+        291
+      ],
+      "dimensions": [
+        1155,
+        291
+      ],
+      "native_xlsx": "tutorial_output/authoring_course/root_07_move/root_07_move.xlsx",
+      "state": "blank student starter",
+      "source_sha256": "3de3a9ea8cc83526d2f82b1f8555327877933f448580a8ea3ae288b5dbc33719"
+    },
+    "course_moved_complete.webp": {
+      "sha256": "272d8a91843c947f35ec5fed0f9251060e8e6243812d8bee32be36182088f854",
+      "width": 1155,
+      "height": 291,
+      "quality": 90,
+      "asset": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/docs/screenshots/course_moved_complete.webp",
+      "source": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/tutorial_output/authoring_course/capture_work/course_moved_complete/root_07_move_completed.xlsx",
+      "print_area": "B1:F7",
+      "renderer": "LibreOffice Calc PDF export and Poppler",
+      "page": 1,
+      "bbox_pixels": [
+        24,
+        24,
+        1179,
+        315
+      ],
+      "dpi": 144,
+      "webp_quality": 90,
+      "native_pdf": "/Users/vosslab/nsh/SLIDES/markdown-to-tutorial/tutorial_output/authoring_course/capture_work/workbook_8cvtqmmi/course_moved_complete.pdf",
+      "scale": 1.0,
+      "original_dimensions": [
+        1155,
+        291
+      ],
+      "dimensions": [
+        1155,
+        291
+      ],
+      "native_xlsx": "tutorial_output/authoring_course/capture_work/course_moved_complete/root_07_move_completed.xlsx",
+      "state": "completed authored baseline",
+      "source_sha256": "a4c400cd194c72bb2cddeb93105521503904a49dad0dba940a8742bd805afd25"
+    },
+    "course_formula_map.webp": {
+      "sha256": "c60f64993dfba862f6745824a65ce40b0ca396e131c097c6ec959b2ead7dbc13",
+      "width": 963,
+      "height": 381,
+      "quality": 90,
+      "native_asset": "course_overview_starter.webp",
+      "native_asset_sha256": "beb5e3b4df4b5b50dd7296e25976f676bebb810da04bb29ff447bceca117eb39",
+      "annotation": "Separate SVG overlay and labeled caption; native cells remain blank",
+      "input_range": "A2:A6",
+      "destination": "E3",
+      "formula": "=AVERAGE(A2:A6)"
+    }
+  },
+  "course_sources_sha256": {
+    "docs/examples/authoring_course/root_01_meet.md": "a33f39bb29cb53128a369871eb2d2ddad19b4efe9dd6d0479cbbaf45efc878c5",
+    "docs/examples/authoring_course/root_02_write.md": "2769f85064adf7ef5f95481dd74378ef699da51547d2195f7ad492f34bc86ca1",
+    "docs/examples/authoring_course/root_03_layout.md": "823659c0e85286db7d7e35f193189aeb7be4e8db37bdca8cb817041cf46fb8e3",
+    "docs/examples/authoring_course/root_04_calculate.md": "f894eae65d1e6be9a8e4031662e19f80eaf85803d2fd2ffef31d4757ac0969b2",
+    "docs/examples/authoring_course/root_05_variation.md": "7be94054fbadcf6c096e81b85fcc697b4d4e8bcd5e6c408dc3ed2b09bc0b2aed",
+    "docs/examples/authoring_course/root_06_grow.md": "6c76255edbd1d14519eee8d6014e089f2043750710853921dc5e81a85a9a2457",
+    "docs/examples/authoring_course/root_07_move.md": "cbbe4e6deb6e548084c802f52ca8124578851056feca96bcffea95bb1bf65826",
+    "docs/examples/authoring_course/root_08_share.md": "c767870f1151a5b915c62692b865bedd1012458663861447a0357c0cd2fc0e42"
+  },
+  "protected_sha256": {
+    "tutorial_data/babies_1_z_test.md": "da64c65d64e160d9b7dc311b73afc7e28fefb38efdb45d9a34d9ed2704c1d5c1",
+    "tutorial_data/babies_2_t_test.md": "446256332bb144cc1ecbd2d0202043dc980a484ceee4ed28db4d624a6f76e96d",
+    "tutorial_data/babies_3_two_sample_t_test.md": "c58d36f92c826a7625f5e371c65bad5ab5dca25148301117d69ac1504217db5f",
+    "tutorial_data/caffeine_1_descriptive_statistics.md": "357428e5a32f5b9d91516186dc646f976aa21667a1c8b7a188e1b07f9f7c6463",
+    "tutorial_data/caffeine_2_linear_regression.md": "7847918ad57941fb24e1fbcf3495b5cfc4ebc9aec82eec05130ac57c2b88ccd2",
+    "tutorial_data/caffeine_3_quadratic_regression.md": "671e14419101d4397556c3f3ac986c28373ce5562f3a3961504b35ba96327d1f",
+    "tutorial_data/microbes_1_z_test.md": "f8e007e4308e23492a644bb33b75a4f63a35634d7a5ba8446cd656399b574075",
+    "tutorial_data/microbes_2_t_test.md": "7e75603806f07ce2762833e1778774ea94fcd5775d02caee7fd504e7160b3d3f",
+    "tutorial_data/microbes_3_two_sample_t_test.md": "86ca0cce468641ada1dce58f22239b728e46921d96b75a753be46bcbf41e49a8",
+    "tutorial_data/microbes_4_f_test.md": "34c3a6e2e8d608b0dd84dd78b903cdbaac68f07f1bfcd1b94cd6ddf60bf89269",
+    "tutorial_data/microbes_5_anova.md": "9e5004a388494c8e7e28e4e9e6d2557466df9de1b90f4338caa2d4eb300fa512",
+    "tutorial_data/petase_1_linear_regression.md": "e00e11da9cc7144b674f8334bfa1e0d8357e039448a3008502e207e4df60536e",
+    "tutorial_output/babies_2_t_test/babies_2_t_test.docx": "7b173e28eef34d1a199cc70dbe956e3ffbeefa73a9d761632103f1212d2ec6b1",
+    "tutorial_output/babies_2_t_test/babies_2_t_test.pdf": "633908d02326c06dd6c0922f66a732b6cc2c144254dd5dd0b1fadf3a37f19bd8",
+    "tutorial_output/babies_2_t_test/validation.json": "9a244474dab9dbfb9404f045383677c5d486df2363610a7c59d2ffa46a7c5b73",
+    "tutorial_output/babies_2_t_test/babies_2_t_test.xlsx": "7aef6c4466e4cb8685cf83ca810a46797026fa43eee574d3ddf9b7dde975d209",
+    "tutorial_output/babies_3_two_sample_t_test/babies_3_two_sample_t_test.xlsx": "97c2eff5d92cfe91872c38ebde9ade9881c697ec21627e552720bf2ee5e55c96",
+    "tutorial_output/babies_3_two_sample_t_test/babies_3_two_sample_t_test.pdf": "9fcbc869c101b0fe293a225c08684971f1950f6bbd8f90e8966c32d1cdf58fbd",
+    "tutorial_output/babies_3_two_sample_t_test/babies_3_two_sample_t_test.docx": "8ffbb7cc779e38f93250c3b74840f033a9a93ca496e7f583dae8a74661e96f44",
+    "tutorial_output/babies_3_two_sample_t_test/validation.json": "5a2f44719ed93856c13e3711669092c6d5bdbe6c692946ced1fa5ef3e55fbaf6",
+    "tutorial_output/microbes_1_z_test/microbes_1_z_test.xlsx": "9db1b79898561bca8ffd1705040f21f302d9c4fa7f138778049a261b2c615703",
+    "tutorial_output/microbes_1_z_test/microbes_1_z_test.docx": "4e8ee3cdda5f4998f52823a4f1cf36db7ecfef32dc6bac0f87ce3accf91a1ab5",
+    "tutorial_output/microbes_1_z_test/microbes_1_z_test.pdf": "5be6e7cd62787073751b7cc66de604d6c4030b7e332318d2b0dc8eaf85e2594f",
+    "tutorial_output/microbes_1_z_test/validation.json": "e8a23e8f3208a9ca522ae5f49776eb595b7eb8d824bf49370ff6b4aa23e3cdcd",
+    "tutorial_output/babies_1_z_test/babies_1_z_test.pdf": "a1e61978e32669f08c486278052a282e2f47db36d2138f41b074e54a6fdc5c67",
+    "tutorial_output/babies_1_z_test/babies_1_z_test.xlsx": "97790c6c187c53d949d2b53bcf381e66305589b8062128e8f0567b7a932dab10",
+    "tutorial_output/babies_1_z_test/validation.json": "8164804b3e37218020c796cccbbd7d94b767608d09511b50400d42ac4d033ded",
+    "tutorial_output/babies_1_z_test/babies_1_z_test.docx": "b97a3af63e574b1a27f46ba14551457f8bb835d4a8f5c7adcef31dff2408a995",
+    "tutorial_output/microbes_2_t_test/microbes_2_t_test.docx": "531b0677788b4151095c039ffa18bfa4b041de9d84885640aef5d194bc5e5ee3",
+    "tutorial_output/microbes_2_t_test/microbes_2_t_test.pdf": "32ec01126251f1c6540714d831e9b95d1379b7ca7c26fb7eaccf7f9be72fbb26",
+    "tutorial_output/microbes_2_t_test/microbes_2_t_test.xlsx": "4de3a1cb44e9203e7d1587378c45f93f7be675cd7749a0ec807fab583fb3ed88",
+    "tutorial_output/microbes_2_t_test/validation.json": "aa7445a095d20539a8b4b8a4ec38535546fe4c346c3cdf16e118bb18f5f8b834",
+    "tutorial_output/caffeine_2_linear_regression/caffeine_2_linear_regression.xlsx": "0366b47e5aa3a3f25a9424446cdb43dfcf109763d32b5bfcbef817073cea4b36",
+    "tutorial_output/caffeine_2_linear_regression/caffeine_2_linear_regression.pdf": "4837f481362d0436d59a87d8a50008a7072c80224fa1993246065b41380ad0aa",
+    "tutorial_output/caffeine_2_linear_regression/validation.json": "e22b4f3e6e477ef13ae709ade92b8acfd3aa6cda14977d041bb4156a5480720b",
+    "tutorial_output/caffeine_2_linear_regression/caffeine_2_linear_regression.docx": "73be9ae55283d45b641e0e884072bb21f24e3e76fc9aaf1edb07d6b67a142e9a",
+    "tutorial_output/microbes_5_anova/microbes_5_anova.xlsx": "6026da8bce87b0c125fbca6ad6c8b9f8eb9855dfc61231860c416929c4b0326a",
+    "tutorial_output/microbes_5_anova/validation.json": "599e789b640b89d554d150a3ed60f6ce74af6197e8743c0c50192e2a80bed64d",
+    "tutorial_output/microbes_5_anova/microbes_5_anova.docx": "fdd16547ecdb6fbb53c55bf2b0b1b7ea2fac7857061dd337c178233cbc4adc19",
+    "tutorial_output/microbes_5_anova/microbes_5_anova.pdf": "593b921d8ec66b8a2f8dee6767a2cc5867245b9eb1680b37662e57e9bb48a5dd",
+    "tutorial_output/caffeine_3_quadratic_regression/caffeine_3_quadratic_regression.pdf": "5cb6c992c35c28d0167fc28421b46d0a1b9dc1084d242e3929e0e0eeac6ed1c0",
+    "tutorial_output/caffeine_3_quadratic_regression/caffeine_3_quadratic_regression.docx": "b07bd7b952fad68c43fcd0635c6aea13e2c61146b580d519cd97ccd7fe471716",
+    "tutorial_output/caffeine_3_quadratic_regression/validation.json": "3f1754fed4c369b60dbb324bb9b3273fde34e88ae99e513592b9a92f4e53851a",
+    "tutorial_output/caffeine_3_quadratic_regression/caffeine_3_quadratic_regression.xlsx": "ffd6328d8bd3984d3eb1b0cc18e07ff4f060e9993425c86324ab091188718669",
+    "tutorial_output/microbes_3_two_sample_t_test/microbes_3_two_sample_t_test.pdf": "de447b20bb97765bf6bd2acbc31d4d15b7631ef8a91d369abb447c367fd16317",
+    "tutorial_output/microbes_3_two_sample_t_test/microbes_3_two_sample_t_test.docx": "8b95ce5f361f2612b67111e8d193c5fbf9c52d34a667a107eeb2873d99b42979",
+    "tutorial_output/microbes_3_two_sample_t_test/validation.json": "e8228e5a80430a1bda27646424cbc53e3febd541e3110347b7b2ae8a63f58727",
+    "tutorial_output/microbes_3_two_sample_t_test/microbes_3_two_sample_t_test.xlsx": "5e5f11f138bc14683eb13e844e5c9493eb9273579b75f62d33e81e34fbb43d63",
+    "tutorial_output/caffeine_1_descriptive_statistics/caffeine_1_descriptive_statistics.pdf": "30fcd2e76635281445e3f350ae5d47c1d4f0d360194773c0c3cb4e42561890fe",
+    "tutorial_output/caffeine_1_descriptive_statistics/caffeine_1_descriptive_statistics.xlsx": "80a83b81b6fe128d700529a26207806733b6b366834405b800b1c58a003b1077",
+    "tutorial_output/caffeine_1_descriptive_statistics/validation.json": "b1b65c3622bbe8e3b665ddc4cc15e1c5b58a1d334e4e05a9c5d3eabdd459c5ee",
+    "tutorial_output/caffeine_1_descriptive_statistics/caffeine_1_descriptive_statistics.docx": "5c6c5948646e5d45f8c34c65e5c4e7a149114ebbb79bcdf131491d934ae80c6d",
+    "tutorial_output/petase_1_linear_regression/petase_1_linear_regression.pdf": "33eb7f688cdd40bf4002d33420dba38252d09ec4389914eb2bdb2d46b398bc64",
+    "tutorial_output/petase_1_linear_regression/petase_1_linear_regression.xlsx": "9a7306a8db7b264cc8467fa8ce0a5606a6486891fa4d12f82e715f46e7f9df4a",
+    "tutorial_output/petase_1_linear_regression/validation.json": "b0183b706768df8e7442b42c9d4500f9dc8519724c7c2ed5dc9456a852981f10",
+    "tutorial_output/petase_1_linear_regression/petase_1_linear_regression.docx": "99b1bf0f745147832a03bd3a99c7361c023300d63aa8df85dbf93e4c48065b17",
+    "tutorial_output/microbes_4_f_test/microbes_4_f_test.docx": "ad3beb88be9a9b8904cca397aded6dd9974fcc925000bc26d91082f49f03f95c",
+    "tutorial_output/microbes_4_f_test/microbes_4_f_test.pdf": "afd1d614f776e407fd2daf40eb221c043bf6b9b88b2fde013e3137ab7f853050",
+    "tutorial_output/microbes_4_f_test/microbes_4_f_test.xlsx": "65d3cb051f59105ef00f833d7944f37928019ad4f2dc37ce881df01712b92ef3",
+    "tutorial_output/microbes_4_f_test/validation.json": "b4e840867ed995699d471a627a9aeb7fe9153269f31c7ae404cb4bc783b72390"
+  },
+  "protected_files_unchanged": true,
+  "independent_calc_checks": {
+    "course_overview_starter": {
+      "observations": [
+        12,
+        15,
+        18,
+        20,
+        25
+      ],
+      "summary": [
+        null,
+        null,
+        null
+      ],
+      "independent_expected_summary": [
+        5,
+        18,
+        4.949747468305833
+      ],
+      "deviations": [],
+      "numeric_display_formats": {
+        "A2": "0.000",
+        "A3": "0.000",
+        "A4": "0.000",
+        "A5": "0.000",
+        "A6": "0.000",
+        "E2": "0.000",
+        "E3": "0.000",
+        "E4": "0.000"
+      },
+      "state": "blank student starter"
+    },
+    "course_layout": {
+      "observations": [
+        12,
+        15,
+        18,
+        20,
+        25
+      ],
+      "summary": [
+        null,
+        null,
+        null
+      ],
+      "independent_expected_summary": [
+        5,
+        18,
+        4.949747468305833
+      ],
+      "deviations": [],
+      "numeric_display_formats": {
+        "A2": "0.000",
+        "A3": "0.000",
+        "A4": "0.000",
+        "A5": "0.000",
+        "A6": "0.000",
+        "E2": "0.000",
+        "E3": "0.000",
+        "E4": "0.000"
+      },
+      "state": "blank student starter"
+    },
+    "course_statistics": {
+      "observations": [
+        12,
+        15,
+        18,
+        20,
+        25
+      ],
+      "summary": [
+        5,
+        18,
+        4.94974746830583
+      ],
+      "independent_expected_summary": [
+        5,
+        18,
+        4.949747468305833
+      ],
+      "deviations": [],
+      "numeric_display_formats": {
+        "A2": "0.000",
+        "A3": "0.000",
+        "A4": "0.000",
+        "A5": "0.000",
+        "A6": "0.000",
+        "E2": "0.000",
+        "E3": "0.000",
+        "E4": "0.000"
+      },
+      "state": "completed authored baseline"
+    },
+    "course_expanded_starter": {
+      "observations": [
+        12,
+        15,
+        18,
+        20,
+        25,
+        30
+      ],
+      "summary": [
+        null,
+        null,
+        null
+      ],
+      "independent_expected_summary": [
+        6,
+        20,
+        6.603029607687671
+      ],
+      "deviations": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "numeric_display_formats": {
+        "A2": "0.000",
+        "A3": "0.000",
+        "A4": "0.000",
+        "A5": "0.000",
+        "A6": "0.000",
+        "A7": "0.000",
+        "E2": "0.000",
+        "E3": "0.000",
+        "E4": "0.000",
+        "B2": "0.000",
+        "B3": "0.000",
+        "B4": "0.000",
+        "B5": "0.000",
+        "B6": "0.000",
+        "B7": "0.000"
+      },
+      "state": "blank student starter"
+    },
+    "course_expanded_complete": {
+      "observations": [
+        12,
+        15,
+        18,
+        20,
+        25,
+        30
+      ],
+      "summary": [
+        6,
+        20,
+        6.60302960768767
+      ],
+      "independent_expected_summary": [
+        6,
+        20,
+        6.603029607687671
+      ],
+      "deviations": [
+        -8,
+        -5,
+        -2,
+        0,
+        5,
+        10
+      ],
+      "numeric_display_formats": {
+        "A2": "0.000",
+        "A3": "0.000",
+        "A4": "0.000",
+        "A5": "0.000",
+        "A6": "0.000",
+        "A7": "0.000",
+        "E2": "0.000",
+        "E3": "0.000",
+        "E4": "0.000",
+        "B2": "0.000",
+        "B3": "0.000",
+        "B4": "0.000",
+        "B5": "0.000",
+        "B6": "0.000",
+        "B7": "0.000"
+      },
+      "state": "completed authored baseline"
+    },
+    "course_moved_starter": {
+      "observations": [
+        12,
+        15,
+        18,
+        20,
+        25,
+        30
+      ],
+      "summary": [
+        null,
+        null,
+        null
+      ],
+      "independent_expected_summary": [
+        6,
+        20,
+        6.603029607687671
+      ],
+      "deviations": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "numeric_display_formats": {
+        "B2": "0.000",
+        "B3": "0.000",
+        "B4": "0.000",
+        "B5": "0.000",
+        "B6": "0.000",
+        "B7": "0.000",
+        "F2": "0.000",
+        "F3": "0.000",
+        "F4": "0.000",
+        "C2": "0.000",
+        "C3": "0.000",
+        "C4": "0.000",
+        "C5": "0.000",
+        "C6": "0.000",
+        "C7": "0.000"
+      },
+      "state": "blank student starter"
+    },
+    "course_moved_complete": {
+      "observations": [
+        12,
+        15,
+        18,
+        20,
+        25,
+        30
+      ],
+      "summary": [
+        6,
+        20,
+        6.60302960768767
+      ],
+      "independent_expected_summary": [
+        6,
+        20,
+        6.603029607687671
+      ],
+      "deviations": [
+        -8,
+        -5,
+        -2,
+        0,
+        5,
+        10
+      ],
+      "numeric_display_formats": {
+        "B2": "0.000",
+        "B3": "0.000",
+        "B4": "0.000",
+        "B5": "0.000",
+        "B6": "0.000",
+        "B7": "0.000",
+        "F2": "0.000",
+        "F3": "0.000",
+        "F4": "0.000",
+        "C2": "0.000",
+        "C3": "0.000",
+        "C4": "0.000",
+        "C5": "0.000",
+        "C6": "0.000",
+        "C7": "0.000"
+      },
+      "state": "completed authored baseline"
+    }
+  },
+  "published_sha256": {
+    "root_statistics.docx": "01fd517db78056b2646e5d8032bb3767dcca894bb4d8b8801b1e74c2ec708e2a",
+    "root_statistics.md": "7be94054fbadcf6c096e81b85fcc697b4d4e8bcd5e6c408dc3ed2b09bc0b2aed",
+    "root_statistics.pdf": "785eacc996686fdd23d033cb90af35413b6fe07b77a3981dbcde24f2fba67517",
+    "root_statistics.xlsx": "cd88ff58d426e3aa509b6da67b241b2eae64a5255483f7b1581a983849499052"
+  },
+  "native_provenance": "Project DOCX-to-PDF; styled XLSX copies rendered by LibreOffice Calc",
+  "completed_scenario": "baseline authored action replay; no synthetic screenshot content"
+}

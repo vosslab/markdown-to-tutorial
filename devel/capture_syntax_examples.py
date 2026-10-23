@@ -7,7 +7,6 @@ import datetime
 import hashlib
 import json
 import pathlib
-import shutil
 import subprocess
 import tempfile
 
@@ -19,15 +18,6 @@ import capture_readme_artifacts
 def digest(path: pathlib.Path) -> str:
 	"""Return a file's SHA-256 fingerprint."""
 	result = hashlib.sha256(path.read_bytes()).hexdigest()
-	return result
-
-
-#============================================
-def crop_pdf(pdf: pathlib.Path, page: int, crop: tuple[int, int, int, int], name: str,
-		temporary: pathlib.Path, destination: pathlib.Path) -> pathlib.Path:
-	"""Capture a precise PDF area using the shared quality-90 WebP helper."""
-	capture_readme_artifacts.capture_pdf(pdf, page, crop, name, temporary, destination)
-	result = destination / f"{name}.webp"
 	return result
 
 
@@ -46,7 +36,7 @@ def build_example(root: pathlib.Path, temporary: pathlib.Path) -> tuple[pathlib.
 	source = root / "docs" / "examples" / "formatting_demo.md"
 	output = temporary / "build"
 	command = [
-		"python3", "make_tutorial.py", "build", str(source), "--format", "all", "--output", str(output),
+		"python3", "make_tutorial.py", "build", str(source), "--format", "all", "--output-dir", str(output),
 	]
 	subprocess.run(command, cwd=root, check=True)
 	stem = source.stem
@@ -58,28 +48,10 @@ def build_example(root: pathlib.Path, temporary: pathlib.Path) -> tuple[pathlib.
 
 
 #============================================
-def capture_workbook(renderer: pathlib.Path, xlsx: pathlib.Path, temporary: pathlib.Path,
-		destination: pathlib.Path) -> pathlib.Path:
-	"""Render a printed copy of the actual starter workbook with supplied labels and blank entries."""
-	print_copy = temporary / "formatting_demo_workbook.xlsx"
-	capture_readme_artifacts.prepare_workbook(xlsx, print_copy, "A1:F4")
-	result = temporary / "syntax_workbook.webp"
-	# The screenshot-docs renderer launches LibreOffice; this whole script runs outside the sandbox.
-	subprocess.run(["bash", str(renderer), str(result), str(print_copy)], check=True)
-	destination_path = destination / result.name
-	shutil.copyfile(result, destination_path)
-	return destination_path
-
-
-#============================================
 def main() -> None:
 	"""Capture five tightly cropped proof views without changing canonical outputs."""
 	parser = argparse.ArgumentParser(description=__doc__)
-	parser.add_argument(
-		"-r", "--artifact-renderer", dest="artifact_renderer", required=True,
-		type=pathlib.Path, help="Path to screenshot-docs render_artifact_libreoffice.sh",
-	)
-	args = parser.parse_args()
+	parser.parse_args()
 	repo_result = subprocess.run(
 		["git", "rev-parse", "--show-toplevel"], check=True, capture_output=True, text=True,
 	)
@@ -88,14 +60,20 @@ def main() -> None:
 	before = protected_hashes(root)
 	temporary = pathlib.Path(tempfile.mkdtemp(prefix="syntax_capture_"))
 	pdf, xlsx = build_example(root, temporary)
-	# PDF points use the 144-dpi native PDF coordinate space; inspect and adjust these focused clips.
-	assets = [
-		crop_pdf(pdf, 1, (78, 280, 1092, 420), "syntax_headings", temporary, destination),
-		crop_pdf(pdf, 1, (78, 675, 1092, 185), "syntax_text", temporary, destination),
-		crop_pdf(pdf, 1, (78, 850, 1092, 240), "syntax_actions", temporary, destination),
-		crop_pdf(pdf, 1, (78, 1330, 1092, 140), "syntax_table", temporary, destination),
+	views = [
+		("Part 1: Explore a curved relationship", "Explanation: Why square a value?",
+			"syntax_headings"),
+		("Explanation: Why square a value?", "Step 2: Calculate squared sleep hours",
+			"syntax_text"),
+		("Step 2: Calculate squared sleep hours",
+			"Explanation: Read a formula before copying it", "syntax_actions"),
+		("Step 3: Compare the model features", None, "syntax_table"),
 	]
-	assets.append(capture_workbook(args.artifact_renderer, xlsx, temporary, destination))
+	metadata = [capture_readme_artifacts.capture_pdf(pdf, start, end, name, temporary, destination)
+		for start, end, name in views]
+	metadata.append(capture_readme_artifacts.render_workbook(xlsx, "syntax_workbook",
+		temporary, destination, "A1:F4"))
+	assets = [pathlib.Path(item["asset"]) for item in metadata]
 	after = protected_hashes(root)
 	if after != before:
 		raise RuntimeError("A protected source changed during syntax capture")
@@ -104,10 +82,11 @@ def main() -> None:
 		"source": "docs/examples/formatting_demo.md",
 		"protected_sha256": after,
 		"assets_sha256": {asset.name: digest(asset) for asset in assets},
-		"renderer": str(args.artifact_renderer.resolve()),
+		"renderer": "repository-owned LibreOffice and Poppler",
+		"captures": metadata,
 		"native_artifacts": {
 			"document": "DOCX rendered to PDF by the project build, then cropped from PDF",
-			"workbook": "generated XLSX rendered through screenshot-docs LibreOffice renderer",
+			"workbook": "generated XLSX printed through repository-owned LibreOffice Calc helper",
 		},
 		"protected_sources_unchanged": True,
 		"build_output": "isolated temporary directory; canonical tutorial_output is not used",

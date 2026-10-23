@@ -434,3 +434,69 @@ wrapping can change after import, so the estimate is not a claim of live Google 
 
 **Owner.** [DOCX styles](../tutorial_lib/docx_styles.py), [DOCX renderer](../tutorial_lib/docx_renderer.py),
 and the [student publishing implementation ledger](active_plans/student_publishing_implementation.md).
+
+### Illustrated student course uses existing syntax
+
+**Decision.** Teach the Roots lesson with the existing Markdown workbook, tutorial Parts, Steps,
+Substeps, and semantic cell actions.
+
+**Why.** Students can learn the authoring language and spreadsheet connections through a worked
+lesson without learning a second authoring format.
+
+**Consequence.** Keep course instructions grounded in the supported syntax and link topic details
+to the reference pages.
+
+**Owner.** [Student guide](STUDENT_GUIDE.md), [course Parts](learn/PART_1_CREATE.md), and
+[tutorial specification](TUTORIAL_SPEC.md).
+
+### One source continues across the course
+
+**Decision.** Students keep editing one `my_roots_tutorial.md` source through all three Parts.
+
+**Why.** A continuous source makes each addition visible and gives students one artifact to complete.
+
+**Consequence.** Part 1 establishes the source and workbook; Part 2 completes count, mean, and sample
+standard deviation; Part 3 is an optional deviation and peer-review extension.
+
+**Owner.** [Student guide](STUDENT_GUIDE.md) and the [course Parts](learn/PART_1_CREATE.md).
+
+### Show three instructional views
+
+**Decision.** Present the generated lesson document, supplied starter workbook, and completed
+calculation output as distinct views.
+
+**Why.** Readers need to distinguish what the author writes, what a student receives, and what a
+completed calculation looks like.
+
+**Consequence.** Label the starter and completed examples clearly; do not present the completed
+calculation copy as the student starter.
+
+**Owner.** [Student guide](STUDENT_GUIDE.md), [course screenshot receipt](screenshots/README.md),
+and the published course examples.
+
+### Refresh captures with one command
+
+**Decision.** Use one repository command to refresh the documentation capture sets after style changes.
+
+**Why.** Style changes should be visible in the examples without manual, coordinate-based recropping.
+
+**Consequence.** Use semantic document headings and workbook ranges as capture anchors, preserve
+capture provenance in receipts, and run the rendering workflow outside the macOS sandbox because it
+invokes LibreOffice. Keep capture helpers in the existing shared implementation rather than adding
+a separate support namespace.
+
+**Owner.** [Documentation refresh command](../devel/refresh_documentation.py),
+[shared capture helpers](../devel/capture_readme_artifacts.py), and [usage guide](USAGE.md).
+
+### Keep checkpoint copies distinct
+
+**Decision.** Use named course checkpoint sources as comparison examples while students maintain
+their own single working source.
+
+**Why.** Checkpoints make progress easy to compare without turning the course into a sequence of
+separate files students must merge.
+
+**Consequence.** Explain that checkpoint files are references; keep generated published outputs in
+their own directory.
+
+**Owner.** [Student guide](STUDENT_GUIDE.md) and `docs/examples/authoring_course/`.

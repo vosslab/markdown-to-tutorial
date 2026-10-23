@@ -4,16 +4,32 @@
 
 ### Additions and New Features
 
+- Add the three-part Roots authoring course: one student project source, eight comparison
+  checkpoints, six Markdown topic references, a student hub, and a published Markdown/DOCX/PDF/XLSX
+  capstone. The starter supplies labels and leaves calculation cells blank.
+- Add the [student guide](STUDENT_GUIDE.md) as the primary course hub and route the README's first
+  tutorial path through it.
+- Document the one-command documentation screenshot refresh workflow and its separate course capture
+  receipt.
+
 - Expand [FORMATTING_GUIDE.md](FORMATTING_GUIDE.md) with a worksheet-address map and worked
   examples adding a calculation column and an observation row. Add a runnable source showing
   supplied headers, blank calculation cells, and matching Enter/Fill instructions.
 
 ### Fixes and Maintenance
 
+- Record the course structure and capture design in the decision and human-guidance ledgers.
 - Reorganize the README around a BIOL 318 student reading path, starting examples, and a plain-language
   explanation of Workbook and Tutorial sections. Keep build commands and advanced examples later.
 - Rebuild the ANOVA bundle and refresh README and formatting-guide screenshots using the
   three-decimal numerical display. Inspect both workbook views and refresh capture receipts.
+- Correct the illustrated course overview crop so it includes the complete first inspection Step;
+  merge its redundant Locate step into Inspect sources to avoid a two-bullet orphan. Fit images to
+  printable page bounds while preserving aspect ratio, keep code blocks together, validate local
+  WebP captures, and convert image data to PNG in memory at the DOCX boundary. Final screenshots and
+  the one-page published capstone are refreshed. Final PDF visual and fresh teaching-quality reviews
+  accept the course; fresh SPEC, QUALITY, and integration reviews accept the final course state.
+  The full suite passes 2,036 tests; Google behavior and student outcomes remain unverified.
 
 ## 2026-10-22
 
