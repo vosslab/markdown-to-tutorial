@@ -12,21 +12,21 @@ indents, justified explanations, and scientific worksheets with purposeful color
 <!-- screenshots:begin (managed by screenshot-docs) -->
 ![Microbes F-test instructions with a prominent green formula display and justified explanation](docs/screenshots/microbes_4_formula_instruction.webp)
 ![Caffeine squared-column step with inset body text, Excel formula, and the author's 36-hours aside](docs/screenshots/caffeine_3_fill_down_instructions.webp)
-![Caffeine student workbook with supplied data and styled blank learner headers, calculations, and response area](docs/screenshots/caffeine_3_blank_predictor_workspace.webp)
 ![Completed ANOVA demonstration showing styled table headers, summary calculations, and a decision; not the student starter](docs/screenshots/microbes_5_completed_anova.webp)
 <!-- screenshots:end -->
 
-The Caffeine workbook is the **student starting state**: data are supplied, while learner labels,
-formulas, and responses remain blank. The ANOVA image is a **completed demonstration**, populated
-from the lesson's instructions in a disposable copy to show how the styled worksheet develops.
-The compiler does not give those answers to students.
+The ANOVA image is a **completed demonstration**, populated from the lesson's instructions in a
+disposable copy to show its table formatting. It is not the student starting workbook. Some current
+lessons still defer headings to learner actions; this demonstration does not establish that those
+starting worksheets have the right instructional structure.
 
 The illustrated lesson opening and capture details are in
 [docs/screenshots/README.md](docs/screenshots/README.md).
 
-Built for BIOL 318 students writing tutorials for classmates. Authors choose the layout, write
-ordinary Excel formulas, and decide what learners construct. The compiler preserves their prose
-and adds the formatting. The collection includes 12 lessons; PETase uses explicitly synthetic data.
+Built for BIOL 318 students writing tutorials for classmates. Authors establish the labels and
+worksheet structure, write ordinary Excel formulas, and decide what learners complete. The compiler
+preserves their prose and adds formatting. The collection includes 12 lessons; PETase uses
+explicitly synthetic data.
 
 DOCX, XLSX, and PDF output is verified locally. Google Docs and Sheets import and execution remain
 unverified; Google may also wrap text differently.
@@ -43,7 +43,7 @@ python3 make_tutorial.py build templates/calculated_column.md --format docx,xlsx
 
 Open `tutorial_output/calculated_column/calculated_column.docx` and
 `tutorial_output/calculated_column/calculated_column.xlsx`. You get formatted instructions and
-three supplied observations, with column C ready for students to label and calculate.
+three supplied observations, with column C reserved for the squared values.
 
 For PDF output, install LibreOffice and the fonts listed in [docs/INSTALL.md](docs/INSTALL.md), then
 run `python3 make_tutorial.py build templates/calculated_column.md --format all`.
@@ -136,8 +136,8 @@ In F2, enter [=AVERAGE(C2:C3)](enter:F2). Then explain what a curved pattern cou
 
 - **Your words, professionally presented.** Editable headings, prominent green formula displays,
   styled tables, and long-paragraph justification, without LLM rewriting.
-- **Workbooks that teach by doing.** Styled data, blank learner headers and calculations, and
-  dedicated response areas follow the author's worksheet layout.
+- **Styled scientific worksheets.** Colors, table headers, borders, and response areas follow
+  the authored structure. Calculation cells remain blank where the lesson assigns learner work.
 - **One source, three outputs.** Markdown supplies DOCX instructions, XLSX workbooks, and PDF copies.
 - **Less coordinate bookkeeping.** Preview column/row insertions, range moves, and data resizing
   across the worksheet specification and explicit instructional references.

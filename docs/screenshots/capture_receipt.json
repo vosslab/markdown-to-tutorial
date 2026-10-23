@@ -1,5 +1,5 @@
 {
-  "captured_utc": "2026-10-23T02:44:25.643637+00:00",
+  "captured_utc": "2026-10-23T02:52:13.386780+00:00",
   "protected_sha256": {
     "tutorial_data/babies_1_z_test.md": "da64c65d64e160d9b7dc311b73afc7e28fefb38efdb45d9a34d9ed2704c1d5c1",
     "tutorial_data/babies_2_t_test.md": "446256332bb144cc1ecbd2d0202043dc980a484ceee4ed28db4d624a6f76e96d",
@@ -51,7 +51,6 @@
     "tutorial_output/petase_1_linear_regression/petase_1_linear_regression.xlsx": "9a7306a8db7b264cc8467fa8ce0a5606a6486891fa4d12f82e715f46e7f9df4a"
   },
   "assets_sha256": {
-    "caffeine_3_blank_predictor_workspace.webp": "7960c621cf16e3c78f050bb6badcefb7691821c46bba3292c04b85737a55c0eb",
     "caffeine_3_fill_down_instructions.webp": "e0a9885ba1803614c85e94abf498691ec4bb0ae9f4c0c82b8854038a9c445594",
     "caffeine_3_illustrated_opening.webp": "4b390c686c818b8360ab09485f5d79c388e02d3934bdba4497e84fd32b8ef2db",
     "microbes_4_formula_instruction.webp": "28189f6b5594f20245643667e07a86c61920d454f8f599ffb29a82c5fc2658f6",

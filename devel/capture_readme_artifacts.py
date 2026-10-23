@@ -137,7 +137,7 @@ def capture_workbook(renderer: pathlib.Path, source: pathlib.Path, name: str,
 
 #============================================
 def main() -> None:
-	"""Capture five current views and preserve canonical teaching artifacts."""
+	"""Capture four current views and preserve canonical teaching artifacts."""
 	parser = argparse.ArgumentParser(description=__doc__)
 	parser.add_argument(
 		"-r", "--artifact-renderer", dest="artifact_renderer", required=True,
@@ -153,7 +153,6 @@ def main() -> None:
 	microbes_f = "microbes_4_f_test"
 	microbes_anova = "microbes_5_anova"
 	pdf = output / caffeine / f"{caffeine}.pdf"
-	xlsx = output / caffeine / f"{caffeine}.xlsx"
 	f_pdf = output / microbes_f / f"{microbes_f}.pdf"
 	anova_xlsx = output / microbes_anova / f"{microbes_anova}.xlsx"
 	destination = root / "docs" / "screenshots"
@@ -170,8 +169,6 @@ def main() -> None:
 		"caffeine_3_illustrated_opening", temporary, destination)
 	capture_pdf(pdf, 4, (80, 82, 1064, 350),
 		"caffeine_3_fill_down_instructions", temporary, destination)
-	capture_workbook(args.artifact_renderer, xlsx, "caffeine_3_blank_predictor_workspace",
-		temporary, destination, "A1:N26")
 	capture_pdf(f_pdf, 3, (80, 270, 1064, 620),
 		"microbes_4_formula_instruction", temporary, destination)
 	completed_source = temporary / "microbes_5_completed_anova_source.xlsx"

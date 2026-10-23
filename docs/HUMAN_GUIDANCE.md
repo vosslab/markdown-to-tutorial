@@ -90,3 +90,7 @@ origin belongs there too. Rules: [REPO_STYLE.md](REPO_STYLE.md).
 - Give headings varied left indentation, with Step headings farther left than body paragraphs.
 - Fully justify paragraphs that run longer than two lines.
 - Use the README and current output screenshots to show off the pipeline's capabilities.
+- Tutorial authors establish labels and worksheet structure first; they do not start with unlabeled
+  colored areas. Tutorial users do not generally enter headings.
+- I intentionally have no `.gitignore` rule for `__pycache__`, because it lets me know when agents
+  are not following guidelines.

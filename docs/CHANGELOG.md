@@ -2,22 +2,6 @@
 
 ## 2026-10-22
 
-### README capability showcase
-
-- Refresh the landing page around student authors, preserved prose, professional document styling,
-  blank learner workbooks, three starter templates, and preview-first worksheet maintenance.
-- Replace stale numeric entities in the authoring excerpt. Verify the template quick start in
-  DOCX/XLSX and PDF, the complete runnable example, and the worksheet-edit preview. Explain the
-  preview's actual fill-wording review notice rather than implying complete prose synchronization.
-- Refresh five native output captures, with four featured in the README. Add the prominent
-  F-statistic formula and a focused completed ANOVA demonstration. The latter uses a disposable
-  styled workbook populated from authored actions and recalculated in Calc; student starters stay
-  blank. All 48 canonical source/product fingerprints remain unchanged.
-- Extend the existing capture harness and record reproducible provenance in the
-  [screenshot receipt](screenshots/README.md). See the
-  [README verification report](active_plans/reports/readme_capabilities_showcase.md) for checks and
-  the editorial before/after score.
-
 ### Additions and New Features
 
 - Add student-oriented calculated-column, statistical-summary, and ANOVA Markdown templates.
@@ -33,6 +17,26 @@
   with the semantic action target.
 
 ### Fixes and Maintenance
+
+- Remove the unlabeled Caffeine grid from the showcase after the human clarified that authors
+  establish labels first and tutorial users do not generally enter headings. Keep the completed
+  ANOVA demonstration explicitly separate from claims about the starting worksheet.
+- Correct the README changelog entries to use this approved category. Record the capture agent's
+  `py_compile` cache-writing mistake and the manager's agent-reuse mistake in the verification
+  report; retain the existing Python environment settings and absence of cache ignore rules.
+- Refresh the landing page around student authors, preserved prose, professional document styling,
+  blank learner workbooks, three starter templates, and preview-first worksheet maintenance.
+- Replace stale numeric entities in the authoring excerpt. Verify the template quick start in
+  DOCX/XLSX and PDF, the complete runnable example, and the worksheet-edit preview. Explain the
+  preview's actual fill-wording review notice rather than implying complete prose synchronization.
+- Refresh four native output captures, with three featured in the README. Add the prominent
+  F-statistic formula and a focused completed ANOVA demonstration. The latter uses a disposable
+  styled workbook populated from authored actions and recalculated in Calc; student starters stay
+  blank. All 48 canonical source/product fingerprints remain unchanged.
+- Extend the existing capture harness and record reproducible provenance in the
+  [screenshot receipt](screenshots/README.md). See the
+  [README verification report](active_plans/reports/readme_capabilities_showcase.md) for checks and
+  the editorial before/after score.
 
 - Normalize active lesson punctuation and scientific notation to ASCII, named entities, and
   ordinary `sub`/`sup` markup without changing lesson wording or archived originals.
